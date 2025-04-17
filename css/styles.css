@@ -620,3 +620,122 @@ footer {
         font-size: 1.8rem;
     }
 }
+
+
+/* All Tools Page Styles */
+.all-tools {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.page-subtitle {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+}
+
+#toolSearch {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.alphabet-filter {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.alphabet-filter span {
+    margin-right: 15px;
+    font-weight: 600;
+}
+
+.letters {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.letters a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.letters a:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.letter-section {
+    margin-bottom: 40px;
+}
+
+.letter-header {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.tools-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.tool-card {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--dark-color);
+}
+
+.tool-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--box-shadow-lg);
+    color: var(--primary-color);
+}
+
+.tool-card i {
+    margin-right: 12px;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
