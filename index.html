@@ -4,18 +4,18 @@
     <!-- SEO Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free online IT tools for developers, designers, and tech professionals. Converters, generators, encoders, and more to simplify your workflow.">
-    <meta name="keywords" content="IT tools, developer tools, online tools, web tools, code tools, converters, generators, encoders, decoders">
-    <meta name="author" content="Your Company Name">
+    <meta name="description" content="300+ free online IT tools for developers, designers, and tech professionals. Converters, generators, encoders, decoders, formatters, and more.">
+    <meta name="keywords" content="IT tools, developer tools, online tools, web tools, code tools, converters, generators, encoders, decoders, formatters, validators">
+    <meta name="author" content="IT Tools">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="IT Tools - Free Online Developer Utilities">
-    <meta property="og:description" content="Collection of free online tools for developers and tech professionals">
+    <meta property="og:title" content="IT Tools - 300+ Free Online Developer Utilities">
+    <meta property="og:description" content="Collection of 300+ free online tools for developers and tech professionals">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://youritoolsdomain.com">
-    <meta property="og:image" content="https://youritoolsdomain.com/images/og-image.jpg">
+    <meta property="og:url" content="https://it-tools.tech">
+    <meta property="og:image" content="https://it-tools.tech/images/og-image.jpg">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://it-tools.nepexo.com">
+    <link rel="canonical" href="https://it-tools.tech">
     
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -27,8 +27,8 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "IT Tools",
-      "url": "https://youritoolsdomain.com",
-      "description": "Collection of free online tools for developers and tech professionals",
+      "url": "https://it-tools.tech",
+      "description": "Collection of 300+ free online tools for developers and tech professionals",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web Browser",
       "offers": {
@@ -39,19 +39,22 @@
     }
     </script>
     
-    <title>IT Tools - Free Online Developer Utilities</title>
+    <title>IT Tools - 300+ Free Online Developer Utilities</title>
     
     <!-- CSS -->
     <style>
         :root {
-            --primary-color: #4a6bff;
-            --secondary-color: #6c757d;
-            --dark-color: #343a40;
-            --light-color: #f8f9fa;
-            --success-color: #28a745;
-            --border-radius: 8px;
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #6b7280;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --success-color: #10b981;
+            --border-radius: 12px;
             --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
         }
         
         * {
@@ -61,17 +64,17 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f5f7fa;
+            color: var(--dark-color);
+            background-color: var(--light-color);
         }
         
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 15px;
+            padding: 0 20px;
         }
         
         /* Header Styles */
@@ -97,14 +100,17 @@
         }
         
         .logo img {
-            height: 40px;
-            margin-right: 10px;
+            height: 42px;
+            margin-right: 12px;
         }
         
         .logo h1 {
             color: var(--primary-color);
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .nav-links {
@@ -113,14 +119,15 @@
         }
         
         .nav-links li {
-            margin-left: 20px;
+            margin-left: 25px;
         }
         
         .nav-links a {
             text-decoration: none;
             color: var(--dark-color);
-            font-weight: 500;
+            font-weight: 600;
             transition: var(--transition);
+            font-size: 0.95rem;
         }
         
         .nav-links a:hover {
@@ -138,134 +145,215 @@
         
         /* Hero Section */
         .hero {
-            padding: 60px 0;
+            padding: 80px 0 60px;
             text-align: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient);
         }
         
         .hero h2 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 20px;
             color: var(--dark-color);
+            font-weight: 800;
+            line-height: 1.2;
         }
         
         .hero p {
             font-size: 1.2rem;
             color: var(--secondary-color);
             max-width: 700px;
-            margin: 0 auto 30px;
+            margin: 0 auto 40px;
         }
         
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
         }
         
-        .search-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #ddd;
+        .stat-item {
+            background: white;
+            padding: 20px 30px;
             border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            min-width: 160px;
         }
         
-        .search-input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            font-weight: 600;
         }
         
         /* Categories Section */
         .categories {
-            padding: 40px 0;
+            padding: 60px 0;
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
             color: var(--dark-color);
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
         }
         
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
         
         .category-card {
             background: white;
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 25px;
             box-shadow: var(--box-shadow);
             transition: var(--transition);
             text-decoration: none;
             color: var(--dark-color);
+            border: 1px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
         }
         
         .category-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .category-card h3 {
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-        
-        .category-card p {
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-        }
-        
-        /* Popular Tools Section */
-        .popular-tools {
-            padding: 40px 0;
-            background-color: white;
-        }
-        
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .tool-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            text-decoration: none;
-            color: var(--dark-color);
-            border: 1px solid #eee;
-        }
-        
-        .tool-card:hover {
+            box-shadow: var(--box-shadow-lg);
             border-color: var(--primary-color);
         }
         
-        .tool-card h3 {
-            margin-bottom: 10px;
+        .category-card h3 {
+            margin-bottom: 12px;
+            color: var(--primary-dark);
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
         }
         
-        .tool-card h3 i {
-            margin-right: 10px;
-            color: var(--primary-color);
+        .category-card h3 i {
+            margin-right: 12px;
+            font-size: 1.4rem;
         }
         
-        .tool-card p {
+        .category-card p {
             color: var(--secondary-color);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Tools Section */
+        .tools-section {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        }
+        
+        .tools-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        .tool-category {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+        
+        .tool-category-header {
+            background: var(--gradient);
+            color: white;
+            padding: 18px 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tool-category-header i {
+            margin-right: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .tool-list {
+            padding: 20px;
+        }
+        
+        .tool-item {
+            margin-bottom: 15px;
+        }
+        
+        .tool-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .tool-link {
+            display: block;
+            padding: 12px 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+        
+        .tool-link:hover {
+            background: #f3f4f6;
+            border-left: 3px solid var(--primary-color);
+            transform: translateX(5px);
         }
         
         /* Ad Banners */
         .ad-banner {
-            margin: 30px 0;
+            margin: 40px 0;
             background: #f1f3f5;
             border-radius: var(--border-radius);
             padding: 20px;
@@ -274,6 +362,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px dashed #d1d5db;
         }
         
         .ad-banner.horizontal {
@@ -287,56 +376,132 @@
         
         /* Features Section */
         .features {
-            padding: 60px 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+            padding: 80px 0;
+            background: white;
         }
         
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            gap: 40px;
+            margin-top: 50px;
         }
         
         .feature-card {
             background: white;
             border-radius: var(--border-radius);
-            padding: 30px;
+            padding: 40px 30px;
             box-shadow: var(--box-shadow);
             text-align: center;
+            border: 1px solid #e5e7eb;
+            transition: var(--transition);
         }
         
-        .feature-card i {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-lg);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 1.8rem;
         }
         
         .feature-card h3 {
             margin-bottom: 15px;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            color: var(--dark-color);
         }
         
         .feature-card p {
             color: var(--secondary-color);
+            line-height: 1.6;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 80px 0;
+            background: var(--gradient);
+            text-align: center;
+            color: white;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary-color);
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
         
         /* Footer */
         footer {
             background-color: var(--dark-color);
             color: white;
-            padding: 50px 0 20px;
+            padding: 70px 0 30px;
         }
         
         .footer-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
         }
         
         .footer-column h3 {
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+        
+        .footer-column p {
+            color: #d1d5db;
             margin-bottom: 20px;
-            font-size: 1.2rem;
+            line-height: 1.6;
         }
         
         .footer-column ul {
@@ -344,41 +509,72 @@
         }
         
         .footer-column ul li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         
         .footer-column ul li a {
-            color: #adb5bd;
+            color: #9ca3af;
             text-decoration: none;
             transition: var(--transition);
+            font-size: 0.95rem;
+            display: inline-block;
         }
         
         .footer-column ul li a:hover {
             color: white;
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
         }
         
         .copyright {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #495057;
-            color: #adb5bd;
+            padding-top: 30px;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
             font-size: 0.9rem;
         }
         
         /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 1000px;
+            }
+        }
+        
         @media (max-width: 992px) {
             .hero h2 {
-                font-size: 2rem;
+                font-size: 2.4rem;
             }
             
-            .hero p {
-                font-size: 1rem;
+            .section-title {
+                font-size: 2rem;
             }
         }
         
         @media (max-width: 768px) {
             .header-container {
-                padding: 10px 0;
+                padding: 12px 0;
             }
             
             .nav-links {
@@ -398,7 +594,7 @@
             }
             
             .nav-links li {
-                margin: 10px 0;
+                margin: 12px 0;
             }
             
             .mobile-menu-btn {
@@ -406,35 +602,76 @@
             }
             
             .hero {
-                padding: 40px 0;
+                padding: 60px 0 40px;
             }
             
             .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                flex-wrap: wrap;
+            }
+            
+            .section-title {
                 font-size: 1.8rem;
+            }
+            
+            .cta h2 {
+                font-size: 2rem;
             }
         }
         
         @media (max-width: 576px) {
             .logo h1 {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
             }
             
             .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .stat-item {
+                padding: 15px 20px;
+                min-width: 120px;
+            }
+            
+            .stat-number {
                 font-size: 1.5rem;
             }
             
             .section-title {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
+            }
+            
+            .categories-grid,
+            .tools-container {
+                grid-template-columns: 1fr;
             }
             
             .feature-card {
-                padding: 20px;
+                padding: 30px 20px;
+            }
+            
+            .cta {
+                padding: 60px 0;
+            }
+            
+            .cta h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Google Adsense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID"></script>
@@ -447,7 +684,7 @@
     <header>
         <div class="container header-container">
             <a href="/" class="logo">
-                <img src="https://via.placeholder.com/40x40" alt="IT Tools Logo">
+                <img src="https://via.placeholder.com/42x42" alt="IT Tools Logo">
                 <h1>IT Tools</h1>
             </a>
             
@@ -459,8 +696,8 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/tools">All Tools</a></li>
                 <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
                 <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
             </ul>
         </div>
     </header>
@@ -468,11 +705,22 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h2>Essential Tools for Developers</h2>
-            <p>Free online tools to simplify your development workflow. Convert, encode, decode, format, and more with our collection of handy utilities.</p>
+            <h2>300+ Essential Developer Tools</h2>
+            <p>Free online tools to simplify your development workflow. No installation required - all tools run directly in your browser.</p>
             
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search for tools...">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">300+</div>
+                    <div class="stat-label">Tools Available</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Free Forever</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Data Sent to Server</div>
+                </div>
             </div>
         </div>
     </section>
@@ -500,34 +748,259 @@
             
             <div class="categories-grid">
                 <a href="/category/converter" class="category-card">
-                    <h3>Converters</h3>
-                    <p>JSON to XML, CSV to JSON, and many more format converters</p>
+                    <h3><i class="fas fa-exchange-alt"></i> Converters</h3>
+                    <p>Convert between different formats including JSON, XML, CSV, YAML, and more with our comprehensive conversion tools.</p>
                 </a>
                 
                 <a href="/category/encoder" class="category-card">
-                    <h3>Encoders/Decoders</h3>
-                    <p>Base64, URL, HTML and other encoding/decoding tools</p>
+                    <h3><i class="fas fa-lock"></i> Encoders/Decoders</h3>
+                    <p>Encode and decode Base64, URL, HTML, JWT, and other formats with our easy-to-use encoding tools.</p>
                 </a>
                 
                 <a href="/category/generator" class="category-card">
-                    <h3>Generators</h3>
-                    <p>Password, UUID, Lorem Ipsum and other content generators</p>
+                    <h3><i class="fas fa-magic"></i> Generators</h3>
+                    <p>Generate passwords, UUIDs, Lorem Ipsum, QR codes, and other content with our powerful generators.</p>
                 </a>
                 
                 <a href="/category/formatter" class="category-card">
-                    <h3>Formatters</h3>
-                    <p>Code beautifiers and minifiers for various languages</p>
+                    <h3><i class="fas fa-code"></i> Formatters</h3>
+                    <p>Beautify and minify code in various languages including JSON, XML, HTML, CSS, JavaScript, and SQL.</p>
                 </a>
                 
                 <a href="/category/web" class="category-card">
-                    <h3>Web Tools</h3>
-                    <p>HTTP headers, IP lookup, and other web-related utilities</p>
+                    <h3><i class="fas fa-globe"></i> Web Tools</h3>
+                    <p>Analyze HTTP headers, check IP, test URLs, inspect user agents, and other web-related utilities.</p>
                 </a>
                 
                 <a href="/category/image" class="category-card">
-                    <h3>Image Tools</h3>
-                    <p>Image converters, optimizers, and other graphic utilities</p>
+                    <h3><i class="fas fa-image"></i> Image Tools</h3>
+                    <p>Convert image formats, optimize images, create thumbnails, and other image processing tools.</p>
                 </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Tools Section -->
+    <section class="tools-section">
+        <div class="container">
+            <h2 class="section-title">Our Complete Tool Collection</h2>
+            
+            <div class="tools-container">
+                <!-- Converters -->
+                <div class="tool-category">
+                    <div class="tool-category-header">
+                        <i class="fas fa-exchange-alt"></i> Converters
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <a href="/tool/json-to-xml" class="tool-link">JSON to XML Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/xml-to-json" class="tool-link">XML to JSON Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/json-to-csv" class="tool-link">JSON to CSV Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/csv-to-json" class="tool-link">CSV to JSON Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/json-to-yaml" class="tool-link">JSON to YAML Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/yaml-to-json" class="tool-link">YAML to JSON Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/sql-to-json" class="tool-link">SQL to JSON Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/excel-to-json" class="tool-link">Excel to JSON Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/json-to-excel" class="tool-link">JSON to Excel Converter</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Encoders/Decoders -->
+                <div class="tool-category">
+                    <div class="tool-category-header">
+                        <i class="fas fa-lock"></i> Encoders/Decoders
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <a href="/tool/base64-encode" class="tool-link">Base64 Encoder</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/base64-decode" class="tool-link">Base64 Decoder</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/url-encode" class="tool-link">URL Encoder</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/url-decode" class="tool-link">URL Decoder</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/html-encode" class="tool-link">HTML Encoder</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/html-decode" class="tool-link">HTML Decoder</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/jwt-decode" class="tool-link">JWT Decoder</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/hex-to-text" class="tool-link">Hex to Text</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/text-to-hex" class="tool-link">Text to Hex</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Generators -->
+                <div class="tool-category">
+                    <div class="tool-category-header">
+                        <i class="fas fa-magic"></i> Generators
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <a href="/tool/password-generator" class="tool-link">Password Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/uuid-generator" class="tool-link">UUID Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/lorem-ipsum" class="tool-link">Lorem Ipsum Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/qr-code-generator" class="tool-link">QR Code Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/hash-generator" class="tool-link">Hash Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/credit-card-generator" class="tool-link">Credit Card Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/fake-data-generator" class="tool-link">Fake Data Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/barcode-generator" class="tool-link">Barcode Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/mockup-generator" class="tool-link">Mockup Generator</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Formatters -->
+                <div class="tool-category">
+                    <div class="tool-category-header">
+                        <i class="fas fa-code"></i> Formatters
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <a href="/tool/json-formatter" class="tool-link">JSON Formatter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/xml-formatter" class="tool-link">XML Formatter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/html-formatter" class="tool-link">HTML Formatter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/css-formatter" class="tool-link">CSS Formatter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/javascript-formatter" class="tool-link">JavaScript Formatter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/sql-formatter" class="tool-link">SQL Formatter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/json-minify" class="tool-link">JSON Minifier</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/xml-minify" class="tool-link">XML Minifier</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/css-minify" class="tool-link">CSS Minifier</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Web Tools -->
+                <div class="tool-category">
+                    <div class="tool-category-header">
+                        <i class="fas fa-globe"></i> Web Tools
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <a href="/tool/http-headers" class="tool-link">HTTP Headers Viewer</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/ip-lookup" class="tool-link">IP Lookup</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/whois" class="tool-link">WHOIS Lookup</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/url-parser" class="tool-link">URL Parser</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/user-agent-parser" class="tool-link">User Agent Parser</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/website-status" class="tool-link">Website Status Checker</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/ssl-checker" class="tool-link">SSL Checker</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/dns-lookup" class="tool-link">DNS Lookup</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/redirect-checker" class="tool-link">Redirect Checker</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image Tools -->
+                <div class="tool-category">
+                    <div class="tool-category-header">
+                        <i class="fas fa-image"></i> Image Tools
+                    </div>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <a href="/tool/image-converter" class="tool-link">Image Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/image-optimizer" class="tool-link">Image Optimizer</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/image-resizer" class="tool-link">Image Resizer</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/image-to-base64" class="tool-link">Image to Base64</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/base64-to-image" class="tool-link">Base64 to Image</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/favicon-generator" class="tool-link">Favicon Generator</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/color-picker" class="tool-link">Color Picker</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/png-to-ico" class="tool-link">PNG to ICO Converter</a>
+                        </div>
+                        <div class="tool-item">
+                            <a href="/tool/svg-converter" class="tool-link">SVG Converter</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -548,69 +1021,69 @@
         </div>
     </div>
     
-    <!-- Popular Tools Section -->
-    <section class="popular-tools">
+    <!-- Features Section -->
+    <section class="features">
         <div class="container">
-            <h2 class="section-title">Most Popular Tools</h2>
+            <h2 class="section-title">Why Developers Love Our Tools</h2>
             
-            <div class="tools-grid">
-                <a href="/tool/json-formatter" class="tool-card">
-                    <h3><i class="fas fa-code"></i> JSON Formatter</h3>
-                    <p>Format and validate your JSON data with this easy-to-use tool</p>
-                </a>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>All tools run directly in your browser for instant results without any server delays or processing time.</p>
+                </div>
                 
-                <a href="/tool/base64-encode" class="tool-card">
-                    <h3><i class="fas fa-lock"></i> Base64 Encoder</h3>
-                    <p>Encode and decode Base64 strings quickly and easily</p>
-                </a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Privacy First</h3>
+                    <p>Your data never leaves your browser. We don't store, track, or analyze any of your inputs or outputs.</p>
+                </div>
                 
-                <a href="/tool/uuid-generator" class="tool-card">
-                    <h3><i class="fas fa-fingerprint"></i> UUID Generator</h3>
-                    <p>Generate random UUIDs (v4) for your applications</p>
-                </a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Free Forever</h3>
+                    <p>All our tools are completely free to use with no hidden costs, premium tiers, or paywalls.</p>
+                </div>
                 
-                <a href="/tool/jwt-decoder" class="tool-card">
-                    <h3><i class="fas fa-key"></i> JWT Decoder</h3>
-                    <p>Decode and verify JSON Web Tokens</p>
-                </a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Friendly</h3>
+                    <p>All tools work perfectly on desktop, tablet, and mobile devices with responsive interfaces.</p>
+                </div>
                 
-                <a href="/tool/sql-formatter" class="tool-card">
-                    <h3><i class="fas fa-database"></i> SQL Formatter</h3>
-                    <p>Format your SQL queries for better readability</p>
-                </a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>No Installation</h3>
+                    <p>Access all tools directly from your browser without any downloads, installations, or plugins.</p>
+                </div>
                 
-                <a href="/tool/hash-generator" class="tool-card">
-                    <h3><i class="fas fa-hashtag"></i> Hash Generator</h3>
-                    <p>Generate MD5, SHA1, SHA256 and other hashes from text</p>
-                </a>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Regular Updates</h3>
+                    <p>We continuously add new tools and improve existing ones based on user feedback.</p>
+                </div>
             </div>
         </div>
     </section>
     
-    <!-- Features Section -->
-    <section class="features">
+    <!-- CTA Section -->
+    <section class="cta">
         <div class="container">
-            <h2 class="section-title">Why Choose Our Tools</h2>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-bolt"></i>
-                    <h3>Fast & Reliable</h3>
-                    <p>Our tools run in your browser for instant results without server delays.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <i class="fas fa-lock"></i>
-                    <h3>Privacy Focused</h3>
-                    <p>Your data never leaves your browser. No tracking, no storage.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <i class="fas fa-heart"></i>
-                    <h3>Free Forever</h3>
-                    <p>All our tools are completely free to use with no hidden costs.</p>
-                </div>
-            </div>
+            <h2>Ready to Boost Your Productivity?</h2>
+            <p>Bookmark IT Tools now and have all the developer utilities you need at your fingertips whenever you need them.</p>
+            <a href="/tools" class="cta-button">Explore All Tools</a>
         </div>
     </section>
     
@@ -620,7 +1093,13 @@
             <div class="footer-container">
                 <div class="footer-column">
                     <h3>IT Tools</h3>
-                    <p>Essential utilities for developers, designers, and tech professionals.</p>
+                    <p>Essential utilities for developers, designers, and tech professionals. All tools are free, privacy-focused, and run directly in your browser.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
                 </div>
                 
                 <div class="footer-column">
@@ -630,6 +1109,8 @@
                         <li><a href="/category/encoder">Encoders/Decoders</a></li>
                         <li><a href="/category/generator">Generators</a></li>
                         <li><a href="/category/formatter">Formatters</a></li>
+                        <li><a href="/category/web">Web Tools</a></li>
+                        <li><a href="/category/image">Image Tools</a></li>
                     </ul>
                 </div>
                 
@@ -637,19 +1118,23 @@
                     <h3>Company</h3>
                     <ul>
                         <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
                         <li><a href="/contact">Contact</a></li>
                         <li><a href="/privacy">Privacy Policy</a></li>
                         <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Connect</h3>
+                    <h3>Popular Tools</h3>
                     <ul>
-                        <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
-                        <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
-                        <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                        <li><a href="/tool/json-formatter">JSON Formatter</a></li>
+                        <li><a href="/tool/base64-encode">Base64 Encoder</a></li>
+                        <li><a href="/tool/uuid-generator">UUID Generator</a></li>
+                        <li><a href="/tool/password-generator">Password Generator</a></li>
+                        <li><a href="/tool/jwt-decode">JWT Decoder</a></li>
+                        <li><a href="/tool/http-headers">HTTP Headers Viewer</a></li>
                     </ul>
                 </div>
             </div>
@@ -678,27 +1163,8 @@
             });
         });
         
-        // Lazy loading for images
-        document.addEventListener('DOMContentLoaded', function() {
-            const lazyImages = [].slice.call(document.querySelectorAll('img.lazy'));
-            
-            if ('IntersectionObserver' in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            lazyImage.classList.remove('lazy');
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
-                
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            }
-        });
+        // Initialize AdSense
+        (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
     
     <!-- Google Analytics -->
