@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Tools - Online Data Generators | IT Tools</title>
+    <meta name="description" content="Collection of free online generator tools for developers. Create UUIDs, passwords, test data, QR codes, and more instantly.">
+    <meta name="keywords" content="data generator, uuid generator, password generator, test data generator, qr code generator, online generator tools">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Category-specific styles */
+        .category-hero {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .category-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .category-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .category-container {
+            padding: 50px 0;
+        }
+        
+        .category-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inherit;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card-header {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: #10b981;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card-body {
+            padding: 20px;
+        }
+        
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111827;
+        }
+        
+        .tool-card p {
+            color: #6b7280;
+            margin: 10px 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            color: #10b981;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-link i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .popular-tools {
+            margin-top: 60px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="category-hero">
+        <div class="container">
+            <h1>Generator Tools</h1>
+            <p>Create test data, unique identifiers, security tokens, and more with our generation utilities</p>
+        </div>
+    </section>
+
+    <!-- Category Content -->
+    <div class="container category-container">
+        <div class="category-description">
+            <p>Our generator tools help you quickly create various types of data needed for development, testing, and security purposes. All generation happens in your browser for maximum privacy.</p>
+        </div>
+        
+        <div class="popular-tools">
+            <div class="section-header">
+                <h2>Popular Generator Tools</h2>
+                <p>Most frequently used data generation utilities in our collection</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- UUID Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <h3>UUID Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate version 4 UUIDs (Universally Unique Identifiers) for your applications.</p>
+                        <a href="/tools/uuid-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Password Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>Password Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Create secure, random passwords with customizable length and character sets.</p>
+                        <a href="/tools/password-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Lorem Ipsum Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-paragraph"></i>
+                        </div>
+                        <h3>Lorem Ipsum Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate placeholder text in paragraphs, words, or bytes for your designs.</p>
+                        <a href="/tools/lorem-ipsum" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- QR Code Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h3>QR Code Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Create customizable QR codes for URLs, text, contact info, and more.</p>
+                        <a href="/tools/qr-code-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-tools" style="margin-top: 80px;">
+            <div class="section-header">
+                <h2>All Generator Tools</h2>
+                <p>Complete list of data generation utilities in this category</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- UUID Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <h3>UUID Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate version 4 UUIDs (Universally Unique Identifiers).</p>
+                        <a href="/tools/uuid-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Password Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>Password Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Create secure, random passwords with customization options.</p>
+                        <a href="/tools/password-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Lorem Ipsum Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-paragraph"></i>
+                        </div>
+                        <h3>Lorem Ipsum Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate placeholder text for designs and prototypes.</p>
+                        <a href="/tools/lorem-ipsum" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- QR Code Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h3>QR Code Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Create customizable QR codes for various data types.</p>
+                        <a href="/tools/qr-code-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Random Number Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-random"></i>
+                        </div>
+                        <h3>Random Number Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate random numbers within a specified range.</p>
+                        <a href="/tools/random-number" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Hash Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-hashtag"></i>
+                        </div>
+                        <h3>Hash Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate hashes using MD5, SHA-1, SHA-256, and other algorithms.</p>
+                        <a href="/tools/hash-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- GUID Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <h3>GUID Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate Globally Unique Identifiers (GUIDs) for Windows systems.</p>
+                        <a href="/tools/guid-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Fake Data Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <h3>Fake Data Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate realistic fake data for testing (names, addresses, etc.).</p>
+                        <a href="/tools/fake-data" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Color Palette Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3>Color Palette Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate beautiful color palettes for your designs.</p>
+                        <a href="/tools/color-palette" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- API Key Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>API Key Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate secure random API keys for your applications.</p>
+                        <a href="/tools/api-key-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Test Credit Card Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h3>Test Credit Card Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate valid test credit card numbers for development.</p>
+                        <a href="/tools/test-credit-card" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Barcode Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-barcode"></i>
+                        </div>
+                        <h3>Barcode Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate barcodes in various formats (EAN-13, UPC-A, etc.).</p>
+                        <a href="/tools/barcode-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need a Different Generator Tool?</h2>
+            <p>Browse our complete collection of 300+ developer utilities</p>
+            <a href="/tools" class="cta-button">View All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div id = "footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>

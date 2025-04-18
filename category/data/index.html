@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Tools - Online Data Processing Utilities | IT Tools</title>
+    <meta name="description" content="Collection of free online data tools. Convert, analyze, and manipulate data with our comprehensive data processing utilities.">
+    <meta name="keywords" content="data tools, json formatter, csv tools, xml converter, data generator, sql formatter, excel converter">
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Category-specific styles */
+        .category-hero {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .category-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .category-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .category-container {
+            padding: 50px 0;
+        }
+        
+        .category-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inherit;
+            
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card-header {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: #f59e0b;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card-body {
+            padding: 20px;
+        }
+        
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111827;
+        }
+        
+        .tool-card p {
+            color: #6b7280;
+            margin: 10px 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            color: #f59e0b;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-link i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .popular-tools {
+            margin-top: 60px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="category-hero">
+        <div class="container">
+            <h1>Data Tools</h1>
+            <p>Convert, analyze, and manipulate data with our comprehensive utilities</p>
+        </div>
+    </section>
+
+    <!-- Category Content -->
+    <div class="container category-container">
+        <div class="category-description">
+            <p>Our data tools help you process and transform data between different formats. All tools work directly in your browser with no data being sent to servers.</p>
+        </div>
+        
+        <div class="popular-tools">
+            <div class="section-header">
+                <h2>Popular Data Tools</h2>
+                <p>Most frequently used data processing utilities in our collection</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- JSON Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>JSON Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Beautify and validate JSON data with proper indentation.</p>
+                        <a href="/tools/json-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSV to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-table"></i>
+                        </div>
+                        <h3>CSV to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert CSV data to JSON format with customizable options.</p>
+                        <a href="/tools/csv-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>SQL Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Format SQL queries with consistent indentation and syntax highlighting.</p>
+                        <a href="/tools/sql-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML Validator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>XML Validator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Validate and format XML documents with proper structure.</p>
+                        <a href="/tools/xml-validator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-tools" style="margin-top: 80px;">
+            <div class="section-header">
+                <h2>All Data Tools</h2>
+                <p>Complete list of data processing utilities in this category</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- JSON Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>JSON Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Beautify and validate JSON data with syntax highlighting.</p>
+                        <a href="/tools/json-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSV to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-table"></i>
+                        </div>
+                        <h3>CSV to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert CSV data to JSON format with options.</p>
+                        <a href="/tools/csv-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>SQL Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Format SQL queries with consistent indentation.</p>
+                        <a href="/tools/sql-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML Validator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>XML Validator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Validate XML documents against standards.</p>
+                        <a href="/tools/xml-validator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON to CSV -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>JSON to CSV</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON data to CSV format for spreadsheets.</p>
+                        <a href="/tools/json-to-csv" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Excel to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <h3>Excel to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert Excel files to JSON format automatically.</p>
+                        <a href="/tools/excel-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON to XML -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>JSON to XML</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON data to XML format with proper structure.</p>
+                        <a href="/tools/json-to-xml" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>XML to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert XML documents to JSON format.</p>
+                        <a href="/tools/xml-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Data Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-random"></i>
+                        </div>
+                        <h3>Data Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate realistic test data in various formats.</p>
+                        <a href="/tools/data-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL Query Builder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>SQL Query Builder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Visually build SQL queries without writing code.</p>
+                        <a href="/tools/sql-builder" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON Schema Validator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>JSON Schema Validator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Validate JSON against schema definitions.</p>
+                        <a href="/tools/json-schema-validator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- YAML to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>YAML to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert YAML configuration files to JSON format.</p>
+                        <a href="/tools/yaml-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need a Different Data Tool?</h2>
+            <p>Browse our complete collection of 300+ developer utilities</p>
+            <a href="/tools" class="cta-button">View All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>IT Tools</h3>
+                    <p>Essential utilities for developers, designers, and tech professionals. All tools are free, privacy-focused, and run directly in your browser.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="/category/converter">Converters</a></li>
+                        <li><a href="/category/encoder">Encoders/Decoders</a></li>
+                        <li><a href="/category/generator">Generators</a></li>
+                        <li><a href="/category/formatter">Formatters</a></li>
+                        <li><a href="/category/web">Web Tools</a></li>
+                        <li><a href="/category/image">Image Tools</a></li>
+                        <li><a href="/category/text">Text Tools</a></li>
+                        <li><a href="/category/data" class="active">Data Tools</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Popular Tools</h3>
+                    <ul>
+                        <li><a href="/tools/json-formatter">JSON Formatter</a></li>
+                        <li><a href="/tools/csv-to-json">CSV to JSON</a></li>
+                        <li><a href="/tools/sql-formatter">SQL Formatter</a></li>
+                        <li><a href="/tools/xml-validator">XML Validator</a></li>
+                        <li><a href="/tools/data-generator">Data Generator</a></li>
+                        <li><a href="/tools/json-schema-validator">JSON Schema Validator</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 IT Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>

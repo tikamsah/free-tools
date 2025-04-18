@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formatter Tools - Code Formatting Utilities | IT Tools</title>
+    <meta name="description" content="Collection of free online formatter tools for developers. Beautify and minify JSON, XML, SQL, CSS, and other code formats instantly.">
+    <meta name="keywords" content="code formatter, json formatter, xml formatter, sql formatter, css formatter, code beautifier, online formatting tools">
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Category-specific styles */
+        .category-hero {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .category-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .category-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .category-container {
+            padding: 50px 0;
+        }
+        
+        .category-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inherit;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card-header {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card-body {
+            padding: 20px;
+        }
+        
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111827;
+        }
+        
+        .tool-card p {
+            color: #6b7280;
+            margin: 10px 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            color: #3b82f6;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-link i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .popular-tools {
+            margin-top: 60px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="category-hero">
+        <div class="container">
+            <h1>Formatter Tools</h1>
+            <p>Beautify, minify, and validate your code with our collection of formatting utilities</p>
+        </div>
+    </section>
+
+    <!-- Category Content -->
+    <div class="container category-container">
+        <div class="category-description">
+            <p>Our formatter tools help you clean up and standardize your code for better readability and maintainability. All formatting happens in your browser with no server-side processing.</p>
+        </div>
+        
+        <div class="popular-tools">
+            <div class="section-header">
+                <h2>Popular Formatter Tools</h2>
+                <p>Most frequently used code formatting utilities in our collection</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- JSON Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>JSON Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Beautify and validate JSON data with proper indentation and syntax highlighting.</p>
+                        <a href="/tools/json-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>XML Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Format and validate XML documents with proper indentation and structure.</p>
+                        <a href="/tools/xml-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>SQL Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Format SQL queries with consistent indentation and keyword highlighting.</p>
+                        <a href="/tools/sql-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSS Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-css3"></i>
+                        </div>
+                        <h3>CSS Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Beautify and minify CSS code with customizable formatting options.</p>
+                        <a href="/tools/css-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-tools" style="margin-top: 80px;">
+            <div class="section-header">
+                <h2>All Formatter Tools</h2>
+                <p>Complete list of code formatting utilities in this category</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- JSON Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>JSON Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Beautify and validate JSON data with syntax highlighting.</p>
+                        <a href="/tools/json-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>XML Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Format and validate XML documents with proper structure.</p>
+                        <a href="/tools/xml-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>SQL Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Format SQL queries with consistent indentation.</p>
+                        <a href="/tools/sql-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSS Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-css3"></i>
+                        </div>
+                        <h3>CSS Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Beautify and minify CSS code with options.</p>
+                        <a href="/tools/css-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JavaScript Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-js"></i>
+                        </div>
+                        <h3>JavaScript Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Format and beautify JavaScript code with ES6+ support.</p>
+                        <a href="/tools/javascript-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- HTML Formatter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        <h3>HTML Formatter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Beautify and validate HTML markup with proper indentation.</p>
+                        <a href="/tools/html-formatter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON Minifier -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>JSON Minifier</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Minify JSON data by removing all unnecessary whitespace.</p>
+                        <a href="/tools/json-minifier" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML Minifier -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>XML Minifier</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Minify XML documents by removing unnecessary whitespace.</p>
+                        <a href="/tools/xml-minifier" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL Minifier -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>SQL Minifier</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Minify SQL queries by removing comments and extra spaces.</p>
+                        <a href="/tools/sql-minifier" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSS Minifier -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>CSS Minifier</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Minify CSS code for production by removing whitespace.</p>
+                        <a href="/tools/css-minifier" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JavaScript Minifier -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>JavaScript Minifier</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Minify JavaScript code for production deployment.</p>
+                        <a href="/tools/javascript-minifier" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- HTML Minifier -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>HTML Minifier</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Minify HTML markup by removing comments and whitespace.</p>
+                        <a href="/tools/html-minifier" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need a Different Formatter Tool?</h2>
+            <p>Browse our complete collection of 300+ developer utilities</p>
+            <a href="/tools" class="cta-button">View All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>IT Tools</h3>
+                    <p>Essential utilities for developers, designers, and tech professionals. All tools are free, privacy-focused, and run directly in your browser.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="/category/converter">Converters</a></li>
+                        <li><a href="/category/encoder">Encoders/Decoders</a></li>
+                        <li><a href="/category/generator">Generators</a></li>
+                        <li><a href="/category/formatter" class="active">Formatters</a></li>
+                        <li><a href="/category/web">Web Tools</a></li>
+                        <li><a href="/category/image">Image Tools</a></li>
+                        <li><a href="/category/text">Text Tools</a></li>
+                        <li><a href="/category/data">Data Tools</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Popular Tools</h3>
+                    <ul>
+                        <li><a href="/tools/json-formatter">JSON Formatter</a></li>
+                        <li><a href="/tools/base64-encode">Base64 Encoder</a></li>
+                        <li><a href="/tools/uuid-generator">UUID Generator</a></li>
+                        <li><a href="/tools/password-generator">Password Generator</a></li>
+                        <li><a href="/tools/jwt-decode">JWT Decoder</a></li>
+                        <li><a href="/tools/http-headers">HTTP Headers Viewer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 IT Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>

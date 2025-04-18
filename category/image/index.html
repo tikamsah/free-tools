@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Tools - Online Image Editing & Conversion Utilities | IT Tools</title>
+    <meta name="description" content="Collection of free online image tools. Resize, convert, compress, and edit images without installing any software.">
+    <meta name="keywords" content="image tools, image converter, image compressor, photo editor, image resizer, png to jpg, webp converter, image optimizer">
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Category-specific styles */
+        .category-hero {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .category-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .category-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .category-container {
+            padding: 50px 0;
+        }
+        
+        .category-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inherit;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card-header {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: #8b5cf6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card-body {
+            padding: 20px;
+        }
+        
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111827;
+        }
+        
+        .tool-card p {
+            color: #6b7280;
+            margin: 10px 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            color: #8b5cf6;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-link i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .popular-tools {
+            margin-top: 60px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="category-hero">
+        <div class="container">
+            <h1>Image Tools</h1>
+            <p>Edit, convert, compress, and optimize images directly in your browser</p>
+        </div>
+    </section>
+
+    <!-- Category Content -->
+    <div class="container category-container">
+        <div class="category-description">
+            <p>Our image tools help you work with photos and graphics without installing any software. All processing happens in your browser for maximum privacy and convenience.</p>
+        </div>
+        
+        <div class="popular-tools">
+            <div class="section-header">
+                <h2>Popular Image Tools</h2>
+                <p>Most frequently used image processing utilities in our collection</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- Image Compressor -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>Image Compressor</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Reduce image file size without noticeable quality loss for faster websites.</p>
+                        <a href="/tools/image-compressor" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Converter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Image Converter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between JPG, PNG, GIF, WEBP, and other image formats.</p>
+                        <a href="/tools/image-converter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Resizer -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-expand-alt"></i>
+                        </div>
+                        <h3>Image Resizer</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Resize images to exact dimensions while maintaining aspect ratio.</p>
+                        <a href="/tools/image-resizer" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Background Remover -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <h3>Background Remover</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Automatically remove backgrounds from images with AI technology.</p>
+                        <a href="/tools/background-remover" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-tools" style="margin-top: 80px;">
+            <div class="section-header">
+                <h2>All Image Tools</h2>
+                <p>Complete list of image processing utilities in this category</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- Image Compressor -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>Image Compressor</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Reduce image file size while preserving quality.</p>
+                        <a href="/tools/image-compressor" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Converter -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Image Converter</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between all popular image formats.</p>
+                        <a href="/tools/image-converter" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Resizer -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-expand-alt"></i>
+                        </div>
+                        <h3>Image Resizer</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Resize images to exact dimensions.</p>
+                        <a href="/tools/image-resizer" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Background Remover -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <h3>Background Remover</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Remove backgrounds from images automatically.</p>
+                        <a href="/tools/background-remover" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Photo Editor -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3>Photo Editor</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Basic online photo editing with filters and adjustments.</p>
+                        <a href="/tools/photo-editor" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- PNG to JPG -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <h3>PNG to JPG</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert PNG images to JPG format with quality control.</p>
+                        <a href="/tools/png-to-jpg" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JPG to WEBP -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <h3>JPG to WEBP</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JPG images to modern WEBP format.</p>
+                        <a href="/tools/jpg-to-webp" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Cropper -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-crop"></i>
+                        </div>
+                        <h3>Image Cropper</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Crop images to remove unwanted areas or focus on specific parts.</p>
+                        <a href="/tools/image-cropper" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Watermark -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <h3>Image Watermark</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Add text or logo watermarks to protect your images.</p>
+                        <a href="/tools/image-watermark" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Color Picker -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-eye-dropper"></i>
+                        </div>
+                        <h3>Color Picker</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Extract colors from images and get HEX, RGB, HSL values.</p>
+                        <a href="/tools/color-picker" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Rotator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-redo"></i>
+                        </div>
+                        <h3>Image Rotator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Rotate and flip images in 90° increments.</p>
+                        <a href="/tools/image-rotator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Image Metadata Viewer -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h3>Image Metadata Viewer</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>View EXIF and other metadata from image files.</p>
+                        <a href="/tools/image-metadata" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need a Different Image Tool?</h2>
+            <p>Browse our complete collection of 300+ developer utilities</p>
+            <a href="/tools" class="cta-button">View All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div id = "footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>

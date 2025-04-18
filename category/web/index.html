@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Tools - Essential Utilities for Web Developers | IT Tools</title>
+    <meta name="description" content="Collection of free online web development tools. Analyze, test, and optimize websites with our comprehensive web utilities.">
+    <meta name="keywords" content="web tools, website analyzer, http headers, seo tools, url encoder, user agent parser, web developer tools">
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Category-specific styles */
+        .category-hero {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .category-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .category-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .category-container {
+            padding: 50px 0;
+        }
+        
+        .category-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inherit;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card-header {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: #10b981;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card-body {
+            padding: 20px;
+        }
+        
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111827;
+        }
+        
+        .tool-card p {
+            color: #6b7280;
+            margin: 10px 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            color: #10b981;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-link i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .popular-tools {
+            margin-top: 60px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="category-hero">
+        <div class="container">
+            <h1>Web Tools</h1>
+            <p>Essential utilities for web developers, designers, and SEO specialists</p>
+        </div>
+    </section>
+
+    <!-- Category Content -->
+    <div class="container category-container">
+        <div class="category-description">
+            <p>Our web tools help you analyze, test, and optimize websites with comprehensive utilities that work directly in your browser. No server-side processing required.</p>
+        </div>
+        
+        <div class="popular-tools">
+            <div class="section-header">
+                <h2>Popular Web Tools</h2>
+                <p>Most frequently used web development utilities in our collection</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- HTTP Headers Viewer -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>HTTP Headers Viewer</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>View HTTP headers sent by your browser and analyze request/response details.</p>
+                        <a href="/tools/http-headers" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- URL Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>URL Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode or decode URL strings to ensure proper formatting and security.</p>
+                        <a href="/tools/url-encoder" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- User Agent Parser -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>User Agent Parser</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Parse and analyze browser user agent strings to detect device and browser details.</p>
+                        <a href="/tools/user-agent-parser" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Website Speed Test -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3>Website Speed Test</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Test your website's loading speed and get optimization recommendations.</p>
+                        <a href="/tools/website-speed-test" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-tools" style="margin-top: 80px;">
+            <div class="section-header">
+                <h2>All Web Tools</h2>
+                <p>Complete list of web development utilities in this category</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- HTTP Headers Viewer -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>HTTP Headers Viewer</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>View and analyze HTTP request and response headers.</p>
+                        <a href="/tools/http-headers" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- URL Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>URL Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode or decode URL strings for proper formatting.</p>
+                        <a href="/tools/url-encoder" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- User Agent Parser -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>User Agent Parser</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Parse browser user agent strings to detect device details.</p>
+                        <a href="/tools/user-agent-parser" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Website Speed Test -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3>Website Speed Test</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Test website loading speed and get recommendations.</p>
+                        <a href="/tools/website-speed-test" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SEO Analyzer -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>SEO Analyzer</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Analyze web pages for SEO factors and optimization opportunities.</p>
+                        <a href="/tools/seo-analyzer" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Meta Tag Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3>Meta Tag Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate optimized meta tags for social media and search engines.</p>
+                        <a href="/tools/meta-tag-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Robots.txt Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>Robots.txt Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Create and validate robots.txt files for search engine crawlers.</p>
+                        <a href="/tools/robots-txt-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Favicon Generator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <h3>Favicon Generator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate favicons in multiple sizes from your uploaded image.</p>
+                        <a href="/tools/favicon-generator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- HTML Validator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        <h3>HTML Validator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Validate HTML markup against W3C standards.</p>
+                        <a href="/tools/html-validator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSS Validator -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-css3"></i>
+                        </div>
+                        <h3>CSS Validator</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Validate CSS stylesheets against W3C standards.</p>
+                        <a href="/tools/css-validator" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Website Screenshot -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h3>Website Screenshot</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Generate screenshots of web pages in different resolutions.</p>
+                        <a href="/tools/website-screenshot" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Domain WHOIS Lookup -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Domain WHOIS Lookup</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Look up domain registration information and availability.</p>
+                        <a href="/tools/whois-lookup" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need a Different Web Tool?</h2>
+            <p>Browse our complete collection of 300+ developer utilities</p>
+            <a href="/tools" class="cta-button">View All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div id = "footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>

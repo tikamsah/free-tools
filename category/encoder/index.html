@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encoder/Decoder Tools - Online Encoding Utilities | IT Tools</title>
+    <meta name="description" content="Collection of free online encoder and decoder tools for developers. Encode and decode Base64, URL, HTML, JWT, and other formats instantly.">
+    <meta name="keywords" content="encoder tools, decoder tools, base64 encode, url encode, html encode, jwt decode, online encoding utilities">
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Category-specific styles */
+        .category-hero {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .category-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .category-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .category-container {
+            padding: 50px 0;
+        }
+        
+        .category-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inherit
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card-header {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: #7c3aed;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card-body {
+            padding: 20px;
+        }
+        
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111827;
+        }
+        
+        .tool-card p {
+            color: #6b7280;
+            margin: 10px 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            color: #7c3aed;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-link i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .popular-tools {
+            margin-top: 60px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="category-hero">
+        <div class="container">
+            <h1>Encoder/Decoder Tools</h1>
+            <p>Secure encoding and decoding utilities for various data formats and protocols</p>
+        </div>
+    </section>
+
+    <!-- Category Content -->
+    <div class="container category-container">
+        <div class="category-description">
+            <p>Our encoder and decoder tools help you transform data between different representations while maintaining data integrity. All processing happens in your browser for maximum security and privacy.</p>
+        </div>
+        
+        <div class="popular-tools">
+            <div class="section-header">
+                <h2>Popular Encoding Tools</h2>
+                <p>Most frequently used encoding/decoding utilities in our collection</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- Base64 Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Base64 Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode and decode Base64 strings with support for various character sets and file attachments.</p>
+                        <a href="/tools/base64-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- URL Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>URL Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode and decode URL strings to ensure proper transmission of special characters.</p>
+                        <a href="/tools/url-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- HTML Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        <h3>HTML Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode and decode HTML entities to prevent XSS attacks and display special characters.</p>
+                        <a href="/tools/html-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JWT Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>JWT Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Decode JSON Web Tokens to view header, payload, and signature information.</p>
+                        <a href="/tools/jwt-decode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-tools" style="margin-top: 80px;">
+            <div class="section-header">
+                <h2>All Encoder/Decoder Tools</h2>
+                <p>Complete list of encoding and decoding utilities in this category</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- Base64 Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Base64 Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode and decode Base64 strings with various character sets.</p>
+                        <a href="/tools/base64-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- URL Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>URL Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode and decode URL strings for web applications.</p>
+                        <a href="/tools/url-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- HTML Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        <h3>HTML Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Encode and decode HTML entities and special characters.</p>
+                        <a href="/tools/html-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JWT Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>JWT Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Decode JSON Web Tokens to inspect claims and verify structure.</p>
+                        <a href="/tools/jwt-decode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- UTF-8 Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>UTF-8 Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between Unicode characters and UTF-8 byte sequences.</p>
+                        <a href="/tools/utf8-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Hex Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-hashtag"></i>
+                        </div>
+                        <h3>Hex Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between text and hexadecimal representation.</p>
+                        <a href="/tools/hex-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Binary Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-digital-tachograph"></i>
+                        </div>
+                        <h3>Binary Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between text and binary (0101) representation.</p>
+                        <a href="/tools/binary-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- ASCII Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-font"></i>
+                        </div>
+                        <h3>ASCII Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between text and ASCII code points.</p>
+                        <a href="/tools/ascii-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- GZip Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-archive"></i>
+                        </div>
+                        <h3>GZip Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Compress and decompress text using GZip algorithm.</p>
+                        <a href="/tools/gzip-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- ROT13 Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-undo"></i>
+                        </div>
+                        <h3>ROT13 Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Apply ROT13 cipher to encode/decode text (reversible).</p>
+                        <a href="/tools/rot13-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Morse Code Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-signal"></i>
+                        </div>
+                        <h3>Morse Code Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between text and Morse code with audio playback.</p>
+                        <a href="/tools/morse-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Unicode Encoder/Decoder -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Unicode Encoder/Decoder</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert between text and Unicode escape sequences.</p>
+                        <a href="/tools/unicode-encode" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need a Different Encoding Tool?</h2>
+            <p>Browse our complete collection of 300+ developer utilities</p>
+            <a href="/tools" class="cta-button">View All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div id = "footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>

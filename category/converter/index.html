@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converter Tools - Data Format Conversion | IT Tools</title>
+    <meta name="description" content="Collection of free online converter tools for developers. Convert between JSON, XML, CSV, YAML, and other data formats instantly.">
+    <meta name="keywords" content="data converter, json converter, xml converter, csv converter, yaml converter, online conversion tools">
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Category-specific styles */
+        .category-hero {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .category-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .category-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .category-container {
+            padding: 50px 0;
+        }
+        
+        .category-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inline;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-card-header {
+            padding: 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: #4f46e5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .tool-card-body {
+            padding: 20px;
+        }
+        
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #111827;
+        }
+        
+        .tool-card p {
+            color: #6b7280;
+            margin: 10px 0 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            color: #4f46e5;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-link i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .popular-tools {
+            margin-top: 60px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .category-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories" class="active">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Category Hero Section -->
+    <section class="category-hero">
+        <div class="container">
+            <h1>Converter Tools</h1>
+            <p>Transform data between different formats and standards with our collection of conversion utilities</p>
+        </div>
+    </section>
+
+    <!-- Category Content -->
+    <div class="container category-container">
+        <div class="category-description">
+            <p>Our converter tools allow you to quickly transform data between various formats used in software development and data processing. All conversions happen in your browser for maximum privacy and security.</p>
+        </div>
+        
+        <div class="popular-tools">
+            <div class="section-header">
+                <h2>Popular Converter Tools</h2>
+                <p>Most frequently used conversion utilities in our collection</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- JSON to XML -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>JSON to XML</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON data to XML format with proper nesting and attributes. Supports complex JSON structures.</p>
+                        <a href="/tools/json-to-xml" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSV to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-csv"></i>
+                        </div>
+                        <h3>CSV to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Transform CSV data to JSON format with options for headers and array/object output.</p>
+                        <a href="/tools/csv-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- YAML to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>YAML to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert YAML configuration files to JSON format with validation and formatting options.</p>
+                        <a href="/tools/yaml-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>SQL to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert SQL query results (as INSERT statements) to JSON format for easy API integration.</p>
+                        <a href="/tools/sql-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>XML to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert XML data to JSON format with options for attribute handling and text content.</p>
+                        <a href="/tools/xml-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON to CSV -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-csv"></i>
+                        </div>
+                        <h3>JSON to CSV</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON arrays to CSV format with customizable delimiters and header options.</p>
+                        <a href="/tools/json-to-csv" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON to YAML -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>JSON to YAML</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON data to YAML format with proper indentation and formatting.</p>
+                        <a href="/tools/json-to-yaml" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Base64 to File -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-download"></i>
+                        </div>
+                        <h3>Base64 to File</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert Base64 encoded strings back to downloadable files (images, PDFs, etc.).</p>
+                        <a href="/tools/base64-to-file" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-tools" style="margin-top: 80px;">
+            <div class="section-header">
+                <h2>All Converter Tools</h2>
+                <p>Complete list of data conversion utilities in this category</p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- JSON to XML -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>JSON to XML</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON data to XML format with proper nesting and attributes.</p>
+                        <a href="/tools/json-to-xml" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>XML to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert XML data to JSON format with attribute handling options.</p>
+                        <a href="/tools/xml-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSV to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-csv"></i>
+                        </div>
+                        <h3>CSV to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Transform CSV data to JSON format with header options.</p>
+                        <a href="/tools/csv-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON to CSV -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-csv"></i>
+                        </div>
+                        <h3>JSON to CSV</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON arrays to CSV format with customizable options.</p>
+                        <a href="/tools/json-to-csv" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- YAML to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>YAML to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert YAML configuration files to JSON format.</p>
+                        <a href="/tools/yaml-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON to YAML -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>JSON to YAML</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON data to YAML format with proper formatting.</p>
+                        <a href="/tools/json-to-yaml" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- SQL to JSON -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>SQL to JSON</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert SQL query results to JSON format.</p>
+                        <a href="/tools/sql-to-json" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Base64 to File -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-download"></i>
+                        </div>
+                        <h3>Base64 to File</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert Base64 encoded strings back to downloadable files.</p>
+                        <a href="/tools/base64-to-file" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- File to Base64 -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-upload"></i>
+                        </div>
+                        <h3>File to Base64</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert files to Base64 encoded strings for web applications.</p>
+                        <a href="/tools/file-to-base64" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- JSON to SQL -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>JSON to SQL</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert JSON data to SQL INSERT statements.</p>
+                        <a href="/tools/json-to-sql" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- XML to CSV -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-csv"></i>
+                        </div>
+                        <h3>XML to CSV</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert XML data to CSV format with element selection.</p>
+                        <a href="/tools/xml-to-csv" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- CSV to XML -->
+                <div class="tool-card">
+                    <div class="tool-card-header">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-code"></i>
+                        </div>
+                        <h3>CSV to XML</h3>
+                    </div>
+                    <div class="tool-card-body">
+                        <p>Convert CSV data to XML format with customizable root and element names.</p>
+                        <a href="/tools/csv-to-xml" class="tool-link">Use Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need a Different Conversion Tool?</h2>
+            <p>Browse our complete collection of 300+ developer utilities</p>
+            <a href="/tools" class="cta-button">View All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div id = "footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>
