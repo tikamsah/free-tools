@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to XML Converter - Online Tool | IT Tools</title>
+    <meta name="description" content="Free online JSON to XML converter tool. Quickly transform your JSON data into properly formatted XML with our easy-to-use converter.">
+    <meta name="keywords" content="json to xml, json converter, xml converter, online json tool, data conversion">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Tool-specific styles */
+        .tool-hero {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .tool-hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .tool-hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .tool-container {
+            padding: 40px 0;
+        }
+        
+        .converter-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .text-areas {
+            display: flex;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .text-areas {
+                flex-direction: column;
+            }
+        }
+        
+        .text-area-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .text-area-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .text-area-header h3 {
+            font-size: 1.1rem;
+            color: #374151;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .text-area-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .text-area-buttons button {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+            color: #4b5563;
+        }
+        
+        .text-area-buttons button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .text-area-buttons button i {
+            font-size: 0.9rem;
+        }
+        
+        .text-area {
+            width: 100%;
+            min-height: 300px;
+            padding: 16px;
+            border: none;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            resize: vertical;
+            background: #ffffff;
+            color: #111827;
+        }
+        
+        .text-area:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 2px #4f46e5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-button {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .convert-btn {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+        }
+        
+        .convert-btn:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+        
+        .clear-btn {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .clear-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-description {
+            max-width: 800px;
+            margin: 40px auto 0;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .tool-description h2 {
+            color: #111827;
+            margin: 30px 0 15px;
+            font-size: 1.4rem;
+        }
+        
+        .tool-description ul {
+            padding-left: 20px;
+        }
+        
+        .tool-description li {
+            margin-bottom: 8px;
+        }
+        
+        .copy-success {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            margin: 10px 16px;
+            font-size: 0.9rem;
+            display: none;
+            padding: 8px 12px;
+            background: #fef2f2;
+            border-radius: 6px;
+            border-left: 3px solid #ef4444;
+        }
+        
+        .output-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+        
+        .output-action-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .output-action-btn:hover {
+            color: #4f46e5;
+            background: #eef2ff;
+        }
+        
+        .output-action-btn i {
+            font-size: 1rem;
+        }
+        
+        .download-btn {
+            color: #10b981;
+        }
+        
+        .download-btn:hover {
+            color: #059669;
+            background: #ecfdf5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Hero Section -->
+    <section class="tool-hero">
+        <div class="container">
+            <h1>JSON to XML Converter</h1>
+            <p>Convert your JSON data to XML format instantly with this free online tool</p>
+        </div>
+    </section>
+
+    <!-- Tool Container -->
+    <div class="container tool-container">
+        <div class="converter-wrapper">
+            <div class="text-areas">
+                <!-- JSON Input -->
+                <div class="text-area-container">
+                    <div class="text-area-header">
+                        <h3>JSON Input</h3>
+                        <div class="text-area-buttons">
+                            <button id="formatJsonBtn">
+                                <i class="fas fa-align-left"></i> Format
+                            </button>
+                            <button id="clearJsonBtn">
+                                <i class="fas fa-trash-alt"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="jsonInput" class="text-area" placeholder='Paste your JSON here, e.g.:
+{
+  "person": {
+    "name": "John",
+    "age": 30,
+    "city": "New York"
+  }
+}'></textarea>
+                    <div id="jsonError" class="error-message"></div>
+                </div>
+                
+                <!-- XML Output -->
+                <div class="text-area-container">
+                    <div class="text-area-header">
+                        <h3>XML Output</h3>
+                        <div class="output-actions">
+                            <button id="copyXmlBtn" class="output-action-btn" title="Copy XML">
+                                <i class="far fa-copy"></i>
+                            </button>
+                            <button id="downloadXmlBtn" class="output-action-btn download-btn" title="Download XML">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button id="clearXmlBtn" class="output-action-btn" title="Clear XML">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="xmlOutput" class="text-area" placeholder="XML output will appear here..." readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="action-button convert-btn">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearAllBtn" class="action-button clear-btn">
+                    <i class="fas fa-broom"></i> Clear All
+                </button>
+            </div>
+        </div>
+        
+        <div class="tool-description">
+            <h2>About JSON to XML Conversion</h2>
+            <p>This tool allows you to convert JSON (JavaScript Object Notation) data to XML (Extensible Markup Language) format. JSON and XML are both widely used formats for data interchange between systems. While JSON is more lightweight and easier to parse in JavaScript, XML is more verbose but offers features like namespaces and schema validation.</p>
+            
+            <h2>How to Use This Converter</h2>
+            <ol>
+                <li>Paste your JSON data into the left text area</li>
+                <li>Click the "Convert" button to transform it to XML</li>
+                <li>Copy or download the resulting XML from the right text area</li>
+                <li>Use the "Format" button to prettify your JSON before conversion</li>
+            </ol>
+            
+            <h2>Conversion Rules</h2>
+            <ul>
+                <li>JSON objects become XML elements</li>
+                <li>JSON properties become XML attributes or child elements</li>
+                <li>JSON arrays become repeated XML elements</li>
+                <li>Primitive values (strings, numbers, booleans) become text content</li>
+                <li>Output includes full XML declaration (<?xml version="1.0" encoding="UTF-8" ?>)</li>
+            </ul>
+            
+            <h2>Example Conversion</h2>
+            <p><strong>JSON Input:</strong></p>
+            <pre>{
+  "employee": {
+    "name": "John Doe",
+    "age": 35,
+    "department": "IT",
+    "skills": ["JavaScript", "Python", "SQL"],
+    "@id": "emp123",
+    "active": true
+  }
+}</pre>
+            
+            <p><strong>XML Output:</strong></p>
+            <pre><?xml version="1.0" encoding="UTF-8"?>
+<employee id="emp123">
+  <name>John Doe</name>
+  <age>35</age>
+  <department>IT</department>
+  <skills>JavaScript</skills>
+  <skills>Python</skills>
+  <skills>SQL</skills>
+  <active>true</active>
+</employee></pre>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Need Other Conversion Tools?</h2>
+            <p>Explore our complete collection of data conversion utilities</p>
+            <a href="/category/converter" class="cta-button">View All Converters</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>IT Tools</h3>
+                    <p>Essential utilities for developers, designers, and tech professionals. All tools are free, privacy-focused, and run directly in your browser.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="/category/converter">Converters</a></li>
+                        <li><a href="/category/encoder">Encoders/Decoders</a></li>
+                        <li><a href="/category/generator">Generators</a></li>
+                        <li><a href="/category/formatter">Formatters</a></li>
+                        <li><a href="/category/web">Web Tools</a></li>
+                        <li><a href="/category/image">Image Tools</a></li>
+                        <li><a href="/category/text">Text Tools</a></li>
+                        <li><a href="/category/data">Data Tools</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Popular Tools</h3>
+                    <ul>
+                        <li><a href="/tool/json-formatter">JSON Formatter</a></li>
+                        <li><a href="/tool/base64-encode">Base64 Encoder</a></li>
+                        <li><a href="/tool/uuid-generator">UUID Generator</a></li>
+                        <li><a href="/tool/password-generator">Password Generator</a></li>
+                        <li><a href="/tool/jwt-decode">JWT Decoder</a></li>
+                        <li><a href="/tool/http-headers">HTTP Headers Viewer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 IT Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copy Success Notification -->
+    <div id="copySuccess" class="copy-success">
+        <i class="fas fa-check-circle"></i>
+        <span>XML copied to clipboard!</span>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const jsonInput = document.getElementById('jsonInput');
+            const xmlOutput = document.getElementById('xmlOutput');
+            const convertBtn = document.getElementById('convertBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const formatJsonBtn = document.getElementById('formatJsonBtn');
+            const clearJsonBtn = document.getElementById('clearJsonBtn');
+            const copyXmlBtn = document.getElementById('copyXmlBtn');
+            const downloadXmlBtn = document.getElementById('downloadXmlBtn');
+            const clearXmlBtn = document.getElementById('clearXmlBtn');
+            const jsonError = document.getElementById('jsonError');
+            const copySuccess = document.getElementById('copySuccess');
+            
+            // Convert JSON to XML
+            function convertJsonToXml() {
+                try {
+                    // Clear previous errors
+                    jsonError.style.display = 'none';
+                    
+                    // Get and validate JSON input
+                    const jsonString = jsonInput.value.trim();
+                    if (!jsonString) {
+                        throw new Error('Please enter JSON data to convert');
+                    }
+                    
+                    // Parse JSON
+                    const jsonObj = JSON.parse(jsonString);
+                    
+                    // Convert to XML
+                    const xmlString = jsonToXml(jsonObj);
+                    
+                    // Display XML output with full XML declaration
+                    xmlOutput.value = `<?xml version="1.0" encoding="UTF-8"?>\n${formatXml(xmlString)}`;
+                } catch (error) {
+                    jsonError.textContent = error.message;
+                    jsonError.style.display = 'block';
+                    xmlOutput.value = '';
+                }
+            }
+            
+            // Recursive function to convert JSON to XML
+            function jsonToXml(obj, nodeName = 'root') {
+                let xml = '';
+                
+                if (obj === null || obj === undefined) {
+                    return `<${nodeName}></${nodeName}>`;
+                }
+                
+                // Handle arrays
+                if (Array.isArray(obj)) {
+                    for (let item of obj) {
+                        xml += jsonToXml(item, nodeName);
+                    }
+                    return xml;
+                }
+                
+                // Handle objects
+                if (typeof obj === 'object') {
+                    let attributes = '';
+                    let children = '';
+                    
+                    for (let key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            // Handle attributes (keys starting with @)
+                            if (key.startsWith('@')) {
+                                attributes += ` ${key.substring(1)}="${escapeXml(String(obj[key]))}"`;
+                            } 
+                            // Handle child elements
+                            else {
+                                children += jsonToXml(obj[key], key);
+                            }
+                        }
+                    }
+                    
+                    if (children) {
+                        xml += `<${nodeName}${attributes}>${children}</${nodeName}>`;
+                    } else {
+                        xml += `<${nodeName}${attributes}/>`;
+                    }
+                } 
+                // Handle primitive values
+                else {
+                    xml += `<${nodeName}>${escapeXml(String(obj))}</${nodeName}>`;
+                }
+                
+                return xml;
+            }
+            
+            // Escape XML special characters
+            function escapeXml(unsafe) {
+                return unsafe.replace(/[<>&'"]/g, function (c) {
+                    switch (c) {
+                        case '<': return '&lt;';
+                        case '>': return '&gt;';
+                        case '&': return '&amp;';
+                        case '\'': return '&apos;';
+                        case '"': return '&quot;';
+                        default: return c;
+                    }
+                });
+            }
+            
+            // Format XML with proper indentation
+            function formatXml(xml) {
+                const PADDING = '  '; // 2 spaces
+                let formatted = '';
+                let indent = '';
+                
+                xml.split(/>\s*</).forEach(function(node) {
+                    if (node.match(/^\/\w/)) { // Closing tag
+                        indent = indent.substring(PADDING.length);
+                        formatted += indent + '<' + node + '>\r\n';
+                    } else if (node.match(/^<?\w[^>]*[^\/]$/)) { // Opening tag
+                        formatted += indent + '<' + node + '>\r\n';
+                        indent += PADDING;
+                    } else { // Self-closing tag or other
+                        formatted += indent + '<' + node + '>\r\n';
+                    }
+                });
+                
+                return formatted.substring(1, formatted.length - 3);
+            }
+            
+            // Format JSON with proper indentation
+            function formatJson() {
+                try {
+                    const jsonObj = JSON.parse(jsonInput.value);
+                    jsonInput.value = JSON.stringify(jsonObj, null, 2);
+                    jsonError.style.display = 'none';
+                } catch (error) {
+                    jsonError.textContent = 'Invalid JSON: ' + error.message;
+                    jsonError.style.display = 'block';
+                }
+            }
+            
+            // Copy XML to clipboard
+            function copyXmlToClipboard() {
+                if (!xmlOutput.value) return;
+                
+                navigator.clipboard.writeText(xmlOutput.value).then(function() {
+                    // Show success message
+                    copySuccess.style.display = 'flex';
+                    setTimeout(function() {
+                        copySuccess.style.display = 'none';
+                    }, 2000);
+                });
+            }
+            
+            // Download XML as file
+            function downloadXml() {
+                if (!xmlOutput.value) return;
+                
+                const blob = new Blob([xmlOutput.value], { type: 'application/xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'converted.xml';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+            
+            // Clear all fields
+            function clearAll() {
+                jsonInput.value = '';
+                xmlOutput.value = '';
+                jsonError.style.display = 'none';
+            }
+            
+            // Event Listeners
+            convertBtn.addEventListener('click', convertJsonToXml);
+            clearAllBtn.addEventListener('click', clearAll);
+            formatJsonBtn.addEventListener('click', formatJson);
+            clearJsonBtn.addEventListener('click', function() {
+                jsonInput.value = '';
+                jsonError.style.display = 'none';
+            });
+            copyXmlBtn.addEventListener('click', copyXmlToClipboard);
+            downloadXmlBtn.addEventListener('click', downloadXml);
+            clearXmlBtn.addEventListener('click', function() {
+                xmlOutput.value = '';
+            });
+            
+            // Keyboard shortcut for conversion (Ctrl+Enter)
+            jsonInput.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    convertJsonToXml();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
