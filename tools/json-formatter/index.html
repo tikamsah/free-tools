@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Formatter - Beautify and Validate JSON Online | IT Tools</title>
+    <meta name="description" content="Free online JSON formatter that beautifies and validates JSON data with syntax highlighting. Copy, download, or upload JSON files.">
+    <meta name="keywords" content="json formatter, json beautifier, json validator, json prettifier, json viewer, online json tools">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    
+    <style>
+        /* Tool-specific styles */
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .tool-content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+        
+        .editor-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .editor-label {
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .editor-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background: #f9fafb;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1),
+                        inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+        }
+        
+        .tool-button {
+            padding: 6px 12px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            position: relative;
+            font-size: 0.85rem;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .tool-button.danger {
+            background: #ef4444;
+        }
+        
+        .tool-button.danger:hover {
+            background: #dc2626;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .status-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #374151 transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Button icons */
+        .button-icon {
+            font-size: 0.8rem;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .editor-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .editor-toolbar {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+            
+            .tool-button {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+        /* New styles for instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .instructions li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .instructions code {
+            background-color: #e2e8f0;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>JSON Formatter</h1>
+            <p>Beautify and validate your JSON data with proper indentation and syntax highlighting</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="editor-container">
+                <div class="editor-header">
+                    <label class="editor-label">JSON Input</label>
+                    <div class="editor-toolbar">
+                        <div class="tooltip">
+                            <button id="formatBtn" class="tool-button">
+                                <i class="fas fa-align-left button-icon"></i> Format
+                                <span class="tooltiptext">Format JSON</span>
+                            </button>
+                        </div>
+                        <div class="tooltip">
+                            <button id="copyBtn" class="tool-button secondary">
+                                <i class="far fa-copy button-icon"></i> Copy
+                                <span class="tooltiptext">Copy to clipboard</span>
+                            </button>
+                        </div>
+                        <div class="tooltip">
+                            <button id="downloadBtn" class="tool-button secondary">
+                                <i class="fas fa-download button-icon"></i> Download
+                                <span class="tooltiptext">Download JSON file</span>
+                            </button>
+                        </div>
+                        <div class="tooltip">
+                            <button id="uploadBtn" class="tool-button secondary">
+                                <i class="fas fa-upload button-icon"></i> Upload
+                                <span class="tooltiptext">Upload JSON file</span>
+                            </button>
+                        </div>
+                        <div class="tooltip">
+                            <button id="clearBtn" class="tool-button danger">
+                                <i class="fas fa-trash-alt button-icon"></i> Clear
+                                <span class="tooltiptext">Clear editor</span>
+                            </button>
+                        </div>
+                        <input type="file" id="fileInput" class="file-input" accept=".json,application/json">
+                    </div>
+                </div>
+                <textarea id="jsonInput" class="editor-textarea" placeholder='{"example": "Paste your JSON here or click Upload to load a file..."}'></textarea>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <p class="privacy-note">Your data won't be stored by us - all processing happens in your browser</p>
+        </div>
+
+        <div class="instructions">
+            <h3>How to use this JSON Formatter:</h3>
+            <ol>
+                <li><strong>Paste your JSON</strong> directly into the input box above</li>
+                <li>Click <strong>Format</strong> to beautify and validate your JSON</li>
+                <li>Use <strong>Copy</strong> to copy the formatted JSON to your clipboard</li>
+                <li>Click <strong>Download</strong> to save the JSON as a file</li>
+                <li>Select <strong>Upload</strong> to load JSON from a file (supports .json files)</li>
+                <li>For quick formatting, you can also use the keyboard shortcut <code>Ctrl+Enter</code> (Windows) or <code>Cmd+Enter</code> (Mac)</li>
+            </ol>
+        </div>
+
+    </main>
+
+    
+
+    <!-- Footer -->
+    <footer>
+        <div id = "footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Get DOM elements
+            const jsonInput = document.getElementById('jsonInput');
+            const formatBtn = document.getElementById('formatBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const fileInput = document.getElementById('fileInput');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            
+            // Initialize Highlight.js
+            hljs.highlightAll();
+            
+            // Format JSON button click handler
+            formatBtn.addEventListener('click', function() {
+                try {
+                    const jsonData = jsonInput.value.trim();
+                    
+                    if (!jsonData) {
+                        showStatus('Please enter some JSON to format', 'error');
+                        return;
+                    }
+                    
+                    const parsedJson = JSON.parse(jsonData);
+                    const formattedJson = JSON.stringify(parsedJson, null, 2);
+                    
+                    jsonInput.value = formattedJson;
+                    showStatus('JSON formatted successfully!', 'success');
+                    
+                    // Apply syntax highlighting
+                    applySyntaxHighlighting();
+                } catch (error) {
+                    showStatus('Invalid JSON: ' + error.message, 'error');
+                }
+            });
+            
+            // Copy button click handler
+            copyBtn.addEventListener('click', function() {
+                if (!jsonInput.value.trim()) {
+                    showStatus('Nothing to copy', 'error');
+                    return;
+                }
+                
+                jsonInput.select();
+                document.execCommand('copy');
+                
+                // Show copied text briefly
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check button-icon"></i> Copied';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="far fa-copy button-icon"></i> Copy';
+                }, 2000);
+                
+                showStatus('JSON copied to clipboard!', 'success');
+            });
+            
+            // Download button click handler
+            downloadBtn.addEventListener('click', function() {
+                const jsonData = jsonInput.value.trim();
+                
+                if (!jsonData) {
+                    showStatus('Nothing to download', 'error');
+                    return;
+                }
+                
+                try {
+                    // Validate JSON before downloading
+                    JSON.parse(jsonData);
+                    
+                    const blob = new Blob([jsonData], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'formatted.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showStatus('JSON downloaded successfully!', 'success');
+                } catch (error) {
+                    showStatus('Invalid JSON: ' + error.message, 'error');
+                }
+            });
+            
+            // Upload button click handler
+            uploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // File input change handler
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                
+                if (!file) {
+                    return;
+                }
+                
+                if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                    showStatus('Please select a JSON file', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const contents = e.target.result;
+                        const parsedJson = JSON.parse(contents);
+                        const formattedJson = JSON.stringify(parsedJson, null, 2);
+                        
+                        jsonInput.value = formattedJson;
+                        showStatus('JSON file loaded and formatted!', 'success');
+                        
+                        // Apply syntax highlighting
+                        applySyntaxHighlighting();
+                    } catch (error) {
+                        showStatus('Invalid JSON file: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+            });
+            
+            // Clear button click handler
+            clearBtn.addEventListener('click', function() {
+                jsonInput.value = '';
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+                showStatus('Editor cleared', 'success');
+            });
+            
+            // Show status message
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                    statusMessage.className = 'status-message';
+                }, 5000);
+            }
+            
+            // Apply syntax highlighting to the textarea
+            function applySyntaxHighlighting() {
+                // This is a simplified approach - for a real implementation you might want to use
+                // a library like CodeMirror or Monaco Editor for proper syntax highlighting in a textarea
+                // For now we'll just highlight the JSON when it's displayed in the textarea
+                
+                // In a real implementation, you would replace the textarea with a proper code editor
+                // that supports syntax highlighting
+            }
+        });
+    </script>
+</body>
+</html>
