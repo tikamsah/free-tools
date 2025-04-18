@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Blog - Tips, Tutorials & Tool Insights | IT Tools</title>
+    <meta name="description" content="Read our developer blog for tutorials, tool insights, coding tips, and the latest updates about our IT Tools collection.">
+    <meta name="keywords" content="developer blog, coding tutorials, tool tips, programming articles, IT tools updates">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Additional blog-specific styles */
+        .blog-hero {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .blog-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .blog-hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .blog-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 60px 0;
+        }
+        
+        .blog-main {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .blog-sidebar {
+            width: 300px;
+        }
+        
+        .blog-post {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .post-content {
+            padding: 25px;
+        }
+        
+        .post-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .post-meta span {
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-meta i {
+            margin-right: 5px;
+        }
+        
+        .post-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .post-excerpt {
+            color: #4b5563;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .read-more {
+            display: inline-block;
+            color: #4f46e5;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .read-more:hover {
+            text-decoration: underline;
+        }
+        
+        .sidebar-widget {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .widget-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .categories-list, .popular-posts {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .categories-list li, .popular-posts li {
+            margin-bottom: 10px;
+        }
+        
+        .categories-list a, .popular-posts a {
+            color: #4b5563;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .categories-list a:hover, .popular-posts a:hover {
+            color: #4f46e5;
+        }
+        
+        .categories-list span, .popular-posts span {
+            background: #e5e7eb;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .newsletter-form input {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+        }
+        
+        .newsletter-form button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .newsletter-form button:hover {
+            background: #4338ca;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .pagination a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin: 0 5px;
+            border-radius: 6px;
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .pagination a.active, .pagination a:hover {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .blog-container {
+                flex-direction: column;
+            }
+            
+            .blog-sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog" class="active">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Blog Hero Section -->
+    <section class="blog-hero">
+        <div class="container">
+            <h1>Developer Blog</h1>
+            <p>Tips, tutorials, and insights about our tools and the latest in web development technologies</p>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <div class="container blog-container">
+        <!-- Main Content -->
+        <main class="blog-main">
+            <!-- Blog Post 1 -->
+            <article class="blog-post">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Code on screen" class="post-image">
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> June 15, 2023</span>
+                        <span><i class="far fa-user"></i> John Developer</span>
+                        <span><i class="far fa-folder"></i> Tutorials</span>
+                    </div>
+                    <h2 class="post-title">Mastering JSON: Formatting, Validation and Conversion Tips</h2>
+                    <p class="post-excerpt">Learn how to effectively work with JSON data using our tools. This comprehensive guide covers formatting best practices, validation techniques, and converting between JSON and other formats like XML and CSV.</p>
+                    <a href="/blog/mastering-json" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            
+            <!-- Blog Post 2 -->
+            <article class="blog-post">
+                <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Security lock" class="post-image">
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> May 28, 2023</span>
+                        <span><i class="far fa-user"></i> Sarah Security</span>
+                        <span><i class="far fa-folder"></i> Security</span>
+                    </div>
+                    <h2 class="post-title">Encoding vs Encryption: When to Use Each and Why It Matters</h2>
+                    <p class="post-excerpt">Many developers confuse encoding with encryption. This article explains the key differences, when to use Base64 encoding versus AES encryption, and how our encoding/decoding tools can help secure your applications.</p>
+                    <a href="/blog/encoding-vs-encryption" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            
+            <!-- Blog Post 3 -->
+            <article class="blog-post">
+                <img src="https://images.unsplash.com/photo-1624953587687-daf255b6b80a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Web development" class="post-image">
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> April 10, 2023</span>
+                        <span><i class="far fa-user"></i> Mike Designer</span>
+                        <span><i class="far fa-folder"></i> Web Development</span>
+                    </div>
+                    <h2 class="post-title">10 Essential Web Developer Tools You Should Know About</h2>
+                    <p class="post-excerpt">We've curated a list of our most powerful web development tools that can save you hours of work. From CSS formatters to HTTP header analyzers, discover utilities that will streamline your development workflow.</p>
+                    <a href="/blog/essential-web-tools" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            
+            <!-- Blog Post 4 -->
+            <article class="blog-post">
+                <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Data visualization" class="post-image">
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span><i class="far fa-calendar"></i> March 22, 2023</span>
+                        <span><i class="far fa-user"></i> Alex Data</span>
+                        <span><i class="far fa-folder"></i> Data Processing</span>
+                    </div>
+                    <h2 class="post-title">Working with CSV Data: Conversion Tips and Common Pitfalls</h2>
+                    <p class="post-excerpt">CSV files are ubiquitous in data processing, but they come with challenges. Learn how to effectively convert CSV to JSON, handle special characters, and avoid common parsing errors using our data conversion tools.</p>
+                    <a href="/blog/working-with-csv" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="/blog/page/2">2</a>
+                <a href="/blog/page/3">3</a>
+                <a href="/blog/page/4">4</a>
+                <a href="/blog/page/2"><i class="fas fa-chevron-right"></i></a>
+            </div>
+        </main>
+        
+        <!-- Sidebar -->
+        <aside class="blog-sidebar">
+            <!-- Search Widget -->
+            <!-- <div class="sidebar-widget">
+                <h3 class="widget-title">Search Blog</h3>
+                <form class="search-form">
+                    <input type="text" placeholder="Search articles...">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div> -->
+            
+            <!-- Categories Widget -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Categories</h3>
+                <ul class="categories-list">
+                    <li><a href="/blog/category/tutorials">Tutorials <span>12</span></a></li>
+                    <li><a href="/blog/category/security">Security <span>8</span></a></li>
+                    <li><a href="/blog/category/web-development">Web Development <span>15</span></a></li>
+                    <li><a href="/blog/category/data-processing">Data Processing <span>7</span></a></li>
+                    <li><a href="/blog/category/tool-updates">Tool Updates <span>5</span></a></li>
+                    <li><a href="/blog/category/best-practices">Best Practices <span>9</span></a></li>
+                </ul>
+            </div>
+            
+            <!-- Popular Posts Widget -->
+            <!-- <div class="sidebar-widget">
+                <h3 class="widget-title">Popular Posts</h3>
+                <ul class="popular-posts">
+                    <li><a href="/blog/json-best-practices">JSON Best Practices for Developers <span>1.2K views</span></a></li>
+                    <li><a href="/blog/secure-password-generation">Secure Password Generation Techniques <span>980 views</span></a></li>
+                    <li><a href="/blog/api-testing-tools">Essential API Testing Tools You Should Use <span>850 views</span></a></li>
+                    <li><a href="/blog/base64-explained">Base64 Encoding Explained with Examples <span>720 views</span></a></li>
+                    <li><a href="/blog/css-minification">Why and How to Minify Your CSS <span>650 views</span></a></li>
+                </ul>
+            </div> -->
+            
+            <!-- Newsletter Widget -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Newsletter</h3>
+                <p>Subscribe to get updates on new tools and articles</p>
+                <form class="newsletter-form">
+                    <input type="text" placeholder="Your Name">
+                    <input type="email" placeholder="Your Email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </aside>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Want to See Our Tools in Action?</h2>
+            <p>Browse our complete collection of 300+ developer tools</p>
+            <a href="/tools" class="cta-button">Explore All Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>IT Tools</h3>
+                    <p>Essential utilities for developers, designers, and tech professionals. All tools are free, privacy-focused, and run directly in your browser.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="/category/converter">Converters</a></li>
+                        <li><a href="/category/encoder">Encoders/Decoders</a></li>
+                        <li><a href="/category/generator">Generators</a></li>
+                        <li><a href="/category/formatter">Formatters</a></li>
+                        <li><a href="/category/web">Web Tools</a></li>
+                        <li><a href="/category/image">Image Tools</a></li>
+                        <li><a href="/category/text">Text Tools</a></li>
+                        <li><a href="/category/data">Data Tools</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Popular Tools</h3>
+                    <ul>
+                        <li><a href="/tool/json-formatter">JSON Formatter</a></li>
+                        <li><a href="/tool/base64-encode">Base64 Encoder</a></li>
+                        <li><a href="/tool/uuid-generator">UUID Generator</a></li>
+                        <li><a href="/tool/password-generator">Password Generator</a></li>
+                        <li><a href="/tool/jwt-decode">JWT Decoder</a></li>
+                        <li><a href="/tool/http-headers">HTTP Headers Viewer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 IT Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>
