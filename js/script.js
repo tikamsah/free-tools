@@ -33,5 +33,9 @@ function includeLayout(url,layout) {
         })
         .catch(error => console.error('Error fetching layout:', error));
 }
- includeLayout('https://it-tools.nepexo.com/footer.html','footerContainer');
+
+includeLayout('https://it-tools.nepexo.com/header.html','headerContainer');
+
+includeLayout('https://it-tools.nepexo.com/footer.html','footerContainer');
+ 
 
