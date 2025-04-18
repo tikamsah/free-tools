@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering JSON: Formatting, Validation and Conversion Tips | IT Tools Blog</title>
+    <meta name="description" content="Learn how to effectively work with JSON data using our tools. Comprehensive guide covering formatting best practices, validation techniques, and converting between JSON and other formats.">
+    <meta name="keywords" content="JSON formatting, JSON validation, JSON conversion, JSON tools, developer guide">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Blog detail specific styles */
+        .blog-detail-hero {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 100px 0 60px;
+            text-align: center;
+        }
+        
+        .blog-detail-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+        }
+        
+        .post-meta span {
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-meta i {
+            margin-right: 5px;
+        }
+        
+        .breadcrumb {
+            padding: 20px 0;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb a {
+            color: #4b5563;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb i {
+            margin: 0 8px;
+            color: #9ca3af;
+            font-size: 0.7rem;
+        }
+        
+        .blog-detail-container {
+            display: flex;
+            gap: 40px;
+            padding: 40px 0 80px;
+        }
+        
+        .blog-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .blog-sidebar {
+            width: 300px;
+        }
+        
+        .featured-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .post-content {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 40px;
+        }
+        
+        .post-content h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 20px;
+            color: #111827;
+        }
+        
+        .post-content h3 {
+            font-size: 1.4rem;
+            margin: 25px 0 15px;
+            color: #111827;
+        }
+        
+        .post-content p {
+            color: #4b5563;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .post-content ul, .post-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+        
+        .post-content li {
+            margin-bottom: 10px;
+        }
+        
+        .post-content pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 25px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .post-content code {
+            background: #e2e8f0;
+            color: #334155;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+        
+        .post-content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+        
+        .post-content blockquote {
+            border-left: 4px solid #4f46e5;
+            padding-left: 20px;
+            margin: 25px 0;
+            color: #4b5563;
+            font-style: italic;
+        }
+        
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .tool-reference {
+            background: #f3f4f6;
+            border-left: 4px solid #4f46e5;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tool-reference h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+        
+        .tool-reference a {
+            color: #4f46e5;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .tool-reference a:hover {
+            text-decoration: underline;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 30px 0;
+        }
+        
+        .tag {
+            background: #e0e7ff;
+            color: #4f46e5;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .tag:hover {
+            background: #c7d2fe;
+        }
+        
+        .author-card {
+            display: flex;
+            gap: 20px;
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 50px 0 30px;
+        }
+        
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+        }
+        
+        .author-info p {
+            color: #6b7280;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .author-social {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .author-social a {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .author-social a:hover {
+            color: #4f46e5;
+        }
+        
+        .comments-section {
+            margin-top: 60px;
+        }
+        
+        .comments-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .comment-form {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        
+        .comment-form h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+        }
+        
+        .submit-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .submit-btn:hover {
+            background: #4338ca;
+        }
+        
+        .sidebar-widget {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .widget-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .categories-list, .popular-posts {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .categories-list li, .popular-posts li {
+            margin-bottom: 10px;
+        }
+        
+        .categories-list a, .popular-posts a {
+            color: #4b5563;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .categories-list a:hover, .popular-posts a:hover {
+            color: #4f46e5;
+        }
+        
+        .categories-list span, .popular-posts span {
+            background: #e5e7eb;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+        }
+        
+        .related-posts {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .related-post {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .related-post img {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+        
+        .related-post h4 {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        .related-post a {
+            color: #111827;
+            text-decoration: none;
+        }
+        
+        .related-post a:hover {
+            color: #4f46e5;
+        }
+        
+        .related-post .post-date {
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 1024px) {
+            .featured-image {
+                height: 350px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                flex-direction: column;
+            }
+            
+            .blog-sidebar {
+                width: 100%;
+            }
+            
+            .featured-image {
+                height: 250px;
+            }
+            
+            .post-content {
+                padding: 25px;
+            }
+            
+            .author-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .author-social {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog" class="active">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Blog Hero Section -->
+    <section class="blog-detail-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="/blog">Blog</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="/blog/category/tutorials">Tutorials</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Mastering JSON</span>
+            </div>
+            
+            <h1>Mastering JSON: Formatting, Validation and Conversion Tips</h1>
+            
+            <div class="post-meta">
+                <span><i class="far fa-calendar"></i> June 15, 2023</span>
+                <span><i class="far fa-user"></i> John Developer</span>
+                <span><i class="far fa-clock"></i> 8 min read</span>
+                <span><i class="far fa-eye"></i> 1,245 views</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <div class="container blog-detail-container">
+        <!-- Main Content -->
+        <main class="blog-content">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Code on screen" class="featured-image">
+            
+            <article class="post-content">
+                <p>JSON (JavaScript Object Notation) has become the de facto standard for data interchange on the web. Its simplicity, readability, and ease of use have made it the preferred format for APIs, configuration files, and data storage. In this comprehensive guide, we'll explore how to effectively work with JSON data using our tools, covering formatting best practices, validation techniques, and converting between JSON and other formats.</p>
+                
+                <h2>JSON Formatting Best Practices</h2>
+                
+                <p>Properly formatted JSON is easier to read, debug, and maintain. Here are some key formatting practices:</p>
+                
+                <h3>1. Consistent Indentation</h3>
+                <p>Use either spaces or tabs consistently (we recommend 2 spaces for JSON):</p>
+                
+                <pre><code>{
+  "name": "IT Tools",
+  "description": "Developer utilities collection",
+  "tools": [
+    {
+      "name": "JSON Formatter",
+      "category": "Formatter"
+    },
+    {
+      "name": "Base64 Encoder",
+      "category": "Encoder"
+    }
+  ]
+}</code></pre>
+                
+                <div class="tool-reference">
+                    <h4>Try Our JSON Formatter</h4>
+                    <p>Use our <a href="/tool/json-formatter" target="_blank">JSON Formatter tool</a> to automatically format and validate your JSON data with proper indentation and syntax highlighting.</p>
+                </div>
+                
+                <h3>2. Key Naming Conventions</h3>
+                <p>Stick to these conventions for JSON keys:</p>
+                <ul>
+                    <li>Use camelCase (JavaScript convention) or snake_case (common in other languages)</li>
+                    <li>Be consistent throughout your document</li>
+                    <li>Use descriptive but concise names</li>
+                    <li>Avoid special characters in keys</li>
+                </ul>
+                
+                <h3>3. Proper String Escaping</h3>
+                <p>Ensure special characters are properly escaped:</p>
+                <pre><code>{
+  "message": "This string contains \"quotes\" and a backslash: \\"
+}</code></pre>
+                
+                <h2>JSON Validation Techniques</h2>
+                
+                <p>Validating JSON ensures your data conforms to the expected structure and prevents errors in processing.</p>
+                
+                <h3>1. Schema Validation</h3>
+                <p>Use JSON Schema to define and validate your JSON structure:</p>
+                <pre><code>{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "age": { "type": "number", "minimum": 0 }
+  },
+  "required": ["name"]
+}</code></pre>
+                
+                <div class="tool-reference">
+                    <h4>Validate JSON with Our Tool</h4>
+                    <p>Our <a href="/tool/json-validator" target="_blank">JSON Validator</a> checks syntax and can validate against schemas to ensure your data is correctly structured.</p>
+                </div>
+                
+                <h3>2. Linting</h3>
+                <p>JSON linters catch common mistakes like:</p>
+                <ul>
+                    <li>Trailing commas</li>
+                    <li>Missing quotes around keys</li>
+                    <li>Incorrect number formats</li>
+                    <li>Duplicate keys</li>
+                </ul>
+                
+                <h2>JSON Conversion to Other Formats</h2>
+                
+                <p>Often you'll need to convert JSON to other formats for different systems or requirements.</p>
+                
+                <h3>1. JSON to XML</h3>
+                <p>XML is still widely used in enterprise systems. Here's a simple conversion example:</p>
+                
+                <pre><code>{
+  "person": {
+    "name": "John",
+    "age": 30,
+    "city": "New York"
+  }
+}</code></pre>
+                
+                <p>Converts to:</p>
+                
+                <pre><code>&lt;person&gt;
+  &lt;name&gt;John&lt;/name&gt;
+  &lt;age&gt;30&lt;/age&gt;
+  &lt;city&gt;New York&lt;/city&gt;
+&lt;/person&gt;</code></pre>
+                
+                <div class="tool-reference">
+                    <h4>Convert JSON to XML Easily</h4>
+                    <p>Use our <a href="/tool/json-to-xml" target="_blank">JSON to XML Converter</a> to transform your data between these formats with customizable options.</p>
+                </div>
+                
+                <h3>2. JSON to CSV</h3>
+                <p>CSV is ideal for spreadsheet applications and simple data exchange:</p>
+                
+                <pre><code>[
+  { "name": "John", "age": 30, "city": "New York" },
+  { "name": "Jane", "age": 25, "city": "Chicago" }
+]</code></pre>
+                
+                <p>Converts to:</p>
+                
+                <pre><code>name,age,city
+John,30,New York
+Jane,25,Chicago</code></pre>
+                
+                <h3>3. JSON to YAML</h3>
+                <p>YAML is often preferred for configuration files due to its cleaner syntax:</p>
+                
+                <pre><code>{
+  "server": {
+    "port": 8080,
+    "environment": "production",
+    "features": ["logging", "compression"]
+  }
+}</code></pre>
+                
+                <p>Converts to:</p>
+                
+                <pre><code>server:
+  port: 8080
+  environment: production
+  features:
+    - logging
+    - compression</code></pre>
+                
+                <div class="tool-reference">
+                    <h4>Convert Between JSON and YAML</h4>
+                    <p>Our <a href="/tool/json-to-yaml" target="_blank">JSON to YAML Converter</a> makes it simple to switch between these formats while preserving your data structure.</p>
+                </div>
+                
+                <h2>Advanced JSON Techniques</h2>
+                
+                <h3>1. Handling Large JSON Files</h3>
+                <p>For large JSON files:</p>
+                <ul>
+                    <li>Use streaming parsers instead of loading entire files into memory</li>
+                    <li>Consider JSON Lines format for large datasets</li>
+                    <li>Compress JSON when transmitting over networks</li>
+                </ul>
+                
+                <h3>2. JSON Path for Data Extraction</h3>
+                <p>JSON Path lets you query specific data from complex JSON structures:</p>
+                <pre><code>$.store.book[?(@.price < 10)].title</code></pre>
+                <p>This would extract titles of all books priced under 10 in a bookstore JSON structure.</p>
+                
+                <div class="tool-reference">
+                    <h4>Try Our JSON Path Tool</h4>
+                    <p>Extract specific data from complex JSON with our <a href="/tool/json-path" target="_blank">JSON Path Evaluator</a>.</p>
+                </div>
+                
+                <h2>Conclusion</h2>
+                
+                <p>Mastering JSON handling is an essential skill for modern developers. By following these formatting best practices, validation techniques, and conversion patterns, you'll work more efficiently with JSON data across all your projects. Remember that our suite of JSON tools can automate many of these processes, saving you time and reducing errors.</p>
+                
+                <div class="tags">
+                    <a href="/blog/tag/json" class="tag">#json</a>
+                    <a href="/blog/tag/web-development" class="tag">#web-development</a>
+                    <a href="/blog/tag/data" class="tag">#data</a>
+                    <a href="/blog/tag/tutorial" class="tag">#tutorial</a>
+                </div>
+                
+                <div class="author-card">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Developer" class="author-avatar">
+                    <div class="author-info">
+                        <h4>John Developer</h4>
+                        <p>John is a senior full-stack developer with over 10 years of experience working with web technologies. He specializes in API design and data processing architectures.</p>
+                        <div class="author-social">
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fas fa-globe"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comments-section">
+                    <h3>Comments (3)</h3>
+                    
+                    <div class="comment-form">
+                        <h4>Leave a Comment</h4>
+                        <form>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Comment</label>
+                                <textarea id="comment" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">Post Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        </main>
+        
+        <!-- Sidebar -->
+        <aside class="blog-sidebar">
+            <!-- Search Widget -->
+         
+            
+            <!-- Categories Widget -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Categories</h3>
+                <ul class="categories-list">
+                    <li><a href="/blog/category/tutorials">Tutorials <span>12</span></a></li>
+                    <li><a href="/blog/category/security">Security <span>8</span></a></li>
+                    <li><a href="/blog/category/web-development">Web Development <span>15</span></a></li>
+                    <li><a href="/blog/category/data-processing">Data Processing <span>7</span></a></li>
+                    <li><a href="/blog/category/tool-updates">Tool Updates <span>5</span></a></li>
+                    <li><a href="/blog/category/best-practices">Best Practices <span>9</span></a></li>
+                </ul>
+            </div>
+            
+            
+            <!-- Related Posts Widget -->
+            <div class="sidebar-widget">
+                <h3 class="widget-title">Related Posts</h3>
+                <div class="related-posts">
+                    <div class="related-post">
+                        <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Data visualization">
+                        <div>
+                            <h4><a href="/blog/working-with-csv">Working with CSV Data: Conversion Tips and Common Pitfalls</a></h4>
+                            <div class="post-date">March 22, 2023</div>
+                        </div>
+                    </div>
+                    <div class="related-post">
+                        <img src="https://images.unsplash.com/photo-1624953587687-daf255b6b80a?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Web development">
+                        <div>
+                            <h4><a href="/blog/rest-api-best-practices">REST API Design: Best Practices and Common Mistakes</a></h4>
+                            <div class="post-date">April 5, 2023</div>
+                        </div>
+                    </div>
+                    <div class="related-post">
+                        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Security lock">
+                        <div>
+                            <h4><a href="/blog/data-validation-techniques">Data Validation Techniques for Web Applications</a></h4>
+                            <div class="post-date">May 10, 2023</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+          
+        </aside>
+    </div>
+
+    <!-- CTA Section -->
+    <section class="category-cta">
+        <div class="container">
+            <h2>Ready to Try Our JSON Tools?</h2>
+            <p>Explore our collection of JSON utilities to format, validate, and convert your data</p>
+            <a href="/category/data" class="cta-button">View JSON Tools</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>IT Tools</h3>
+                    <p>Essential utilities for developers, designers, and tech professionals. All tools are free, privacy-focused, and run directly in your browser.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="/category/converter">Converters</a></li>
+                        <li><a href="/category/encoder">Encoders/Decoders</a></li>
+                        <li><a href="/category/generator">Generators</a></li>
+                        <li><a href="/category/formatter">Formatters</a></li>
+                        <li><a href="/category/web">Web Tools</a></li>
+                        <li><a href="/category/image">Image Tools</a></li>
+                        <li><a href="/category/text">Text Tools</a></li>
+                        <li><a href="/category/data">Data Tools</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Popular Tools</h3>
+                    <ul>
+                        <li><a href="/tool/json-formatter">JSON Formatter</a></li>
+                        <li><a href="/tool/base64-encode">Base64 Encoder</a></li>
+                        <li><a href="/tool/uuid-generator">UUID Generator</a></li>
+                        <li><a href="/tool/password-generator">Password Generator</a></li>
+                        <li><a href="/tool/jwt-decode">JWT Decoder</a></li>
+                        <li><a href="/tool/http-headers">HTTP Headers Viewer</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 IT Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+</body>
+</html>
