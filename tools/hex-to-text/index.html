@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hex to Text Converter - Online Hexadecimal Decoding Tool | IT Tools</title>
+    <meta name="description" content="Convert hexadecimal strings to readable text instantly with our free online tool. Perfect for developers working with encoded data.">
+    <meta name="keywords" content="hex to text, hex decoder, hexadecimal converter, hex decoding, data transformation">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .editor-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .editor-label {
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .editor-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background: #f9fafb;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+        }
+        
+        .tool-button {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .tool-button.danger {
+            background: #ef4444;
+        }
+        
+        .tool-button.danger:hover {
+            background: #dc2626;
+        }
+        
+        .tool-button.success {
+            background: #10b981;
+        }
+        
+        .tool-button.success:hover {
+            background: #059669;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #374151 transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .preview-container {
+            max-height: 300px;
+            overflow: auto;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        
+        .example-text {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Hex to Text Converter</h1>
+            <p>Convert hexadecimal strings to readable text instantly</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="options-container">
+                <div class="option-group">
+                    <label for="inputFormat">Input Format:</label>
+                    <select id="inputFormat">
+                        <option value="auto">Auto-detect</option>
+                        <option value="spaced">Spaced (48 65 6C 6C 6F)</option>
+                        <option value="continuous">Continuous (48656C6C6F)</option>
+                        <option value="prefixed">Prefixed (0x48 0x65 0x6C 0x6C 0x6F)</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="encoding">Text Encoding:</label>
+                    <select id="encoding">
+                        <option value="utf8">UTF-8</option>
+                        <option value="ascii">ASCII</option>
+                        <option value="latin1">Latin-1</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="converter-container">
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">Hexadecimal Input</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="uploadInputBtn" class="tool-button secondary">
+                                    <i class="fas fa-upload"></i> Upload
+                                    <span class="tooltiptext">Upload hex file</span>
+                                </button>
+                            </div>
+                            <div class="tooltip">
+                                <button id="clearInputBtn" class="tool-button danger">
+                                    <i class="fas fa-trash-alt"></i> Clear
+                                    <span class="tooltiptext">Clear input</span>
+                                </button>
+                            </div>
+                            <input type="file" id="fileInput" class="file-input" accept=".txt,.hex">
+                        </div>
+                    </div>
+                    <textarea id="inputText" class="editor-textarea" placeholder="Enter your hexadecimal string here...
+Examples: 
+48 65 6C 6C 6F (spaced)
+48656C6C6F (continuous)
+0x48 0x65 0x6C 0x6C 0x6F (prefixed)"></textarea>
+                </div>
+                
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">Text Output</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="copyOutputBtn" class="tool-button secondary">
+                                    <i class="fas fa-copy"></i> Copy
+                                    <span class="tooltiptext">Copy to clipboard</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="preview-container">
+                        <div id="outputText">Converted text will appear here</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="tool-button success">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearAllBtn" class="tool-button danger">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <div class="instructions">
+                <h3>How to use this Hex to Text Converter:</h3>
+                <ol>
+                    <li><strong>Enter your hexadecimal string</strong> in the left input box or <strong>upload</strong> a file containing hex</li>
+                    <li>Select the appropriate <strong>input format</strong> (auto-detect works for most cases)</li>
+                    <li>Choose the <strong>text encoding</strong> (UTF-8 for most modern text)</li>
+                    <li>Click <strong>Convert</strong> to transform your hex to readable text</li>
+                    <li>View the converted text in the right panel</li>
+                    <li>Click <strong>Copy</strong> to copy the text to clipboard</li>
+                    <li>Click <strong>Clear All</strong> to reset both input and output</li>
+                    <li>For quick conversion, use the keyboard shortcut <code>Ctrl+Enter</code> (Windows) or <code>Cmd+Enter</code> (Mac)</li>
+                </ol>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Hexadecimal Encoding:</h3>
+                <ul>
+                    <li>Hexadecimal (base-16) is a numerical system using 16 symbols (0-9, A-F)</li>
+                    <li>Commonly used in computing to represent binary data in a human-readable form</li>
+                    <li>Each pair of hex digits represents one byte (8 bits) of data</li>
+                    <li>Conversion process:
+                        <ol>
+                            <li>Hex string is split into pairs (or single bytes for spaced format)</li>
+                            <li>Each hex value is converted to its decimal equivalent</li>
+                            <li>Decimal value is mapped to a character based on the selected encoding</li>
+                        </ol>
+                    </li>
+                    <li>UTF-8 can represent all Unicode characters (recommended for most text)</li>
+                    <li>ASCII covers basic English characters (values 0-127)</li>
+                    <li>Latin-1 (ISO-8859-1) covers Western European characters (values 0-255)</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">Your data is processed in your browser only - we never store or send your input/output to any server</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script> 
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            const convertBtn = document.getElementById('convertBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const clearInputBtn = document.getElementById('clearInputBtn');
+            const copyOutputBtn = document.getElementById('copyOutputBtn');
+            const uploadInputBtn = document.getElementById('uploadInputBtn');
+            const fileInput = document.getElementById('fileInput');
+            const statusMessage = document.getElementById('statusMessage');
+            const inputFormatSelect = document.getElementById('inputFormat');
+            const encodingSelect = document.getElementById('encoding');
+            
+            // Convert hex to text
+            function hexToText() {
+                try {
+                    let hexString = inputText.value.trim();
+                    
+                    if (!hexString) {
+                        showStatus('Please enter some hex to convert', 'error');
+                        return;
+                    }
+                    
+                    // Clean the hex string based on input format
+                    const format = inputFormatSelect.value;
+                    let cleanHex = cleanHexString(hexString, format);
+                    
+                    // Convert to text based on encoding
+                    const encoding = encodingSelect.value;
+                    const text = convertHexToText(cleanHex, encoding);
+                    
+                    outputText.textContent = text;
+                    showStatus('Hex converted to text successfully!', 'success');
+                } catch (error) {
+                    showStatus('Conversion error: ' + error.message, 'error');
+                    outputText.textContent = 'Error during conversion';
+                }
+            }
+            
+            // Clean hex string based on format
+            function cleanHexString(hexString, format) {
+                // Remove all whitespace first
+                let cleaned = hexString.replace(/\s+/g, '');
+                
+                // Handle different formats
+                if (format === 'auto') {
+                    // Auto-detect by checking for 0x prefix
+                    if (hexString.includes('0x')) {
+                        cleaned = hexString.replace(/0x/g, '');
+                    }
+                    // Remove any remaining non-hex characters
+                    cleaned = cleaned.replace(/[^0-9a-fA-F]/g, '');
+                } 
+                else if (format === 'spaced') {
+                    // For spaced format, split by spaces and take first two chars of each
+                    const parts = hexString.split(/\s+/);
+                    cleaned = parts.map(part => {
+                        // Remove any non-hex characters from each part
+                        const cleanPart = part.replace(/[^0-9a-fA-F]/g, '');
+                        // Take first two characters (one byte)
+                        return cleanPart.substring(0, 2);
+                    }).join('');
+                }
+                else if (format === 'prefixed') {
+                    // Remove 0x prefixes and any other non-hex characters
+                    cleaned = hexString.replace(/0x/g, '').replace(/[^0-9a-fA-F]/g, '');
+                }
+                // For continuous format, we just take all hex chars
+                else {
+                    cleaned = cleaned.replace(/[^0-9a-fA-F]/g, '');
+                }
+                
+                // Ensure we have an even number of characters
+                if (cleaned.length % 2 !== 0) {
+                    throw new Error('Invalid hex length - must have even number of characters');
+                }
+                
+                return cleaned;
+            }
+            
+            // Convert cleaned hex string to text
+            function convertHexToText(hexString, encoding) {
+                let text = '';
+                
+                // Split into pairs of two (bytes)
+                for (let i = 0; i < hexString.length; i += 2) {
+                    const hexByte = hexString.substr(i, 2);
+                    const decimal = parseInt(hexByte, 16);
+                    
+                    if (isNaN(decimal)) {
+                        throw new Error(`Invalid hex value: ${hexByte}`);
+                    }
+                    
+                    // Handle different encodings
+                    if (encoding === 'utf8') {
+                        // For UTF-8, we'll use String.fromCodePoint for proper Unicode handling
+                        text += String.fromCodePoint(decimal);
+                    } 
+                    else if (encoding === 'ascii' && decimal > 127) {
+                        // ASCII only supports 0-127
+                        text += '�'; // Replacement character for invalid
+                    }
+                    else if (encoding === 'latin1' && decimal > 255) {
+                        // Latin-1 only supports 0-255
+                        text += '�'; // Replacement character for invalid
+                    }
+                    else {
+                        // For ASCII and Latin-1, use fromCharCode
+                        text += String.fromCharCode(decimal);
+                    }
+                }
+                
+                return text;
+            }
+            
+            // Copy output to clipboard
+            function copyOutput() {
+                if (!outputText.textContent || outputText.textContent === 'Converted text will appear here') {
+                    showStatus('Nothing to copy. Please convert first.', 'error');
+                    return;
+                }
+                
+                navigator.clipboard.writeText(outputText.textContent)
+                    .then(() => {
+                        showStatus('Copied to clipboard!', 'success');
+                    })
+                    .catch(err => {
+                        showStatus('Failed to copy: ' + err, 'error');
+                    });
+            }
+            
+            // Event Listeners
+            convertBtn.addEventListener('click', hexToText);
+            
+            clearAllBtn.addEventListener('click', function() {
+                inputText.value = '';
+                outputText.textContent = 'Converted text will appear here';
+                showStatus('Cleared all data', 'success');
+            });
+            
+            clearInputBtn.addEventListener('click', function() {
+                inputText.value = '';
+                showStatus('Cleared input', 'success');
+            });
+            
+            copyOutputBtn.addEventListener('click', copyOutput);
+            
+            // Keyboard shortcut for conversion
+            inputText.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    convertBtn.click();
+                }
+            });
+            
+            uploadInputBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                
+                if (!file) {
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    inputText.value = e.target.result;
+                    showStatus('Hex file loaded successfully!', 'success');
+                };
+                reader.onerror = function() {
+                    showStatus('Error reading file', 'error');
+                };
+                reader.readAsText(file);
+            });
+            
+            // Helper function to show status messages
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                    statusMessage.className = 'status-message';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
