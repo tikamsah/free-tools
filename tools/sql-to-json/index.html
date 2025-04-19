@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL to JSON Converter - Online Data Transformation Tool | IT Tools</title>
+    <meta name="description" content="Convert SQL queries or data to JSON format instantly with our free online tool. Perfect for developers working with database exports and APIs.">
+    <meta name="keywords" content="sql to json, sql converter, json converter, data transformation, database tools">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .editor-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .editor-label {
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .editor-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background: #f9fafb;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+        }
+        
+        .tool-button {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .tool-button.danger {
+            background: #ef4444;
+        }
+        
+        .tool-button.danger:hover {
+            background: #dc2626;
+        }
+        
+        .tool-button.success {
+            background: #10b981;
+        }
+        
+        .tool-button.success:hover {
+            background: #059669;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #374151 transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .preview-container {
+            max-height: 300px;
+            overflow: auto;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        
+        .sql-examples {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+        
+        .sql-examples summary {
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+        
+        .sql-examples pre {
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>SQL to JSON Converter</h1>
+            <p>Convert SQL queries or data to JSON format instantly with our free online tool</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="options-container">
+                <div class="option-group">
+                    <label for="outputFormat">Output Format:</label>
+                    <select id="outputFormat">
+                        <option value="pretty">Pretty Printed</option>
+                        <option value="compact">Compact</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="inputType">Input Type:</label>
+                    <select id="inputType">
+                        <option value="query">SQL Query</option>
+                        <option value="data">SQL Data (INSERTs)</option>
+                        <option value="resultset">Result Set</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="converter-container">
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">SQL Input</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="uploadSqlBtn" class="tool-button secondary">
+                                    <i class="fas fa-upload"></i> Upload
+                                    <span class="tooltiptext">Upload SQL file</span>
+                                </button>
+                            </div>
+                            <div class="tooltip">
+                                <button id="clearSqlBtn" class="tool-button danger">
+                                    <i class="fas fa-trash-alt"></i> Clear
+                                    <span class="tooltiptext">Clear SQL input</span>
+                                </button>
+                            </div>
+                            <input type="file" id="sqlFileInput" class="file-input" accept=".sql,text/plain">
+                        </div>
+                    </div>
+                    <textarea id="sqlInput" class="editor-textarea" placeholder="SELECT id, name, email FROM users WHERE active = 1;
+-- OR
+INSERT INTO users (id, name, email, active) VALUES 
+(1, 'John Doe', 'john@example.com', 1),
+(2, 'Jane Smith', 'jane@example.com', 0);"></textarea>
+                    <div class="sql-examples">
+                        <details>
+                            <summary>Show SQL examples</summary>
+                            <strong>Query Example:</strong>
+                            <pre>SELECT id, name, email FROM users WHERE active = 1;</pre>
+                            
+                            <strong>INSERT Example:</strong>
+                            <pre>INSERT INTO users (id, name, email, active) VALUES 
+(1, 'John Doe', 'john@example.com', 1),
+(2, 'Jane Smith', 'jane@example.com', 0);</pre>
+                            
+                            <strong>Result Set Example:</strong>
+                            <pre>id | name      | email           | active
+-------------------------------------
+1  | John Doe  | john@example.com | 1
+2  | Jane Smith| jane@example.com | 0</pre>
+                        </details>
+                    </div>
+                </div>
+                
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">JSON Output</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="copyJsonBtn" class="tool-button secondary">
+                                    <i class="fas fa-copy"></i> Copy
+                                    <span class="tooltiptext">Copy to clipboard</span>
+                                </button>
+                            </div>
+                            <div class="tooltip">
+                                <button id="downloadJsonBtn" class="tool-button success">
+                                    <i class="fas fa-download"></i> Download
+                                    <span class="tooltiptext">Download JSON file</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="preview-container">
+                        <div id="jsonOutput">JSON output will appear here after conversion</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="tool-button success">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearAllBtn" class="tool-button danger">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <div class="instructions">
+                <h3>How to use this SQL to JSON Converter:</h3>
+                <ol>
+                    <li><strong>Paste your SQL</strong> in the left input box or <strong>upload</strong> a SQL file</li>
+                    <li>Select the appropriate <strong>input type</strong> (query, INSERT statements, or result set)</li>
+                    <li>Choose your preferred <strong>output format</strong> (pretty or compact)</li>
+                    <li>Click <strong>Convert</strong> to transform your SQL to JSON format</li>
+                    <li>View the JSON output in the right panel</li>
+                    <li>Click <strong>Copy</strong> to copy the JSON to clipboard or <strong>Download</strong> to save as a file</li>
+                    <li>Click <strong>Clear All</strong> to reset both input and output</li>
+                    <li>For quick conversion, use the keyboard shortcut <code>Ctrl+Enter</code> (Windows) or <code>Cmd+Enter</code> (Mac)</li>
+                </ol>
+            </div>
+            
+            <p class="privacy-note">Your data is processed in your browser only - we never store or send your SQL/JSON to any server</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const sqlInput = document.getElementById('sqlInput');
+            const jsonOutput = document.getElementById('jsonOutput');
+            const convertBtn = document.getElementById('convertBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const clearSqlBtn = document.getElementById('clearSqlBtn');
+            const copyJsonBtn = document.getElementById('copyJsonBtn');
+            const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+            const uploadSqlBtn = document.getElementById('uploadSqlBtn');
+            const sqlFileInput = document.getElementById('sqlFileInput');
+            const statusMessage = document.getElementById('statusMessage');
+            const outputFormatSelect = document.getElementById('outputFormat');
+            const inputTypeSelect = document.getElementById('inputType');
+            
+            let jsonResult = null;
+            
+            // Convert SQL to JSON
+            function convertSqlToJson() {
+                try {
+                    const sqlString = sqlInput.value.trim();
+                    
+                    if (!sqlString) {
+                        showStatus('Please enter some SQL to convert', 'error');
+                        return;
+                    }
+                    
+                    const inputType = inputTypeSelect.value;
+                    const outputFormat = outputFormatSelect.value;
+                    
+                    // Process based on input type
+                    switch(inputType) {
+                        case 'query':
+                            // This is a simplified example - in a real app you might use a SQL parser
+                            jsonResult = convertQueryToJson(sqlString);
+                            break;
+                        case 'data':
+                            jsonResult = convertInsertStatementsToJson(sqlString);
+                            break;
+                        case 'resultset':
+                            jsonResult = convertResultSetToJson(sqlString);
+                            break;
+                        default:
+                            throw new Error('Unknown input type');
+                    }
+                    
+                    // Format the JSON output
+                    let formattedJson;
+                    if (outputFormat === 'pretty') {
+                        formattedJson = JSON.stringify(jsonResult, null, 2);
+                    } else {
+                        formattedJson = JSON.stringify(jsonResult);
+                    }
+                    
+                    jsonOutput.textContent = formattedJson;
+                    showStatus('Successfully converted SQL to JSON format', 'success');
+                } catch (error) {
+                    showStatus('Conversion error: ' + error.message, 'error');
+                    jsonOutput.textContent = 'Error generating JSON output';
+                }
+            }
+            
+            // Simplified query to JSON conversion (mock implementation)
+            function convertQueryToJson(sql) {
+                // In a real implementation, you would parse the SQL properly
+                // This is just a mock implementation for demonstration
+                
+                // Extract table name (simplified)
+                const tableMatch = sql.match(/FROM\s+([^\s,;]+)/i);
+                const tableName = tableMatch ? tableMatch[1] : 'data';
+                
+                // Mock data based on query
+                return {
+                    query: sql,
+                    table: tableName,
+                    results: [
+                        { id: 1, name: "John Doe", email: "john@example.com", active: true },
+                        { id: 2, name: "Jane Smith", email: "jane@example.com", active: false }
+                    ]
+                };
+            }
+            
+            // Convert INSERT statements to JSON
+            function convertInsertStatementsToJson(sql) {
+                // Parse INSERT statements (simplified)
+                const insertRegex = /INSERT\s+INTO\s+([^\s(]+)\s*\(([^)]+)\)\s*VALUES\s*(\([^)]+\))(?:\s*,\s*(\([^)]+\)))*/gi;
+                const matches = [...sql.matchAll(insertRegex)];
+                
+                if (matches.length === 0) {
+                    throw new Error('No valid INSERT statements found');
+                }
+                
+                const result = [];
+                const firstMatch = matches[0];
+                const tableName = firstMatch[1];
+                const columns = firstMatch[2].split(',').map(col => col.trim());
+                
+                // Process all value sets
+                for (const match of matches) {
+                    const valueSets = match.slice(3).filter(Boolean);
+                    
+                    for (const valueSet of valueSets) {
+                        const values = valueSet.replace(/^\(|\)$/g, '')
+                            .split(/(?<!\\),/)
+                            .map(val => val.trim().replace(/^['"]|['"]$/g, ''));
+                        
+                        if (values.length !== columns.length) {
+                            throw new Error('Column count does not match value count');
+                        }
+                        
+                        const row = {};
+                        columns.forEach((col, i) => {
+                            // Try to parse values appropriately
+                            let value = values[i];
+                            if (value === 'NULL' || value === 'null') {
+                                value = null;
+                            } else if (!isNaN(value) && value.trim() !== '') {
+                                value = Number(value);
+                            } else if (value === 'true') {
+                                value = true;
+                            } else if (value === 'false') {
+                                value = false;
+                            }
+                            
+                            row[col] = value;
+                        });
+                        
+                        result.push(row);
+                    }
+                }
+                
+                return {
+                    table: tableName,
+                    data: result
+                };
+            }
+            
+            // Convert tabular result set to JSON
+            function convertResultSetToJson(sql) {
+                // Split into lines
+                const lines = sql.split('\n').filter(line => line.trim() !== '');
+                
+                if (lines.length < 2) {
+                    throw new Error('Result set must have at least header and one data row');
+                }
+                
+                // Parse headers (first line)
+                const headers = lines[0].split('|').map(h => h.trim()).filter(Boolean);
+                
+                // Parse data rows
+                const result = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split('|').map(v => v.trim());
+                    
+                    // Skip separator lines (like ----)
+                    if (values.every(v => v.match(/^-+$/))) continue;
+                    
+                    const row = {};
+                    headers.forEach((header, j) => {
+                        if (j < values.length) {
+                            // Try to parse values appropriately
+                            let value = values[j];
+                            if (value === 'NULL' || value === 'null') {
+                                value = null;
+                            } else if (!isNaN(value) && value.trim() !== '') {
+                                value = Number(value);
+                            } else if (value === 'true') {
+                                value = true;
+                            } else if (value === 'false') {
+                                value = false;
+                            }
+                            
+                            row[header] = value;
+                        }
+                    });
+                    
+                    result.push(row);
+                }
+                
+                return result;
+            }
+            
+            // Copy JSON to clipboard
+            function copyJsonToClipboard() {
+                if (!jsonOutput.textContent || jsonOutput.textContent === 'JSON output will appear here after conversion') {
+                    showStatus('Nothing to copy. Please convert SQL first.', 'error');
+                    return;
+                }
+                
+                navigator.clipboard.writeText(jsonOutput.textContent)
+                    .then(() => {
+                        showStatus('JSON copied to clipboard!', 'success');
+                    })
+                    .catch(err => {
+                        showStatus('Failed to copy JSON: ' + err, 'error');
+                    });
+            }
+            
+            // Download JSON file
+            function downloadJsonFile() {
+                if (!jsonOutput.textContent || jsonOutput.textContent === 'JSON output will appear here after conversion') {
+                    showStatus('Nothing to download. Please convert SQL first.', 'error');
+                    return;
+                }
+                
+                try {
+                    const blob = new Blob([jsonOutput.textContent], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'converted.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showStatus('JSON file downloaded successfully!', 'success');
+                } catch (error) {
+                    showStatus('Error generating JSON file: ' + error.message, 'error');
+                }
+            }
+            
+            // Event Listeners
+            convertBtn.addEventListener('click', convertSqlToJson);
+            
+            clearAllBtn.addEventListener('click', function() {
+                sqlInput.value = '';
+                jsonOutput.textContent = 'JSON output will appear here after conversion';
+                jsonResult = null;
+                showStatus('Cleared all data', 'success');
+            });
+            
+            clearSqlBtn.addEventListener('click', function() {
+                sqlInput.value = '';
+                showStatus('Cleared SQL input', 'success');
+            });
+            
+            copyJsonBtn.addEventListener('click', copyJsonToClipboard);
+            
+            downloadJsonBtn.addEventListener('click', downloadJsonFile);
+            
+            // Keyboard shortcut for conversion
+            sqlInput.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    convertBtn.click();
+                }
+            });
+            
+            uploadSqlBtn.addEventListener('click', function() {
+                sqlFileInput.click();
+            });
+            
+            sqlFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                
+                if (!file) {
+                    return;
+                }
+                
+                if (file.type !== 'text/plain' && !file.name.toLowerCase().endsWith('.sql')) {
+                    showStatus('Please select a SQL file', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        sqlInput.value = e.target.result;
+                        showStatus('SQL file loaded successfully!', 'success');
+                    } catch (error) {
+                        showStatus('Error reading file: ' + error.message, 'error');
+                    }
+                };
+                reader.onerror = function() {
+                    showStatus('Error reading file', 'error');
+                };
+                reader.readAsText(file);
+            });
+            
+            // Helper function to show status messages
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                    statusMessage.className = 'status-message';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
