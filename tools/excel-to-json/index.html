@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel to JSON Converter - Online Data Transformation Tool | IT Tools</title>
+    <meta name="description" content="Convert Excel files to JSON format instantly with our free online tool. Perfect for developers working with data transformation and APIs.">
+    <meta name="keywords" content="excel to json, excel converter, json converter, data transformation, api tools">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .editor-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .editor-label {
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .editor-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background: #f9fafb;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+        }
+        
+        .tool-button {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .tool-button.danger {
+            background: #ef4444;
+        }
+        
+        .tool-button.danger:hover {
+            background: #dc2626;
+        }
+        
+        .tool-button.success {
+            background: #10b981;
+        }
+        
+        .tool-button.success:hover {
+            background: #059669;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #374151 transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .drop-area {
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .drop-area:hover {
+            border-color: #3b82f6;
+            background: #f0f7ff;
+        }
+        
+        .drop-area.active {
+            border-color: #3b82f6;
+            background: #f0f7ff;
+        }
+        
+        .drop-icon {
+            font-size: 48px;
+            color: #1d6f42;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Excel to JSON Converter</h1>
+            <p>Convert Excel files to JSON format instantly with our free online tool</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="options-container">
+                <div class="option-group">
+                    <label for="headerOption">First row is header:</label>
+                    <select id="headerOption">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label for="outputFormat">Output format:</label>
+                    <select id="outputFormat">
+                        <option value="array">Array of objects</option>
+                        <option value="object">Object with keys</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="drop-area" id="dropArea">
+                <i class="fas fa-file-excel drop-icon"></i>
+                <h3>Drag & Drop Excel File Here</h3>
+                <p>or click to browse files</p>
+                <input type="file" id="excelFileInput" class="file-input" accept=".xlsx,.xls,.csv">
+            </div>
+            
+            <div class="converter-container">
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">Excel Data Preview</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="clearPreviewBtn" class="tool-button danger">
+                                    <i class="fas fa-trash-alt"></i> Clear
+                                    <span class="tooltiptext">Clear preview</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="excelPreview" class="editor-textarea" style="overflow: auto;"></div>
+                </div>
+                
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">JSON Output</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="copyJsonBtn" class="tool-button secondary">
+                                    <i class="far fa-copy"></i> Copy
+                                    <span class="tooltiptext">Copy JSON to clipboard</span>
+                                </button>
+                            </div>
+                            <div class="tooltip">
+                                <button id="downloadJsonBtn" class="tool-button secondary">
+                                    <i class="fas fa-download"></i> Download
+                                    <span class="tooltiptext">Download JSON file</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <textarea id="jsonOutput" class="editor-textarea" placeholder='Converted JSON will appear here...' readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="tool-button success">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearAllBtn" class="tool-button danger">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <div class="instructions">
+                <h3>How to use this Excel to JSON Converter:</h3>
+                <ol>
+                    <li><strong>Upload your Excel file</strong> by dragging and dropping or clicking to browse</li>
+                    <li>Configure conversion options (headers, output format)</li>
+                    <li>Click <strong>Convert</strong> to transform your data to JSON</li>
+                    <li>View the formatted JSON output in the right panel</li>
+                    <li>Use <strong>Copy</strong> or <strong>Download</strong> to save your JSON</li>
+                    <li>Click <strong>Clear All</strong> to reset both input and output</li>
+                </ol>
+            </div>
+            
+            <p class="privacy-note">Your data is processed in your browser only - we never store or send your Excel/JSON to any server</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <!-- SheetJS library for Excel parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dropArea = document.getElementById('dropArea');
+            const excelFileInput = document.getElementById('excelFileInput');
+            const excelPreview = document.getElementById('excelPreview');
+            const jsonOutput = document.getElementById('jsonOutput');
+            const convertBtn = document.getElementById('convertBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const clearPreviewBtn = document.getElementById('clearPreviewBtn');
+            const copyJsonBtn = document.getElementById('copyJsonBtn');
+            const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+            const statusMessage = document.getElementById('statusMessage');
+            const headerOption = document.getElementById('headerOption');
+            const outputFormat = document.getElementById('outputFormat');
+            
+            let workbook = null;
+            let currentSheetData = null;
+            
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('active');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('active');
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            dropArea.addEventListener('click', () => excelFileInput.click());
+            
+            excelFileInput.addEventListener('change', handleFiles);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles({ target: { files } });
+            }
+            
+            function handleFiles(e) {
+                const files = e.target.files;
+                if (files.length === 0) return;
+                
+                const file = files[0];
+                if (!file.name.match(/\.(xlsx|xls|csv)$/i)) {
+                    showStatus('Please select an Excel file (.xlsx, .xls, .csv)', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        workbook = XLSX.read(data, { type: 'array' });
+                        
+                        // Get first sheet by default
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        currentSheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        // Show preview
+                        showExcelPreview(currentSheetData);
+                        showStatus(`Loaded file: ${file.name} (${workbook.SheetNames.length} sheets)`, 'success');
+                    } catch (error) {
+                        showStatus('Error reading file: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+            
+            function showExcelPreview(data) {
+                if (!data || data.length === 0) {
+                    excelPreview.innerHTML = '<p>No data to preview</p>';
+                    return;
+                }
+                
+                // Create a simple table preview
+                let html = '<table style="width: 100%; border-collapse: collapse;">';
+                
+                // Show first 5 rows for preview
+                const previewRows = Math.min(data.length, 5);
+                for (let i = 0; i < previewRows; i++) {
+                    html += '<tr>';
+                    for (let j = 0; j < data[i].length; j++) {
+                        const cellValue = data[i][j] !== undefined ? data[i][j] : '';
+                        html += `<td style="border: 1px solid #e5e7eb; padding: 5px;">${cellValue}</td>`;
+                    }
+                    html += '</tr>';
+                }
+                
+                if (data.length > 5) {
+                    html += '<tr><td colspan="' + data[0].length + '" style="text-align: center; font-style: italic;">... and ' + (data.length - 5) + ' more rows</td></tr>';
+                }
+                
+                html += '</table>';
+                excelPreview.innerHTML = html;
+            }
+            
+            function convertToJson() {
+                if (!currentSheetData || currentSheetData.length === 0) {
+                    showStatus('No data to convert. Please upload a file first.', 'error');
+                    return;
+                }
+                
+                try {
+                    const hasHeaders = headerOption.value === 'true';
+                    const format = outputFormat.value;
+                    let jsonData;
+                    
+                    if (hasHeaders) {
+                        const headers = currentSheetData[0];
+                        const rows = currentSheetData.slice(1);
+                        
+                        if (format === 'array') {
+                            jsonData = rows.map(row => {
+                                const obj = {};
+                                headers.forEach((header, i) => {
+                                    obj[header] = row[i] !== undefined ? row[i] : null;
+                                });
+                                return obj;
+                            });
+                        } else {
+                            jsonData = {};
+                            rows.forEach((row, rowIndex) => {
+                                const obj = {};
+                                headers.forEach((header, i) => {
+                                    obj[header] = row[i] !== undefined ? row[i] : null;
+                                });
+                                jsonData[rowIndex] = obj;
+                            });
+                        }
+                    } else {
+                        if (format === 'array') {
+                            jsonData = currentSheetData.map(row => [...row]);
+                        } else {
+                            jsonData = {};
+                            currentSheetData.forEach((row, rowIndex) => {
+                                jsonData[rowIndex] = [...row];
+                            });
+                        }
+                    }
+                    
+                    jsonOutput.value = JSON.stringify(jsonData, null, 2);
+                    showStatus('Successfully converted to JSON', 'success');
+                } catch (error) {
+                    showStatus('Conversion error: ' + error.message, 'error');
+                }
+            }
+            
+            // Event Listeners
+            convertBtn.addEventListener('click', convertToJson);
+            
+            clearAllBtn.addEventListener('click', function() {
+                excelFileInput.value = '';
+                excelPreview.innerHTML = '';
+                jsonOutput.value = '';
+                workbook = null;
+                currentSheetData = null;
+                showStatus('Cleared all data', 'success');
+            });
+            
+            clearPreviewBtn.addEventListener('click', function() {
+                excelFileInput.value = '';
+                excelPreview.innerHTML = '';
+                workbook = null;
+                currentSheetData = null;
+                showStatus('Cleared preview', 'success');
+            });
+            
+            copyJsonBtn.addEventListener('click', function() {
+                if (!jsonOutput.value.trim()) {
+                    showStatus('Nothing to copy', 'error');
+                    return;
+                }
+                
+                jsonOutput.select();
+                document.execCommand('copy');
+                
+                // Visual feedback
+                const originalText = copyJsonBtn.innerHTML;
+                copyJsonBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyJsonBtn.innerHTML = originalText;
+                }, 2000);
+                
+                showStatus('JSON copied to clipboard!', 'success');
+            });
+            
+            downloadJsonBtn.addEventListener('click', function() {
+                const jsonData = jsonOutput.value.trim();
+                
+                if (!jsonData) {
+                    showStatus('Nothing to download', 'error');
+                    return;
+                }
+                
+                try {
+                    // Validate JSON before downloading
+                    JSON.parse(jsonData);
+                    
+                    const blob = new Blob([jsonData], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'converted.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showStatus('JSON downloaded successfully!', 'success');
+                } catch (error) {
+                    showStatus('Invalid JSON: ' + error.message, 'error');
+                }
+            });
+            
+            // Helper function to show status messages
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                    statusMessage.className = 'status-message';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
