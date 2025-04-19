@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to YAML Converter - Online Data Transformation Tool | IT Tools</title>
+    <meta name="description" content="Convert JSON data to YAML format instantly with our free online tool. Perfect for developers working with configuration files and APIs.">
+    <meta name="keywords" content="json to yaml, json converter, yaml converter, data transformation, api tools, configuration converter">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .editor-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .editor-label {
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .editor-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background: #f9fafb;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .editor-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+        }
+        
+        .tool-button {
+            padding: 8px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #d1d5db;
+        }
+        
+        .tool-button.danger {
+            background: #ef4444;
+        }
+        
+        .tool-button.danger:hover {
+            background: #dc2626;
+        }
+        
+        .tool-button.success {
+            background: #10b981;
+        }
+        
+        .tool-button.success:hover {
+            background: #059669;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #374151 transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group input[type="number"] {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>JSON to YAML Converter</h1>
+            <p>Convert JSON data to YAML format instantly with our free online tool</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="options-container">
+                <div class="option-group">
+                    <label for="indent">Indentation:</label>
+                    <input type="number" id="indent" value="2" min="1" max="8">
+                </div>
+                <div class="option-group">
+                    <label for="lineWidth">Line Width:</label>
+                    <input type="number" id="lineWidth" value="80" min="40" max="200">
+                </div>
+            </div>
+            
+            <div class="converter-container">
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">JSON Input</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="uploadJsonBtn" class="tool-button secondary">
+                                    <i class="fas fa-upload"></i> Upload
+                                    <span class="tooltiptext">Upload JSON file</span>
+                                </button>
+                            </div>
+                            <div class="tooltip">
+                                <button id="clearJsonBtn" class="tool-button danger">
+                                    <i class="fas fa-trash-alt"></i> Clear
+                                    <span class="tooltiptext">Clear JSON input</span>
+                                </button>
+                            </div>
+                            <input type="file" id="jsonFileInput" class="file-input" accept=".json,application/json">
+                        </div>
+                    </div>
+                    <textarea id="jsonInput" class="editor-textarea" placeholder='{
+  "person": {
+    "name": "John Doe",
+    "age": 30,
+    "address": {
+      "street": "123 Main St",
+      "city": "Anytown",
+      "zip": "12345"
+    }
+  },
+  "hobbies": ["reading", "hiking", "coding"]
+}'></textarea>
+                </div>
+                
+                <div class="editor-box">
+                    <div class="editor-header">
+                        <label class="editor-label">YAML Output</label>
+                        <div class="editor-toolbar">
+                            <div class="tooltip">
+                                <button id="copyYamlBtn" class="tool-button secondary">
+                                    <i class="far fa-copy"></i> Copy
+                                    <span class="tooltiptext">Copy YAML to clipboard</span>
+                                </button>
+                            </div>
+                            <div class="tooltip">
+                                <button id="downloadYamlBtn" class="tool-button secondary">
+                                    <i class="fas fa-download"></i> Download
+                                    <span class="tooltiptext">Download YAML file</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <textarea id="yamlOutput" class="editor-textarea" placeholder='Converted YAML will appear here...' readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="tool-button success">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearAllBtn" class="tool-button danger">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <div class="instructions">
+                <h3>How to use this JSON to YAML Converter:</h3>
+                <ol>
+                    <li><strong>Paste your JSON</strong> in the left input box or <strong>upload</strong> a JSON file</li>
+                    <li>Configure output options (indentation, line width)</li>
+                    <li>Click <strong>Convert</strong> to transform your data to YAML</li>
+                    <li>View the formatted YAML output in the right panel</li>
+                    <li>Use <strong>Copy</strong> or <strong>Download</strong> to save your YAML</li>
+                    <li>Click <strong>Clear All</strong> to reset both input and output</li>
+                    <li>For quick conversion, use the keyboard shortcut <code>Ctrl+Enter</code> (Windows) or <code>Cmd+Enter</code> (Mac)</li>
+                </ol>
+            </div>
+            
+            <p class="privacy-note">Your data is processed in your browser only - we never store or send your JSON/YAML to any server</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id = "footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <!-- YAML parser library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const jsonInput = document.getElementById('jsonInput');
+            const yamlOutput = document.getElementById('yamlOutput');
+            const convertBtn = document.getElementById('convertBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            const clearJsonBtn = document.getElementById('clearJsonBtn');
+            const copyYamlBtn = document.getElementById('copyYamlBtn');
+            const downloadYamlBtn = document.getElementById('downloadYamlBtn');
+            const uploadJsonBtn = document.getElementById('uploadJsonBtn');
+            const jsonFileInput = document.getElementById('jsonFileInput');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            // Options elements
+            const indentInput = document.getElementById('indent');
+            const lineWidthInput = document.getElementById('lineWidth');
+            
+            // Convert JSON to YAML
+            function convertJsonToYaml(jsonString) {
+                try {
+                    if (!jsonString.trim()) {
+                        throw new Error("JSON input is empty");
+                    }
+                    
+                    // Parse JSON to JavaScript object
+                    const jsObject = JSON.parse(jsonString);
+                    
+                    // Convert to YAML with options
+                    const options = {
+                        indent: parseInt(indentInput.value) || 2,
+                        lineWidth: parseInt(lineWidthInput.value) || 80,
+                        skipInvalid: true,
+                        noRefs: true
+                    };
+                    
+                    return jsyaml.dump(jsObject, options);
+                } catch (error) {
+                    throw new Error(`JSON parsing error: ${error.message}`);
+                }
+            }
+            
+            // Event Listeners
+            convertBtn.addEventListener('click', function() {
+                try {
+                    const jsonData = jsonInput.value.trim();
+                    
+                    if (!jsonData) {
+                        showStatus('Please enter some JSON to convert', 'error');
+                        return;
+                    }
+                    
+                    const yamlData = convertJsonToYaml(jsonData);
+                    yamlOutput.value = yamlData;
+                    showStatus('JSON converted to YAML successfully!', 'success');
+                } catch (error) {
+                    showStatus(error.message, 'error');
+                    yamlOutput.value = '';
+                }
+            });
+            
+            // Clear all button
+            clearAllBtn.addEventListener('click', function() {
+                jsonInput.value = '';
+                yamlOutput.value = '';
+                showStatus('Cleared both input and output', 'success');
+            });
+            
+            // Clear JSON button
+            clearJsonBtn.addEventListener('click', function() {
+                jsonInput.value = '';
+                showStatus('Cleared JSON input', 'success');
+            });
+            
+            // Keyboard shortcut for conversion
+            jsonInput.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    convertBtn.click();
+                }
+            });
+            
+            copyYamlBtn.addEventListener('click', function() {
+                if (!yamlOutput.value.trim()) {
+                    showStatus('Nothing to copy', 'error');
+                    return;
+                }
+                
+                yamlOutput.select();
+                document.execCommand('copy');
+                
+                // Visual feedback
+                const originalText = copyYamlBtn.innerHTML;
+                copyYamlBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyYamlBtn.innerHTML = '<i class="far fa-copy"></i> Copy';
+                }, 2000);
+                
+                showStatus('YAML copied to clipboard!', 'success');
+            });
+            
+            downloadYamlBtn.addEventListener('click', function() {
+                const yamlData = yamlOutput.value.trim();
+                
+                if (!yamlData) {
+                    showStatus('Nothing to download', 'error');
+                    return;
+                }
+                
+                try {
+                    // Validate by trying to parse the YAML
+                    jsyaml.load(yamlData);
+                    
+                    const blob = new Blob([yamlData], { type: 'text/yaml' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'converted.yaml';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showStatus('YAML downloaded successfully!', 'success');
+                } catch (error) {
+                    showStatus('Invalid YAML: ' + error.message, 'error');
+                }
+            });
+            
+            uploadJsonBtn.addEventListener('click', function() {
+                jsonFileInput.click();
+            });
+            
+            jsonFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                
+                if (!file) {
+                    return;
+                }
+                
+                if (file.type !== 'application/json' && !file.name.toLowerCase().endsWith('.json')) {
+                    showStatus('Please select a JSON file', 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        jsonInput.value = e.target.result;
+                        showStatus('JSON file loaded successfully!', 'success');
+                    } catch (error) {
+                        showStatus('Error reading file: ' + error.message, 'error');
+                    }
+                };
+                reader.onerror = function() {
+                    showStatus('Error reading file', 'error');
+                };
+                reader.readAsText(file);
+            });
+            
+            // Helper function to show status messages
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.textContent = '';
+                    statusMessage.className = 'status-message';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
