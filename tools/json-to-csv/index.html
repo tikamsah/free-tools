@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XML to JSON Converter - Online XML Transformation Tool | IT Tools</title>
-    <meta name="description" content="Convert XML to JSON format instantly with our free online tool. Perfect for developers working with web APIs and data transformations.">
-    <meta name="keywords" content="xml to json, xml converter, json converter, data transformation, web api tools">
+    <title>JSON to CSV Converter - Online Data Transformation Tool | IT Tools</title>
+    <meta name="description" content="Convert JSON data to CSV format instantly with our free online tool. Perfect for developers working with data analysis and spreadsheet applications.">
+    <meta name="keywords" content="json to csv, json converter, csv converter, data transformation, spreadsheet tools">
     
     <!-- CSS -->
     <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
@@ -243,6 +243,36 @@
             visibility: visible;
             opacity: 1;
         }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group input[type="checkbox"],
+        .option-group input[type="text"] {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+        
+        .option-group input[type="text"] {
+            width: 40px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -270,47 +300,68 @@
     <!-- Tool Content -->
     <main class="tool-container">
         <div class="tool-header">
-            <h1>XML to JSON Converter</h1>
-            <p>Convert XML data to JSON format instantly with our free online tool</p>
+            <h1>JSON to CSV Converter</h1>
+            <p>Convert JSON data to CSV format instantly with our free online tool</p>
         </div>
         
         <div class="tool-content">
+            <div class="options-container">
+                <div class="option-group">
+                    <label for="delimiter">Delimiter:</label>
+                    <input type="text" id="delimiter" value="," maxlength="1">
+                </div>
+                <div class="option-group">
+                    <input type="checkbox" id="headerRow" checked>
+                    <label for="headerRow">Include header row</label>
+                </div>
+                <div class="option-group">
+                    <input type="checkbox" id="quoteFields">
+                    <label for="quoteFields">Quote all fields</label>
+                </div>
+            </div>
+            
             <div class="converter-container">
                 <div class="editor-box">
                     <div class="editor-header">
-                        <label class="editor-label">XML Input</label>
+                        <label class="editor-label">JSON Input</label>
                         <div class="editor-toolbar">
                             <div class="tooltip">
-                                <button id="uploadXmlBtn" class="tool-button secondary">
+                                <button id="uploadJsonBtn" class="tool-button secondary">
                                     <i class="fas fa-upload"></i> Upload
-                                    <span class="tooltiptext">Upload XML file</span>
+                                    <span class="tooltiptext">Upload JSON file</span>
                                 </button>
                             </div>
-                            <input type="file" id="xmlFileInput" class="file-input" accept=".xml,application/xml">
+                            <div class="tooltip">
+                                <button id="clearJsonBtn" class="tool-button danger">
+                                    <i class="fas fa-trash-alt"></i> Clear
+                                    <span class="tooltiptext">Clear JSON input</span>
+                                </button>
+                            </div>
+                            <input type="file" id="jsonFileInput" class="file-input" accept=".json,application/json">
                         </div>
                     </div>
-                    <textarea id="xmlInput" class="editor-textarea" placeholder='<example>Paste your XML here or click Upload to load a file...</example>'></textarea>
+                    <textarea id="jsonInput" class="editor-textarea" placeholder='[{"id":1,"name":"John"},{"id":2,"name":"Jane"}]'></textarea>
                 </div>
                 
                 <div class="editor-box">
                     <div class="editor-header">
-                        <label class="editor-label">JSON Output</label>
+                        <label class="editor-label">CSV Output</label>
                         <div class="editor-toolbar">
                             <div class="tooltip">
-                                <button id="copyJsonBtn" class="tool-button secondary">
+                                <button id="copyCsvBtn" class="tool-button secondary">
                                     <i class="far fa-copy"></i> Copy
-                                    <span class="tooltiptext">Copy JSON to clipboard</span>
+                                    <span class="tooltiptext">Copy CSV to clipboard</span>
                                 </button>
                             </div>
                             <div class="tooltip">
-                                <button id="downloadJsonBtn" class="tool-button secondary">
+                                <button id="downloadCsvBtn" class="tool-button secondary">
                                     <i class="fas fa-download"></i> Download
-                                    <span class="tooltiptext">Download JSON file</span>
+                                    <span class="tooltiptext">Download CSV file</span>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <textarea id="jsonOutput" class="editor-textarea" placeholder='Converted JSON will appear here...' readonly></textarea>
+                    <textarea id="csvOutput" class="editor-textarea" placeholder='Converted CSV will appear here...' readonly></textarea>
                 </div>
             </div>
             
@@ -326,18 +377,19 @@
             <div id="statusMessage" class="status-message"></div>
             
             <div class="instructions">
-                <h3>How to use this XML to JSON Converter:</h3>
+                <h3>How to use this JSON to CSV Converter:</h3>
                 <ol>
-                    <li><strong>Paste your XML</strong> in the left input box or <strong>upload</strong> an XML file</li>
-                    <li>Click <strong>Convert</strong> to transform your data to JSON</li>
-                    <li>View the formatted JSON output in the right panel</li>
-                    <li>Use <strong>Copy</strong> or <strong>Download</strong> to save your JSON</li>
+                    <li><strong>Paste your JSON</strong> in the left input box or <strong>upload</strong> a JSON file</li>
+                    <li>Configure conversion options (delimiter, headers, etc.)</li>
+                    <li>Click <strong>Convert</strong> to transform your data to CSV</li>
+                    <li>View the CSV output in the right panel</li>
+                    <li>Use <strong>Copy</strong> or <strong>Download</strong> to save your CSV</li>
                     <li>Click <strong>Clear All</strong> to reset both input and output</li>
                     <li>For quick conversion, use the keyboard shortcut <code>Ctrl+Enter</code> (Windows) or <code>Cmd+Enter</code> (Mac)</li>
                 </ol>
             </div>
             
-            <p class="privacy-note">Your data is processed in your browser only - we never store or send your XML/JSON to any server</p>
+            <p class="privacy-note">Your data is processed in your browser only - we never store or send your JSON/CSV to any server</p>
         </div>
     </main>
 
@@ -351,87 +403,68 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
-            const xmlInput = document.getElementById('xmlInput');
-            const jsonOutput = document.getElementById('jsonOutput');
+            const jsonInput = document.getElementById('jsonInput');
+            const csvOutput = document.getElementById('csvOutput');
             const convertBtn = document.getElementById('convertBtn');
             const clearAllBtn = document.getElementById('clearAllBtn');
-            const copyJsonBtn = document.getElementById('copyJsonBtn');
-            const downloadJsonBtn = document.getElementById('downloadJsonBtn');
-            const uploadXmlBtn = document.getElementById('uploadXmlBtn');
-            const xmlFileInput = document.getElementById('xmlFileInput');
+            const clearJsonBtn = document.getElementById('clearJsonBtn');
+            const copyCsvBtn = document.getElementById('copyCsvBtn');
+            const downloadCsvBtn = document.getElementById('downloadCsvBtn');
+            const uploadJsonBtn = document.getElementById('uploadJsonBtn');
+            const jsonFileInput = document.getElementById('jsonFileInput');
             const statusMessage = document.getElementById('statusMessage');
             
-            // Improved XML to JSON conversion
-            function convertXmlToJson(xmlString) {
+            // Options elements
+            const delimiterInput = document.getElementById('delimiter');
+            const headerRowCheckbox = document.getElementById('headerRow');
+            const quoteFieldsCheckbox = document.getElementById('quoteFields');
+            
+            // Convert JSON to CSV
+            function convertJsonToCsv(jsonString) {
                 try {
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-                    
-                    // Check for parser errors
-                    const parserError = xmlDoc.getElementsByTagName("parsererror");
-                    if (parserError.length > 0) {
-                        throw new Error("Invalid XML: " + parserError[0].textContent);
+                    const data = JSON.parse(jsonString);
+                    if (!Array.isArray(data)) {
+                        throw new Error("JSON should be an array of objects");
                     }
                     
-                    // Convert XML node to JSON object
-                    function nodeToJson(node) {
-                        const obj = {};
-                        
-                        // Handle element nodes
-                        if (node.nodeType === Node.ELEMENT_NODE) {
-                            // Process attributes
-                            if (node.attributes.length > 0) {
-                                obj["@attributes"] = {};
-                                for (let i = 0; i < node.attributes.length; i++) {
-                                    const attr = node.attributes[i];
-                                    obj["@attributes"][attr.nodeName] = attr.nodeValue;
-                                }
-                            }
-                            
-                            // Process child nodes
-                            for (let i = 0; i < node.childNodes.length; i++) {
-                                const child = node.childNodes[i];
-                                
-                                // Skip empty text nodes
-                                if (child.nodeType === Node.TEXT_NODE && !child.nodeValue.trim()) {
-                                    continue;
-                                }
-                                
-                                // Handle text content
-                                if (child.nodeType === Node.TEXT_NODE) {
-                                    return child.nodeValue.trim();
-                                }
-                                
-                                // Handle element nodes
-                                const childObj = nodeToJson(child);
-                                const nodeName = child.nodeName;
-                                
-                                if (obj[nodeName] === undefined) {
-                                    obj[nodeName] = childObj;
-                                } else {
-                                    if (!Array.isArray(obj[nodeName])) {
-                                        obj[nodeName] = [obj[nodeName]];
-                                    }
-                                    obj[nodeName].push(childObj);
-                                }
-                            }
-                            
-                            // Simplify if no attributes and only one property
-                            if (obj["@attributes"] === undefined && Object.keys(obj).length === 1) {
-                                const key = Object.keys(obj)[0];
-                                if (typeof obj[key] === "string") {
-                                    return obj[key];
-                                }
-                            }
-                            
-                            return obj;
-                        }
-                        
-                        return null;
+                    if (data.length === 0) {
+                        throw new Error("JSON array is empty");
                     }
                     
-                    const jsonObj = nodeToJson(xmlDoc.documentElement);
-                    return JSON.stringify({ [xmlDoc.documentElement.nodeName]: jsonObj }, null, 2);
+                    const delimiter = delimiterInput.value || ',';
+                    const includeHeader = headerRowCheckbox.checked;
+                    const quoteAll = quoteFieldsCheckbox.checked;
+                    
+                    // Get all unique keys from all objects
+                    const allKeys = new Set();
+                    data.forEach(obj => {
+                        Object.keys(obj).forEach(key => allKeys.add(key));
+                    });
+                    const keys = Array.from(allKeys);
+                    
+                    // Build CSV content
+                    let csv = '';
+                    
+                    // Add header row if needed
+                    if (includeHeader) {
+                        const headerRow = keys.map(key => {
+                            return quoteAll ? `"${key}"` : key;
+                        }).join(delimiter);
+                        csv += headerRow + '\n';
+                    }
+                    
+                    // Add data rows
+                    data.forEach(obj => {
+                        const row = keys.map(key => {
+                            let value = obj[key] !== undefined ? obj[key] : '';
+                            // Convert to string and escape quotes
+                            value = String(value).replace(/"/g, '""');
+                            return quoteAll ? `"${value}"` : value;
+                        }).join(delimiter);
+                        csv += row + '\n';
+                    });
+                    
+                    return csv;
                 } catch (error) {
                     throw error;
                 }
@@ -440,105 +473,104 @@
             // Event Listeners
             convertBtn.addEventListener('click', function() {
                 try {
-                    const xmlData = xmlInput.value.trim();
+                    const jsonData = jsonInput.value.trim();
                     
-                    if (!xmlData) {
-                        showStatus('Please enter some XML to convert', 'error');
+                    if (!jsonData) {
+                        showStatus('Please enter some JSON to convert', 'error');
                         return;
                     }
                     
-                    const jsonData = convertXmlToJson(xmlData);
-                    jsonOutput.value = jsonData;
-                    showStatus('XML converted to JSON successfully!', 'success');
+                    const csvData = convertJsonToCsv(jsonData);
+                    csvOutput.value = csvData;
+                    showStatus('JSON converted to CSV successfully!', 'success');
                 } catch (error) {
                     showStatus(error.message, 'error');
-                    jsonOutput.value = '';
+                    csvOutput.value = '';
                 }
             });
             
             // Clear all button
             clearAllBtn.addEventListener('click', function() {
-                xmlInput.value = '';
-                jsonOutput.value = '';
+                jsonInput.value = '';
+                csvOutput.value = '';
                 showStatus('Cleared both input and output', 'success');
             });
             
+            // Clear JSON button
+            clearJsonBtn.addEventListener('click', function() {
+                jsonInput.value = '';
+                showStatus('Cleared JSON input', 'success');
+            });
+            
             // Keyboard shortcut for conversion
-            xmlInput.addEventListener('keydown', function(e) {
+            jsonInput.addEventListener('keydown', function(e) {
                 if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                     e.preventDefault();
                     convertBtn.click();
                 }
             });
             
-            copyJsonBtn.addEventListener('click', function() {
-                if (!jsonOutput.value.trim()) {
+            copyCsvBtn.addEventListener('click', function() {
+                if (!csvOutput.value.trim()) {
                     showStatus('Nothing to copy', 'error');
                     return;
                 }
                 
-                jsonOutput.select();
+                csvOutput.select();
                 document.execCommand('copy');
                 
                 // Visual feedback
-                const originalText = copyJsonBtn.innerHTML;
-                copyJsonBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                const originalText = copyCsvBtn.innerHTML;
+                copyCsvBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 setTimeout(() => {
-                    copyJsonBtn.innerHTML = '<i class="far fa-copy"></i> Copy';
+                    copyCsvBtn.innerHTML = '<i class="far fa-copy"></i> Copy';
                 }, 2000);
                 
-                showStatus('JSON copied to clipboard!', 'success');
+                showStatus('CSV copied to clipboard!', 'success');
             });
             
-            downloadJsonBtn.addEventListener('click', function() {
-                const jsonData = jsonOutput.value.trim();
+            downloadCsvBtn.addEventListener('click', function() {
+                const csvData = csvOutput.value.trim();
                 
-                if (!jsonData) {
+                if (!csvData) {
                     showStatus('Nothing to download', 'error');
                     return;
                 }
                 
-                try {
-                    // Validate JSON before downloading
-                    JSON.parse(jsonData);
-                    
-                    const blob = new Blob([jsonData], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'converted.json';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    showStatus('JSON downloaded successfully!', 'success');
-                } catch (error) {
-                    showStatus('Invalid JSON: ' + error.message, 'error');
-                }
+                const blob = new Blob([csvData], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'converted.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showStatus('CSV downloaded successfully!', 'success');
             });
             
-            uploadXmlBtn.addEventListener('click', function() {
-                xmlFileInput.click();
+            uploadJsonBtn.addEventListener('click', function() {
+                jsonFileInput.click();
             });
             
-            xmlFileInput.addEventListener('change', function(e) {
+            jsonFileInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 
                 if (!file) {
                     return;
                 }
                 
-                if (file.type !== 'application/xml' && !file.name.endsWith('.xml')) {
-                    showStatus('Please select an XML file', 'error');
+                if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                    showStatus('Please select a JSON file', 'error');
                     return;
                 }
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     try {
-                        xmlInput.value = e.target.result;
-                        showStatus('XML file loaded successfully!', 'success');
+                        jsonInput.value = e.target.result;
+                        showStatus('JSON file loaded successfully!', 'success');
                     } catch (error) {
                         showStatus('Error reading file: ' + error.message, 'error');
                     }
