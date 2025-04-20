@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Data Generator - Online Test Data Creator | IT Tools</title>
+    <meta name="description" content="Generate realistic fake data for testing and development. Create names, addresses, emails, phone numbers and more.">
+    <meta name="keywords" content="fake data generator, test data, mock data, random data generator, dummy data">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Faker.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .generator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .generator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .output-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        #output-data {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background: #f9fafb;
+        }
+        
+        .data-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .data-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .data-option label {
+            font-size: 0.9rem;
+            color: #4b5563;
+            cursor: pointer;
+        }
+        
+        .data-option input[type="checkbox"] {
+            cursor: pointer;
+        }
+        
+        .format-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .format-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .format-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .format-group select {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .quantity-control label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .quantity-control input {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #8b5cf6;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #7c3aed;
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .locale-selector {
+            margin-bottom: 15px;
+        }
+        
+        .locale-selector label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .locale-selector select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Fake Data Generator</h1>
+            <p>Generate realistic test data for development, testing, and demonstration purposes</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="generator-container">
+                <div class="input-group">
+                    <h3>Data Options</h3>
+                    
+                    <div class="locale-selector">
+                        <label for="locale">Locale/Language:</label>
+                        <select id="locale">
+                            <option value="en">English</option>
+                            <option value="de">German</option>
+                            <option value="fr">French</option>
+                            <option value="it">Italian</option>
+                            <option value="ja">Japanese</option>
+                            <option value="ru">Russian</option>
+                            <option value="es">Spanish</option>
+                            <option value="zh_CN">Chinese</option>
+                        </select>
+                    </div>
+                    
+                    <div class="data-options">
+                        <div class="data-option">
+                            <input type="checkbox" id="firstName" checked>
+                            <label for="firstName">First Name</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="lastName" checked>
+                            <label for="lastName">Last Name</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="email" checked>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="phone" checked>
+                            <label for="phone">Phone</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="address">
+                            <label for="address">Address</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="city">
+                            <label for="city">City</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="country">
+                            <label for="country">Country</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="zipCode">
+                            <label for="zipCode">Zip Code</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="company">
+                            <label for="company">Company</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="jobTitle">
+                            <label for="jobTitle">Job Title</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="username">
+                            <label for="username">Username</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="password">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="creditCard">
+                            <label for="creditCard">Credit Card</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="date">
+                            <label for="date">Date</label>
+                        </div>
+                        <div class="data-option">
+                            <input type="checkbox" id="lorem">
+                            <label for="lorem">Lorem Ipsum</label>
+                        </div>
+                    </div>
+                    
+                    <div class="quantity-control">
+                        <label for="recordCount">Number of Records:</label>
+                        <input type="number" id="recordCount" min="1" max="1000" value="10">
+                    </div>
+                    
+                    <div class="format-options">
+                        <div class="format-group">
+                            <label for="outputFormat">Output Format:</label>
+                            <select id="outputFormat">
+                                <option value="json">JSON</option>
+                                <option value="csv">CSV</option>
+                                <option value="sql">SQL</option>
+                                <option value="xml">XML</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="generate-btn" class="tool-button">
+                            <i class="fas fa-sync-alt"></i> Generate Data
+                        </button>
+                        <button id="download-btn" class="tool-button secondary">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button id="clear-btn" class="tool-button outline">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Generated Data</h3>
+                    <textarea id="output-data" readonly></textarea>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this Fake Data Generator:</h3>
+                <ul>
+                    <li>Select the data fields you want to include</li>
+                    <li>Choose the locale/language for your data</li>
+                    <li>Specify how many records you need</li>
+                    <li>Select the output format (JSON, CSV, SQL, or XML)</li>
+                    <li>Click <strong>Generate Data</strong> to create the fake data</li>
+                    <li>Use <strong>Copy</strong> or <strong>Download</strong> to save your data</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Fake Data:</h3>
+                <ul>
+                    <li>Perfect for testing applications, databases, and forms</li>
+                    <li>Useful for creating mockups and demonstrations</li>
+                    <li>Helps protect privacy by avoiding real user data in testing</li>
+                    <li>Supports multiple languages and regions</li>
+                    <li>All data is generated in your browser - nothing is sent to servers</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All data generation happens in your browser - we never store or transmit your data</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         gtag('config', 'G-61PG9HQVB4');
+     </script>
+     
+    <script>
+        // DOM elements
+        const generateBtn = document.getElementById('generate-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const outputData = document.getElementById('output-data');
+        const statusMessage = document.getElementById('statusMessage');
+        const localeSelect = document.getElementById('locale');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            generateBtn.addEventListener('click', generateFakeData);
+            downloadBtn.addEventListener('click', downloadData);
+            clearBtn.addEventListener('click', clearOutput);
+            copyBtn.addEventListener('click', copyToClipboard);
+            
+            // Generate initial data
+            generateFakeData();
+        });
+        
+        function generateFakeData() {
+            const recordCount = parseInt(document.getElementById('recordCount').value) || 10;
+            const outputFormat = document.getElementById('outputFormat').value;
+            const locale = localeSelect.value;
+            
+            // Set the locale for Faker.js
+            faker.locale = locale;
+            
+            // Get all checked fields
+            const fields = [];
+            document.querySelectorAll('.data-option input[type="checkbox"]:checked').forEach(checkbox => {
+                fields.push(checkbox.id);
+            });
+            
+            if (fields.length === 0) {
+                showStatus('Please select at least one data field', 'error');
+                return;
+            }
+            
+            try {
+                const data = [];
+                
+                for (let i = 0; i < recordCount; i++) {
+                    const record = {};
+                    
+                    fields.forEach(field => {
+                        switch(field) {
+                            case 'firstName':
+                                record.firstName = faker.name.firstName();
+                                break;
+                            case 'lastName':
+                                record.lastName = faker.name.lastName();
+                                break;
+                            case 'email':
+                                record.email = faker.internet.email(record.firstName, record.lastName);
+                                break;
+                            case 'phone':
+                                record.phone = faker.phone.phoneNumber();
+                                break;
+                            case 'address':
+                                record.address = faker.address.streetAddress();
+                                break;
+                            case 'city':
+                                record.city = faker.address.city();
+                                break;
+                            case 'country':
+                                record.country = faker.address.country();
+                                break;
+                            case 'zipCode':
+                                record.zipCode = faker.address.zipCode();
+                                break;
+                            case 'company':
+                                record.company = faker.company.companyName();
+                                break;
+                            case 'jobTitle':
+                                record.jobTitle = faker.name.jobTitle();
+                                break;
+                            case 'username':
+                                record.username = faker.internet.userName(record.firstName, record.lastName);
+                                break;
+                            case 'password':
+                                record.password = faker.internet.password();
+                                break;
+                            case 'creditCard':
+                                record.creditCard = faker.finance.creditCardNumber();
+                                break;
+                            case 'date':
+                                record.date = faker.date.future();
+                                break;
+                            case 'lorem':
+                                record.lorem = faker.lorem.paragraph();
+                                break;
+                        }
+                    });
+                    
+                    data.push(record);
+                }
+                
+                // Format the output
+                let formattedData;
+                switch(outputFormat) {
+                    case 'json':
+                        formattedData = JSON.stringify(data, null, 2);
+                        break;
+                    case 'csv':
+                        formattedData = convertToCSV(data);
+                        break;
+                    case 'sql':
+                        formattedData = convertToSQL(data);
+                        break;
+                    case 'xml':
+                        formattedData = convertToXML(data);
+                        break;
+                    default:
+                        formattedData = JSON.stringify(data, null, 2);
+                }
+                
+                outputData.value = formattedData;
+                showStatus(`Generated ${recordCount} records successfully!`, 'success');
+            } catch (error) {
+                showStatus('Error generating data: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+        
+        function convertToCSV(data) {
+            if (data.length === 0) return '';
+            
+            // Get headers
+            const headers = Object.keys(data[0]);
+            
+            // Create CSV content
+            let csv = headers.join(',') + '\n';
+            
+            data.forEach(item => {
+                const row = headers.map(header => {
+                    // Escape quotes and wrap in quotes if contains comma
+                    let value = item[header] || '';
+                    if (typeof value === 'object') value = JSON.stringify(value);
+                    if (value.toString().includes(',')) {
+                        return `"${value.toString().replace(/"/g, '""')}"`;
+                    }
+                    return value;
+                });
+                csv += row.join(',') + '\n';
+            });
+            
+            return csv;
+        }
+        
+        function convertToSQL(data) {
+            if (data.length === 0) return '';
+            
+            // Get headers (assuming all records have same structure)
+            const headers = Object.keys(data[0]);
+            const tableName = 'users';
+            
+            let sql = `-- SQL INSERT statements for ${tableName} table\n`;
+            sql += `-- Generated ${new Date().toISOString()}\n\n`;
+            
+            data.forEach(item => {
+                const columns = [];
+                const values = [];
+                
+                headers.forEach(header => {
+                    columns.push(header);
+                    let value = item[header] || '';
+                    if (typeof value === 'string') {
+                        value = `'${value.replace(/'/g, "''")}'`;
+                    } else if (value instanceof Date) {
+                        value = `'${value.toISOString()}'`;
+                    } else if (typeof value === 'object') {
+                        value = `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+                    }
+                    values.push(value);
+                });
+                
+                sql += `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${values.join(', ')});\n`;
+            });
+            
+            return sql;
+        }
+        
+        function convertToXML(data) {
+            if (data.length === 0) return '';
+            
+            let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            xml += '<records>\n';
+            
+            data.forEach((item, index) => {
+                xml += `  <record id="${index + 1}">\n`;
+                Object.entries(item).forEach(([key, value]) => {
+                    let val = value;
+                    if (value instanceof Date) {
+                        val = value.toISOString();
+                    } else if (typeof value === 'object') {
+                        val = JSON.stringify(value);
+                    }
+                    xml += `    <${key}>${escapeXML(val.toString())}</${key}>\n`;
+                });
+                xml += '  </record>\n';
+            });
+            
+            xml += '</records>';
+            return xml;
+        }
+        
+        function escapeXML(str) {
+            return str.replace(/&/g, '&amp;')
+                     .replace(/</g, '&lt;')
+                     .replace(/>/g, '&gt;')
+                     .replace(/"/g, '&quot;')
+                     .replace(/'/g, '&apos;');
+        }
+        
+        function downloadData() {
+            if (!outputData.value) {
+                showStatus('No data to download', 'error');
+                return;
+            }
+            
+            const outputFormat = document.getElementById('outputFormat').value;
+            let mimeType, extension;
+            
+            switch(outputFormat) {
+                case 'json':
+                    mimeType = 'application/json';
+                    extension = 'json';
+                    break;
+                case 'csv':
+                    mimeType = 'text/csv';
+                    extension = 'csv';
+                    break;
+                case 'sql':
+                    mimeType = 'text/plain';
+                    extension = 'sql';
+                    break;
+                case 'xml':
+                    mimeType = 'application/xml';
+                    extension = 'xml';
+                    break;
+                default:
+                    mimeType = 'application/json';
+                    extension = 'json';
+            }
+            
+            const blob = new Blob([outputData.value], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fake-data-${new Date().toISOString().slice(0, 10)}.${extension}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus('Data downloaded successfully!', 'success');
+        }
+        
+        function clearOutput() {
+            outputData.value = '';
+            showStatus('Output cleared!', 'success');
+        }
+        
+        function copyToClipboard() {
+            if (!outputData.value) {
+                showStatus('No data to copy', 'error');
+                return;
+            }
+            
+            outputData.select();
+            document.execCommand('copy');
+            
+            // Deselect the text
+            if (window.getSelection) {
+                window.getSelection().removeAllRanges();
+            }
+            
+            showStatus('Data copied to clipboard!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
