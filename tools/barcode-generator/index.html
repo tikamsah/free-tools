@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Generator - Online Barcode Creator | IT Tools</title>
+    <meta name="description" content="Generate barcodes in various formats instantly. Supports UPC-A, EAN-13, Code 128, QR codes and more.">
+    <meta name="keywords" content="barcode generator, QR code generator, UPC generator, EAN generator, Code 128 generator">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Barcode Library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- QR Code Library -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .generator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .generator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .output-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #input-text {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            resize: vertical;
+            background: #f9fafb;
+        }
+        
+        #input-text:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+        }
+        
+        .barcode-container {
+            margin: 20px 0;
+            text-align: center;
+            width: 100%;
+        }
+        
+        #barcode-output {
+            max-width: 100%;
+            height: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        #qrcode-output {
+            width: 200px;
+            height: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select,
+        .option-group input {
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+            width: 100%;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #8b5cf6;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #7c3aed;
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .barcode-types {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .barcode-type-btn {
+            padding: 8px 15px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .barcode-type-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .color-picker input[type="color"] {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Barcode Generator</h1>
+            <p>Create barcodes and QR codes for products, inventory, marketing and more</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="generator-container">
+                <div class="input-group">
+                    <h3>Barcode Settings</h3>
+                    
+                    <div class="barcode-types">
+                        <button class="barcode-type-btn active" data-type="code128">Code 128</button>
+                        <button class="barcode-type-btn" data-type="ean13">EAN-13</button>
+                        <button class="barcode-type-btn" data-type="upc">UPC-A</button>
+                        <button class="barcode-type-btn" data-type="qrcode">QR Code</button>
+                    </div>
+                    
+                    <input type="text" id="input-text" placeholder="Enter text or numbers to encode..." value="ITTOOLS123">
+                    
+                    <div class="options-container">
+                        <div class="option-group">
+                            <label for="barcode-type">Barcode Type</label>
+                            <select id="barcode-type">
+                                <option value="CODE128">CODE128</option>
+                                <option value="CODE128A">CODE128 A</option>
+                                <option value="CODE128B">CODE128 B</option>
+                                <option value="CODE128C">CODE128 C</option>
+                                <option value="EAN13">EAN-13</option>
+                                <option value="UPC">UPC-A</option>
+                                <option value="EAN8">EAN-8</option>
+                                <option value="ITF14">ITF-14</option>
+                                <option value="MSI">MSI</option>
+                                <option value="pharmacode">Pharmacode</option>
+                                <option value="codabar">Codabar</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="width">Width (px)</label>
+                            <input type="number" id="width" min="1" max="10" value="2">
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="height">Height (px)</label>
+                            <input type="number" id="height" min="10" max="500" value="100">
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="display-value">Display Text</label>
+                            <select id="display-value">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group color-picker">
+                            <label for="line-color">Line Color</label>
+                            <input type="color" id="line-color" value="#000000">
+                        </div>
+                        
+                        <div class="option-group color-picker">
+                            <label for="background">Background</label>
+                            <input type="color" id="background" value="#ffffff">
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="generate-btn" class="tool-button">
+                            <i class="fas fa-sync-alt"></i> Generate Barcode
+                        </button>
+                        <button id="download-btn" class="tool-button secondary">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button id="clear-btn" class="tool-button outline">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Generated Barcode</h3>
+                    
+                    <div class="barcode-container">
+                        <svg id="barcode-output"></svg>
+                        <div id="qrcode-output" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-svg-btn">
+                            <i class="fas fa-copy"></i> Copy SVG
+                        </button>
+                        <button class="action-btn" id="copy-png-btn">
+                            <i class="fas fa-copy"></i> Copy PNG
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this Barcode Generator:</h3>
+                <ul>
+                    <li>Enter the text or numbers you want to encode</li>
+                    <li>Select the barcode type (different types support different characters)</li>
+                    <li>Adjust the size and appearance settings as needed</li>
+                    <li>Click <strong>Generate Barcode</strong> to create your barcode</li>
+                    <li>Use the <strong>Download</strong> or <strong>Copy</strong> buttons to save your barcode</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Barcode Types:</h3>
+                <ul>
+                    <li><strong>CODE128</strong>: General purpose, supports all 128 ASCII characters</li>
+                    <li><strong>EAN-13</strong>: Used for retail products worldwide (12-13 digits)</li>
+                    <li><strong>UPC-A</strong>: North American retail products (12 digits)</li>
+                    <li><strong>EAN-8</strong>: Compact version for small packages (7-8 digits)</li>
+                    <li><strong>ITF-14</strong>: Used for shipping cartons (13-14 digits)</li>
+                    <li><strong>QR Code</strong>: 2D code that can store URLs, text, and more data</li>
+                    <li>Different types have different requirements for input length and characters</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All barcode generation happens in your browser - we never store or transmit your data</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         gtag('config', 'G-61PG9HQVB4');
+     </script>
+     
+    <script>
+        // DOM elements
+        const inputText = document.getElementById('input-text');
+        const barcodeType = document.getElementById('barcode-type');
+        const widthInput = document.getElementById('width');
+        const heightInput = document.getElementById('height');
+        const displayValue = document.getElementById('display-value');
+        const lineColor = document.getElementById('line-color');
+        const background = document.getElementById('background');
+        const generateBtn = document.getElementById('generate-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copySvgBtn = document.getElementById('copy-svg-btn');
+        const copyPngBtn = document.getElementById('copy-png-btn');
+        const barcodeOutput = document.getElementById('barcode-output');
+        const qrcodeOutput = document.getElementById('qrcode-output');
+        const statusMessage = document.getElementById('statusMessage');
+        const barcodeTypeBtns = document.querySelectorAll('.barcode-type-btn');
+        
+        // QR Code instance
+        let qrcode = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            generateBtn.addEventListener('click', generateBarcode);
+            downloadBtn.addEventListener('click', downloadBarcode);
+            clearBtn.addEventListener('click', clearInput);
+            copySvgBtn.addEventListener('click', copySvgToClipboard);
+            copyPngBtn.addEventListener('click', copyPngToClipboard);
+            
+            // Barcode type buttons
+            barcodeTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    barcodeTypeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const type = this.dataset.type;
+                    if (type === 'qrcode') {
+                        document.getElementById('barcode-type').style.display = 'none';
+                        document.querySelector('label[for="barcode-type"]').style.display = 'none';
+                        barcodeOutput.style.display = 'none';
+                        qrcodeOutput.style.display = 'block';
+                    } else {
+                        document.getElementById('barcode-type').style.display = 'block';
+                        document.querySelector('label[for="barcode-type"]').style.display = 'block';
+                        barcodeOutput.style.display = 'block';
+                        qrcodeOutput.style.display = 'none';
+                        
+                        // Set barcode type based on button
+                        if (type === 'code128') {
+                            barcodeType.value = 'CODE128';
+                        } else if (type === 'ean13') {
+                            barcodeType.value = 'EAN13';
+                        } else if (type === 'upc') {
+                            barcodeType.value = 'UPC';
+                        }
+                    }
+                    
+                    generateBarcode();
+                });
+            });
+            
+            // Generate initial barcode
+            generateBarcode();
+        });
+        
+        function generateBarcode() {
+            const text = inputText.value.trim();
+            const type = barcodeType.value;
+            const width = parseInt(widthInput.value) || 2;
+            const height = parseInt(heightInput.value) || 100;
+            const showText = displayValue.value === 'true';
+            const lineColorValue = lineColor.value;
+            const bgColor = background.value;
+            
+            if (!text) {
+                showStatus('Please enter some text to encode', 'error');
+                return;
+            }
+            
+            try {
+                // Check if we're generating a QR code
+                const activeBtn = document.querySelector('.barcode-type-btn.active');
+                if (activeBtn && activeBtn.dataset.type === 'qrcode') {
+                    generateQRCode(text, bgColor, lineColorValue);
+                    return;
+                }
+                
+                // Generate standard barcode
+                JsBarcode(barcodeOutput, text, {
+                    format: type,
+                    width: width,
+                    height: height,
+                    displayValue: showText,
+                    lineColor: lineColorValue,
+                    background: bgColor,
+                    margin: 10,
+                    valid: function(valid) {
+                        if (!valid) {
+                            showStatus('Invalid input for selected barcode type', 'error');
+                        }
+                    }
+                });
+                
+                showStatus('Barcode generated successfully!', 'success');
+            } catch (error) {
+                showStatus('Error generating barcode: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+        
+        function generateQRCode(text, bgColor, fgColor) {
+            // Clear previous QR code
+            qrcodeOutput.innerHTML = '';
+            
+            // Create new QR code
+            qrcode = new QRCode(qrcodeOutput, {
+                text: text,
+                width: 200,
+                height: 200,
+                colorDark: fgColor,
+                colorLight: bgColor,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            showStatus('QR code generated successfully!', 'success');
+        }
+        
+        function downloadBarcode() {
+            const activeBtn = document.querySelector('.barcode-type-btn.active');
+            const isQRCode = activeBtn && activeBtn.dataset.type === 'qrcode';
+            const fileName = isQRCode ? 'qrcode' : 'barcode';
+            
+            if (isQRCode) {
+                // Download QR code
+                const canvas = qrcodeOutput.querySelector('canvas');
+                if (!canvas) {
+                    showStatus('No QR code to download', 'error');
+                    return;
+                }
+                
+                const link = document.createElement('a');
+                link.download = `${fileName}-${new Date().getTime()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } else {
+                // Download barcode
+                const svgData = new XMLSerializer().serializeToString(barcodeOutput);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const link = document.createElement('a');
+                    link.download = `${fileName}-${new Date().getTime()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                };
+                
+                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+            }
+            
+            showStatus('Barcode downloaded successfully!', 'success');
+        }
+        
+        function clearInput() {
+            inputText.value = '';
+            barcodeOutput.innerHTML = '';
+            qrcodeOutput.innerHTML = '';
+            showStatus('Input cleared!', 'success');
+        }
+        
+        async function copySvgToClipboard() {
+            const activeBtn = document.querySelector('.barcode-type-btn.active');
+            const isQRCode = activeBtn && activeBtn.dataset.type === 'qrcode';
+            
+            try {
+                if (isQRCode) {
+                    const canvas = qrcodeOutput.querySelector('canvas');
+                    if (!canvas) {
+                        showStatus('No QR code to copy', 'error');
+                        return;
+                    }
+                    
+                    canvas.toBlob(async (blob) => {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({
+                                [blob.type]: blob
+                            })
+                        ]);
+                        showStatus('QR code copied as image!', 'success');
+                    });
+                } else {
+                    const svg = barcodeOutput.innerHTML;
+                    if (!svg) {
+                        showStatus('No barcode to copy', 'error');
+                        return;
+                    }
+                    
+                    await navigator.clipboard.writeText(svg);
+                    showStatus('SVG copied to clipboard!', 'success');
+                }
+            } catch (error) {
+                showStatus('Failed to copy: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+        
+        async function copyPngToClipboard() {
+            const activeBtn = document.querySelector('.barcode-type-btn.active');
+            const isQRCode = activeBtn && activeBtn.dataset.type === 'qrcode';
+            
+            try {
+                if (isQRCode) {
+                    const canvas = qrcodeOutput.querySelector('canvas');
+                    if (!canvas) {
+                        showStatus('No QR code to copy', 'error');
+                        return;
+                    }
+                    
+                    canvas.toBlob(async (blob) => {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({
+                                [blob.type]: blob
+                            })
+                        ]);
+                        showStatus('QR code copied to clipboard!', 'success');
+                    });
+                } else {
+                    const svgData = new XMLSerializer().serializeToString(barcodeOutput);
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const img = new Image();
+                    
+                    img.onload = async function() {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        
+                        canvas.toBlob(async (blob) => {
+                            await navigator.clipboard.write([
+                                new ClipboardItem({
+                                    [blob.type]: blob
+                                })
+                            ]);
+                            showStatus('Barcode copied to clipboard!', 'success');
+                        });
+                    };
+                    
+                    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                }
+            } catch (error) {
+                showStatus('Failed to copy: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
