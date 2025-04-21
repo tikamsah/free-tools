@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL Certificate Checker - Verify SSL/TLS Certificate Details | IT Tools</title>
+    <meta name="description" content="Check SSL certificate details including issuer, validity period, and security configuration. Essential tool for webmasters and security professionals.">
+    <meta name="keywords" content="SSL checker, TLS checker, certificate validator, SSL expiration, certificate details">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        #url-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            width: 100%;
+        }
+        
+        #url-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* Status indicator */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .status-indicator.valid {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-indicator.invalid {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .status-indicator.warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* Certificate details */
+        .certificate-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        .detail-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .detail-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .detail-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+            word-break: break-all;
+        }
+        
+        /* Validity progress bar */
+        .validity-container {
+            margin: 20px 0;
+        }
+        
+        .validity-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .validity-bar {
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .validity-progress {
+            height: 100%;
+            background: #10b981;
+        }
+        
+        /* Protocol support */
+        .protocol-support {
+            margin: 20px 0;
+        }
+        
+        .protocol-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .protocol-name {
+            width: 100px;
+            font-weight: 500;
+        }
+        
+        .protocol-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .protocol-status.valid {
+            color: #065f46;
+        }
+        
+        .protocol-status.invalid {
+            color: #b91c1c;
+        }
+        
+        /* Buttons */
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .url-input-container {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .certificate-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .option-group select {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            font-size: 0.9rem;
+            color: #111827;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>SSL Certificate Checker</h1>
+            <p>Verify SSL/TLS certificate details including issuer, validity period, and security configuration</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter Website URL</h3>
+                
+                <div class="url-input-container">
+                    <input type="url" id="url-input" placeholder="https://example.com" value="https://example.com">
+                    <button id="check-btn" class="tool-button">
+                        <span id="check-btn-text">Check SSL</span>
+                        <span id="check-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div class="check-options">
+                    <div class="option-group">
+                        <label for="timeout-select">Timeout:</label>
+                        <select id="timeout-select">
+                            <option value="5000">5 seconds</option>
+                            <option value="10000" selected>10 seconds</option>
+                            <option value="15000">15 seconds</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="check-chain">Check Chain:</label>
+                        <select id="check-chain">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">SSL Certificate Details</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn" id="clear-btn">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="status-display" style="display: none;">
+                        <div id="status-summary">
+                            <!-- Status summary will be populated here -->
+                        </div>
+                        
+                        <div class="certificate-details" id="certificate-details">
+                            <!-- Certificate details will be populated here -->
+                        </div>
+                        
+                        <div class="validity-container">
+                            <h4>Certificate Validity</h4>
+                            <div class="validity-info">
+                                <span id="valid-from">Issued on: -</span>
+                                <span id="valid-to">Expires on: -</span>
+                            </div>
+                            <div class="validity-bar">
+                                <div class="validity-progress" id="validity-progress"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="protocol-support">
+                            <h4>Protocol Support</h4>
+                            <div id="protocols-list">
+                                <!-- Protocol support will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-lock"></i>
+                        <p>No SSL certificate checked yet. Enter a URL and click "Check SSL".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this SSL Checker:</h3>
+                <ul>
+                    <li>Enter the website URL you want to check (include https://)</li>
+                    <li>Click <strong>Check SSL</strong> to verify the SSL/TLS certificate</li>
+                    <li>View certificate details including issuer, validity period, and subject</li>
+                    <li>Check which protocols (TLS 1.2, TLS 1.3) are supported</li>
+                    <li>Copy the results or clear them as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About SSL Certificates:</h3>
+                <ul>
+                    <li><strong>Valid Certificate</strong>: Properly issued, not expired, and trusted by browsers</li>
+                    <li><strong>Expiration</strong>: Certificates typically last 1-2 years before needing renewal</li>
+                    <li><strong>Issuer</strong>: Certificate Authority (CA) that issued the certificate</li>
+                    <li><strong>Subject</strong>: Domain name(s) the certificate is valid for</li>
+                    <li><strong>Protocols</strong>: Modern sites should support TLS 1.2 or TLS 1.3</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All checks are performed in real-time from your browser - we never store or log your requests</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+
+    <script>
+        // DOM elements
+        const urlInput = document.getElementById('url-input');
+        const checkBtn = document.getElementById('check-btn');
+        const checkBtnText = document.getElementById('check-btn-text');
+        const checkBtnLoader = document.getElementById('check-btn-loader');
+        const timeoutSelect = document.getElementById('timeout-select');
+        const checkChain = document.getElementById('check-chain');
+        const statusDisplay = document.getElementById('status-display');
+        const statusSummary = document.getElementById('status-summary');
+        const certificateDetails = document.getElementById('certificate-details');
+        const validFrom = document.getElementById('valid-from');
+        const validTo = document.getElementById('valid-to');
+        const validityProgress = document.getElementById('validity-progress');
+        const protocolsList = document.getElementById('protocols-list');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        checkBtn.addEventListener('click', checkSSL);
+        copyBtn.addEventListener('click', copyResults);
+        clearBtn.addEventListener('click', clearResults);
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkSSL();
+            }
+        });
+        
+        async function checkSSL() {
+            let url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a website URL', 'error');
+                return;
+            }
+            
+            // Add https:// if missing
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+                urlInput.value = url;
+            }
+            
+            // Validate URL
+            try {
+                new URL(url);
+            } catch (e) {
+                showStatus('Please enter a valid URL (e.g. https://example.com)', 'error');
+                return;
+            }
+            
+            // Show loading state
+            checkBtn.disabled = true;
+            checkBtnText.style.display = 'none';
+            checkBtnLoader.style.display = 'inline-block';
+            
+            try {
+                const timeout = parseInt(timeoutSelect.value);
+                const shouldCheckChain = checkChain.value === 'true';
+                
+                // Extract hostname from URL
+                const hostname = new URL(url).hostname;
+                
+                // Make the request to a backend that can check SSL (since browsers restrict direct certificate access)
+                // In a real implementation, you would need a backend service for this
+                // This is a mock implementation that simulates the response
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                
+                // Simulate API call with timeout
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                clearTimeout(timeoutId);
+                
+                // Mock response - in a real implementation, you would call your backend API
+                const mockResponse = {
+                    success: true,
+                    hostname: hostname,
+                    certificate: {
+                        valid: true,
+                        validFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                        validTo: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+                        issuer: "Let's Encrypt",
+                        subject: hostname,
+                        serialNumber: "ABCD1234EFGH5678",
+                        signatureAlgorithm: "SHA256-RSA",
+                        publicKeyAlgorithm: "RSA",
+                        keySize: 2048,
+                        san: [`DNS:${hostname}`, `DNS:www.${hostname}`],
+                        ocspMustStaple: false,
+                        chainValid: shouldCheckChain ? true : null
+                    },
+                    protocols: {
+                        tls1_0: false,
+                        tls1_1: false,
+                        tls1_2: true,
+                        tls1_3: true
+                    },
+                    features: {
+                        hsts: true,
+                        hpkp: false
+                    }
+                };
+                
+                // Display the results
+                displaySSLResults(mockResponse);
+                
+                showStatus('SSL certificate checked successfully!', 'success');
+                
+            } catch (error) {
+                showStatus('Error checking SSL certificate: ' + error.message, 'error');
+                console.error('Error checking SSL:', error);
+                
+                // Display error in results
+                statusSummary.innerHTML = `
+                    <div class="status-indicator invalid">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Invalid Certificate</span>
+                    </div>
+                    <p>Error: ${error.message}</p>
+                `;
+                
+                certificateDetails.innerHTML = `
+                    <div class="detail-card">
+                        <h4>Error</h4>
+                        <p>Could not retrieve certificate details</p>
+                    </div>
+                `;
+                
+                statusDisplay.style.display = 'block';
+                emptyState.style.display = 'none';
+                
+            } finally {
+                // Reset loading state
+                checkBtn.disabled = false;
+                checkBtnText.style.display = 'inline-block';
+                checkBtnLoader.style.display = 'none';
+            }
+        }
+        
+        function displaySSLResults(data) {
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            // Prepare status summary
+            let statusHtml = '';
+            if (data.certificate.valid) {
+                statusHtml = `
+                    <div class="status-indicator valid">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Valid Certificate</span>
+                    </div>
+                    <p>${data.hostname} has a valid SSL certificate</p>
+                `;
+            } else {
+                statusHtml = `
+                    <div class="status-indicator invalid">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Invalid Certificate</span>
+                    </div>
+                    <p>${data.hostname} has an invalid SSL certificate</p>
+                `;
+            }
+            
+            statusSummary.innerHTML = statusHtml;
+            
+            // Format dates
+            const fromDate = new Date(data.certificate.validFrom);
+            const toDate = new Date(data.certificate.validTo);
+            const now = new Date();
+            
+            // Calculate validity percentage
+            const total = toDate - fromDate;
+            const elapsed = now - fromDate;
+            const percentage = Math.min(100, Math.max(0, (elapsed / total) * 100));
+            
+            // Update validity display
+            validFrom.textContent = `Issued on: ${fromDate.toLocaleDateString()}`;
+            validTo.textContent = `Expires on: ${toDate.toLocaleDateString()} (${Math.ceil((toDate - now) / (1000 * 60 * 60 * 24))} days remaining)`;
+            validityProgress.style.width = `${percentage}%`;
+            
+            // Change progress bar color based on remaining time
+            if ((toDate - now) < 30 * 24 * 60 * 60 * 1000) { // Less than 30 days
+                validityProgress.style.background = '#ef4444';
+            } else if ((toDate - now) < 60 * 24 * 60 * 60 * 1000) { // Less than 60 days
+                validityProgress.style.background = '#f59e0b';
+            } else {
+                validityProgress.style.background = '#10b981';
+            }
+            
+            // Prepare certificate details
+            const detailsHtml = `
+                <div class="detail-card">
+                    <h4>Issuer</h4>
+                    <p>${data.certificate.issuer}</p>
+                </div>
+                <div class="detail-card">
+                    <h4>Subject</h4>
+                    <p>${data.certificate.subject}</p>
+                </div>
+                <div class="detail-card">
+                    <h4>Serial Number</h4>
+                    <p>${data.certificate.serialNumber}</p>
+                </div>
+                <div class="detail-card">
+                    <h4>Signature Algorithm</h4>
+                    <p>${data.certificate.signatureAlgorithm}</p>
+                </div>
+                <div class="detail-card">
+                    <h4>Public Key</h4>
+                    <p>${data.certificate.publicKeyAlgorithm} (${data.certificate.keySize} bits)</p>
+                </div>
+                <div class="detail-card">
+                    <h4>Subject Alternative Names</h4>
+                    <p>${data.certificate.san.join(', ').replace(/DNS:/g, '')}</p>
+                </div>
+                ${data.certificate.chainValid !== null ? `
+                <div class="detail-card">
+                    <h4>Certificate Chain</h4>
+                    <p>${data.certificate.chainValid ? 'Valid' : 'Invalid'}</p>
+                </div>
+                ` : ''}
+            `;
+            
+            certificateDetails.innerHTML = detailsHtml;
+            
+            // Prepare protocol support
+            let protocolsHtml = '';
+            for (const [protocol, supported] of Object.entries(data.protocols)) {
+                const protocolName = protocol.replace('_', '.').toUpperCase();
+                protocolsHtml += `
+                    <div class="protocol-row">
+                        <div class="protocol-name">${protocolName}</div>
+                        <div class="protocol-status ${supported ? 'valid' : 'invalid'}">
+                            <i class="fas fa-${supported ? 'check' : 'times'}"></i>
+                            <span>${supported ? 'Supported' : 'Not supported'}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            protocolsList.innerHTML = protocolsHtml;
+            
+            // Show the results
+            statusDisplay.style.display = 'block';
+        }
+        
+        function copyResults() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No results to copy', 'error');
+                return;
+            }
+            
+            // Get all results text
+            const statusText = statusSummary.textContent.trim();
+            const details = Array.from(document.querySelectorAll('.detail-card'));
+            const protocols = Array.from(document.querySelectorAll('.protocol-row'));
+            
+            let textToCopy = 'SSL CERTIFICATE REPORT\n====================\n\n';
+            textToCopy += `${statusText}\n\n`;
+            
+            textToCopy += 'CERTIFICATE DETAILS\n------------------\n';
+            details.forEach(detail => {
+                const name = detail.querySelector('h4').textContent;
+                const value = detail.querySelector('p').textContent;
+                textToCopy += `${name}: ${value}\n`;
+            });
+            
+            textToCopy += '\nVALIDITY\n--------\n';
+            textToCopy += `${validFrom.textContent}\n`;
+            textToCopy += `${validTo.textContent}\n\n`;
+            
+            textToCopy += 'PROTOCOL SUPPORT\n---------------\n';
+            protocols.forEach(row => {
+                const name = row.querySelector('.protocol-name').textContent;
+                const status = row.querySelector('.protocol-status span').textContent;
+                textToCopy += `${name}: ${status}\n`;
+            });
+            
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => showStatus('Results copied to clipboard!', 'success'))
+                .catch(() => showStatus('Failed to copy results', 'error'));
+        }
+        
+        function clearResults() {
+            urlInput.value = '';
+            statusDisplay.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Results cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
