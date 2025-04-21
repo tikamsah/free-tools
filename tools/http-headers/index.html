@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Headers Viewer - Online HTTP Headers Analyzer | IT Tools</title>
+    <meta name="description" content="View and analyze HTTP headers from any URL. Inspect request and response headers for debugging and optimization.">
+    <meta name="keywords" content="http headers viewer, http headers analyzer, http request headers, http response headers, header inspector">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        #url-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        #url-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select, .option-group input {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .headers-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        
+        .headers-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .headers-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .headers-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .header-name {
+            color: #1e40af;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .header-value {
+            word-break: break-all;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>HTTP Headers Viewer</h1>
+            <p>View and analyze HTTP headers from any URL</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter URL to Inspect</h3>
+                
+                <div class="url-input-container">
+                    <input type="url" id="url-input" placeholder="https://example.com" value="https://example.com">
+                    <button id="fetch-btn" class="tool-button">
+                        <span id="fetch-btn-text">Fetch Headers</span>
+                        <span id="fetch-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div class="options-container">
+                    <div class="option-group">
+                        <label for="method-select">HTTP Method:</label>
+                        <select id="method-select">
+                            <option value="GET" selected>GET</option>
+                            <option value="HEAD">HEAD</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="follow-redirects">Follow Redirects:</label>
+                        <select id="follow-redirects">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="include-request">Include Request Headers:</label>
+                        <select id="include-request">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">HTTP Headers</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn" id="clear-btn">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <table class="headers-table" id="headers-table">
+                        <thead>
+                            <tr>
+                                <th>Header Name</th>
+                                <th>Header Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="headers-body">
+                            <tr>
+                                <td colspan="2" style="text-align: center; color: #6b7280;">
+                                    No headers fetched yet. Enter a URL and click "Fetch Headers".
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this HTTP Headers Viewer:</h3>
+                <ul>
+                    <li>Enter the URL you want to inspect in the input field</li>
+                    <li>Click <strong>Fetch Headers</strong> to retrieve the HTTP headers</li>
+                    <li>Adjust the options to customize your request (method, redirects, etc.)</li>
+                    <li>View the returned headers in the results table</li>
+                    <li>Copy the headers or clear the results as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About HTTP Headers:</h3>
+                <ul>
+                    <li>HTTP headers carry additional information between clients and servers</li>
+                    <li>Request headers are sent by the client to the server</li>
+                    <li>Response headers are sent back by the server to the client</li>
+                    <li>Headers control caching, content types, security policies, and more</li>
+                    <li>All requests are made from your browser - no server-side processing</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All requests are made directly from your browser - we never store or log your requests</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const urlInput = document.getElementById('url-input');
+        const fetchBtn = document.getElementById('fetch-btn');
+        const fetchBtnText = document.getElementById('fetch-btn-text');
+        const fetchBtnLoader = document.getElementById('fetch-btn-loader');
+        const methodSelect = document.getElementById('method-select');
+        const followRedirects = document.getElementById('follow-redirects');
+        const includeRequest = document.getElementById('include-request');
+        const headersBody = document.getElementById('headers-body');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        // Event listeners
+        fetchBtn.addEventListener('click', fetchHeaders);
+        copyBtn.addEventListener('click', copyHeaders);
+        clearBtn.addEventListener('click', clearResults);
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                fetchHeaders();
+            }
+        });
+        
+        async function fetchHeaders() {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a URL', 'error');
+                return;
+            }
+            
+            try {
+                // Validate URL
+                new URL(url);
+            } catch (e) {
+                showStatus('Please enter a valid URL (include http:// or https://)', 'error');
+                return;
+            }
+            
+            // Show loading state
+            fetchBtn.disabled = true;
+            fetchBtnText.style.display = 'none';
+            fetchBtnLoader.style.display = 'inline-block';
+            
+            try {
+                const method = methodSelect.value;
+                const shouldFollowRedirects = followRedirects.value === 'true';
+                const shouldIncludeRequest = includeRequest.value === 'true';
+                
+                // Make the request using the Fetch API
+                const response = await fetch(url, {
+                    method: method,
+                    redirect: shouldFollowRedirects ? 'follow' : 'manual',
+                    // Add CORS mode to be able to read headers
+                    mode: 'cors'
+                });
+                
+                // Process the response
+                const headers = [];
+                
+                // Add request headers if enabled
+                if (shouldIncludeRequest) {
+                    headers.push({
+                        name: 'Request URL',
+                        value: url
+                    });
+                    headers.push({
+                        name: 'Request Method',
+                        value: method
+                    });
+                }
+                
+                // Add response headers
+                if (response.redirected) {
+                    headers.push({
+                        name: 'Response Status',
+                        value: `${response.status} ${response.statusText} (Redirected)`
+                    });
+                    headers.push({
+                        name: 'Final URL',
+                        value: response.url
+                    });
+                } else {
+                    headers.push({
+                        name: 'Response Status',
+                        value: `${response.status} ${response.statusText}`
+                    });
+                }
+                
+                // Add all headers
+                response.headers.forEach((value, name) => {
+                    headers.push({ name, value });
+                });
+                
+                // Display the headers
+                displayHeaders(headers);
+                showStatus('Headers fetched successfully!', 'success');
+                
+            } catch (error) {
+                showStatus('Error fetching headers: ' + error.message, 'error');
+                console.error('Error fetching headers:', error);
+                
+                // Display error in results
+                headersBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" style="color: #b91c1c;">
+                            Error: ${error.message}
+                            <br><br>
+                            Possible reasons:
+                            <ul>
+                                <li>The URL doesn't exist or is unreachable</li>
+                                <li>The server blocked the request (CORS policy)</li>
+                                <li>You're not connected to the internet</li>
+                            </ul>
+                        </td>
+                    </tr>
+                `;
+            } finally {
+                // Reset loading state
+                fetchBtn.disabled = false;
+                fetchBtnText.style.display = 'inline-block';
+                fetchBtnLoader.style.display = 'none';
+            }
+        }
+        
+        function displayHeaders(headers) {
+            if (headers.length === 0) {
+                headersBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" style="text-align: center; color: #6b7280;">
+                            No headers received from the server.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            headers.forEach(header => {
+                html += `
+                    <tr>
+                        <td class="header-name">${header.name}</td>
+                        <td class="header-value">${header.value}</td>
+                    </tr>
+                `;
+            });
+            
+            headersBody.innerHTML = html;
+        }
+        
+        function copyHeaders() {
+            const rows = Array.from(document.querySelectorAll('#headers-body tr'));
+            if (rows.length === 0 || (rows.length === 1 && rows[0].querySelector('td').colSpan === 2)) {
+                showStatus('No headers to copy', 'error');
+                return;
+            }
+            
+            let textToCopy = '';
+            rows.forEach(row => {
+                const name = row.querySelector('.header-name')?.textContent || '';
+                const value = row.querySelector('.header-value')?.textContent || '';
+                if (name && value) {
+                    textToCopy += `${name}: ${value}\n`;
+                }
+            });
+            
+            navigator.clipboard.writeText(textToCopy.trim())
+                .then(() => showStatus('Headers copied to clipboard!', 'success'))
+                .catch(() => showStatus('Failed to copy headers', 'error'));
+        }
+        
+        function clearResults() {
+            headersBody.innerHTML = `
+                <tr>
+                    <td colspan="2" style="text-align: center; color: #6b7280;">
+                        No headers fetched yet. Enter a URL and click "Fetch Headers".
+                    </td>
+                </tr>
+            `;
+            showStatus('Results cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
