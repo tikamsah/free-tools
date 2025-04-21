@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Status Checker - Uptime & Performance Monitor | IT Tools</title>
+    <meta name="description" content="Check if a website is online, monitor response time, and view HTTP headers. Essential tool for webmasters and developers.">
+    <meta name="keywords" content="website status, uptime checker, website monitor, http checker, site status">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        #url-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            width: 100%;
+        }
+        
+        #url-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* Status indicator */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .status-indicator.online {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-indicator.offline {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .status-indicator.warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* Metrics grid */
+        .status-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            width: 100%;
+        }
+        
+        .metric-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .metric-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .metric-card p {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Headers table */
+        .headers-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        
+        .headers-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .headers-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .headers-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .header-name {
+            color: #1e40af;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .header-value {
+            word-break: break-all;
+        }
+        
+        /* Options */
+        .check-options {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        /* History chart */
+        .history-chart {
+            height: 200px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 15px;
+            position: relative;
+            width: 100%;
+        }
+        
+        .chart-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6b7280;
+        }
+        
+        /* Buttons */
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .url-input-container {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .status-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Website Status Checker</h1>
+            <p>Check if a website is online, monitor response time, and view HTTP headers</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter Website URL</h3>
+                
+                <div class="url-input-container">
+                    <input type="url" id="url-input" placeholder="https://example.com" value="https://example.com">
+                    <button id="check-btn" class="tool-button">
+                        <span id="check-btn-text">Check Status</span>
+                        <span id="check-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div class="check-options">
+                    <div class="option-group">
+                        <label for="timeout-select">Timeout:</label>
+                        <select id="timeout-select">
+                            <option value="5000">5 seconds</option>
+                            <option value="10000" selected>10 seconds</option>
+                            <option value="15000">15 seconds</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="follow-redirects">Follow Redirects:</label>
+                        <select id="follow-redirects">
+                            <option value="true" selected>Yes</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Website Status</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn" id="clear-btn">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="status-display" style="display: none;">
+                        <div id="status-summary">
+                            <!-- Status summary will be populated here -->
+                        </div>
+                        
+                        <div class="status-metrics" id="status-metrics">
+                            <!-- Metrics will be populated here -->
+                        </div>
+                        
+                        <div class="history-chart">
+                            <div class="chart-placeholder">
+                                Response time history chart will appear here (requires multiple checks)
+                            </div>
+                        </div>
+                        
+                        <h4>HTTP Response Headers</h4>
+                        <table class="headers-table" id="headers-table">
+                            <thead>
+                                <tr>
+                                    <th>Header Name</th>
+                                    <th>Header Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="headers-body">
+                                <!-- Headers will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-globe"></i>
+                        <p>No status checked yet. Enter a URL and click "Check Status".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this Website Status Checker:</h3>
+                <ul>
+                    <li>Enter the website URL you want to check (include http:// or https://)</li>
+                    <li>Click <strong>Check Status</strong> to test the website availability</li>
+                    <li>View the response status, time, and HTTP headers</li>
+                    <li>Adjust timeout and redirect options as needed</li>
+                    <li>Copy the results or clear them as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Website Status:</h3>
+                <ul>
+                    <li><strong>HTTP Status Codes</strong>: 200 = OK, 301/302 = Redirect, 404 = Not Found, 500 = Server Error</li>
+                    <li><strong>Response Time</strong>: Time taken for the server to respond (lower is better)</li>
+                    <li><strong>Uptime</strong>: Percentage of time the website is available to users</li>
+                    <li><strong>Headers</strong>: Provide technical details about the server and content</li>
+                    <li>All checks are performed from your current location and network</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All checks are performed in real-time from your browser - we never store or log your requests</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+
+
+    <script>
+        // DOM elements
+        const urlInput = document.getElementById('url-input');
+        const checkBtn = document.getElementById('check-btn');
+        const checkBtnText = document.getElementById('check-btn-text');
+        const checkBtnLoader = document.getElementById('check-btn-loader');
+        const timeoutSelect = document.getElementById('timeout-select');
+        const followRedirects = document.getElementById('follow-redirects');
+        const statusDisplay = document.getElementById('status-display');
+        const statusSummary = document.getElementById('status-summary');
+        const statusMetrics = document.getElementById('status-metrics');
+        const headersBody = document.getElementById('headers-body');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        checkBtn.addEventListener('click', checkWebsiteStatus);
+        copyBtn.addEventListener('click', copyResults);
+        clearBtn.addEventListener('click', clearResults);
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkWebsiteStatus();
+            }
+        });
+        
+        async function checkWebsiteStatus() {
+            let url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a website URL', 'error');
+                return;
+            }
+            
+            // Add https:// if missing
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+                urlInput.value = url;
+            }
+            
+            // Validate URL
+            try {
+                new URL(url);
+            } catch (e) {
+                showStatus('Please enter a valid URL (e.g. https://example.com)', 'error');
+                return;
+            }
+            
+            // Show loading state
+            checkBtn.disabled = true;
+            checkBtnText.style.display = 'none';
+            checkBtnLoader.style.display = 'inline-block';
+            
+            try {
+                const timeout = parseInt(timeoutSelect.value);
+                const shouldFollowRedirects = followRedirects.value === 'true';
+                const startTime = performance.now();
+                
+                // Make the request using Fetch API
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                
+                let response;
+                try {
+                    response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        redirect: shouldFollowRedirects ? 'follow' : 'manual',
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        throw new Error(`Request timed out after ${timeout/1000} seconds`);
+                    } else {
+                        throw error;
+                    }
+                }
+                
+                const endTime = performance.now();
+                const responseTime = Math.round(endTime - startTime);
+                
+                // Process the response
+                const statusCode = response.status;
+                const statusText = response.statusText;
+                const isOnline = statusCode >= 200 && statusCode < 400;
+                const headers = [];
+                
+                // Add all headers
+                response.headers.forEach((value, name) => {
+                    headers.push({ name, value });
+                });
+                
+                // Display the results
+                displayStatusResults({
+                    url: response.url,
+                    statusCode,
+                    statusText,
+                    isOnline,
+                    responseTime,
+                    headers
+                });
+                
+                showStatus('Website status checked successfully!', 'success');
+                
+            } catch (error) {
+                showStatus('Error checking website status: ' + error.message, 'error');
+                console.error('Error checking website:', error);
+                
+                // Display error in results
+                statusSummary.innerHTML = `
+                    <div class="status-indicator offline">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Offline</span>
+                    </div>
+                    <p>Error: ${error.message}</p>
+                `;
+                
+                statusMetrics.innerHTML = `
+                    <div class="metric-card">
+                        <h4>Response Time</h4>
+                        <p>N/A</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4>HTTP Status</h4>
+                        <p>Error</p>
+                    </div>
+                `;
+                
+                headersBody.innerHTML = `
+                    <tr>
+                        <td colspan="2">No headers received due to error</td>
+                    </tr>
+                `;
+                
+                statusDisplay.style.display = 'block';
+                emptyState.style.display = 'none';
+                
+            } finally {
+                // Reset loading state
+                checkBtn.disabled = false;
+                checkBtnText.style.display = 'inline-block';
+                checkBtnLoader.style.display = 'none';
+            }
+        }
+        
+        function displayStatusResults(data) {
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            // Prepare status summary
+            let statusHtml = '';
+            if (data.isOnline) {
+                statusHtml = `
+                    <div class="status-indicator online">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Online</span>
+                    </div>
+                    <p>${data.url} is responding normally</p>
+                `;
+            } else if (data.statusCode >= 400 && data.statusCode < 500) {
+                statusHtml = `
+                    <div class="status-indicator warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Client Error</span>
+                    </div>
+                    <p>${data.url} returned HTTP ${data.statusCode} ${data.statusText}</p>
+                `;
+            } else if (data.statusCode >= 500) {
+                statusHtml = `
+                    <div class="status-indicator warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Server Error</span>
+                    </div>
+                    <p>${data.url} returned HTTP ${data.statusCode} ${data.statusText}</p>
+                `;
+            }
+            
+            statusSummary.innerHTML = statusHtml;
+            
+            // Prepare metrics
+            const metricsHtml = `
+                <div class="metric-card">
+                    <h4>Response Time</h4>
+                    <p>${data.responseTime} ms</p>
+                </div>
+                <div class="metric-card">
+                    <h4>HTTP Status</h4>
+                    <p>${data.statusCode} ${data.statusText}</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Final URL</h4>
+                    <p>${data.url}</p>
+                </div>
+            `;
+            
+            statusMetrics.innerHTML = metricsHtml;
+            
+            // Prepare headers
+            let headersHtml = '';
+            if (data.headers.length > 0) {
+                data.headers.forEach(header => {
+                    headersHtml += `
+                        <tr>
+                            <td class="header-name">${header.name}</td>
+                            <td class="header-value">${header.value}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                headersHtml = `
+                    <tr>
+                        <td colspan="2">No headers received</td>
+                    </tr>
+                `;
+            }
+            
+            headersBody.innerHTML = headersHtml;
+            
+            // Show the results
+            statusDisplay.style.display = 'block';
+        }
+        
+        function copyResults() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No results to copy', 'error');
+                return;
+            }
+            
+            // Get all results text
+            const statusText = statusSummary.textContent.trim();
+            const metrics = Array.from(document.querySelectorAll('.metric-card'));
+            const headers = Array.from(document.querySelectorAll('#headers-body tr'));
+            
+            let textToCopy = 'WEBSITE STATUS REPORT\n====================\n\n';
+            textToCopy += `${statusText}\n\n`;
+            
+            textToCopy += 'METRICS\n-------\n';
+            metrics.forEach(metric => {
+                const name = metric.querySelector('h4').textContent;
+                const value = metric.querySelector('p').textContent;
+                textToCopy += `${name}: ${value}\n`;
+            });
+            
+            textToCopy += '\nHEADERS\n-------\n';
+            headers.forEach(row => {
+                const name = row.querySelector('.header-name')?.textContent || '';
+                const value = row.querySelector('.header-value')?.textContent || '';
+                if (name && value) {
+                    textToCopy += `${name}: ${value}\n`;
+                }
+            });
+            
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => showStatus('Results copied to clipboard!', 'success'))
+                .catch(() => showStatus('Failed to copy results', 'error'));
+        }
+        
+        function clearResults() {
+            urlInput.value = '';
+            statusDisplay.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Results cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
