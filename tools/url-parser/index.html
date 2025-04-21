@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Parser - Analyze and Break Down URLs | IT Tools</title>
+    <meta name="description" content="Parse any URL into its components - protocol, domain, path, parameters, and more. Essential tool for developers and SEO specialists.">
+    <meta name="keywords" content="url parser, url analyzer, url breakdown, url components, parse url">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        #url-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        #url-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .url-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .component-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .component-card h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #1e40af;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .component-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #111827;
+            word-break: break-all;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .query-params-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        
+        .query-params-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .query-params-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .query-params-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .param-name {
+            color: #1e40af;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .param-value {
+            word-break: break-all;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>URL Parser</h1>
+            <p>Analyze and break down URLs into their components - protocol, domain, path, parameters, and more</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter URL to Parse</h3>
+                
+                <div class="url-input-container">
+                    <input type="url" id="url-input" placeholder="https://example.com/path?param=value" value="https://example.com/path/to/page?param1=value1&param2=value2">
+                    <button id="parse-btn" class="tool-button">
+                        <span id="parse-btn-text">Parse URL</span>
+                        <span id="parse-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">URL Components</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn" id="clear-btn">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="url-components" class="url-components" style="display: none;">
+                        <!-- Components will be populated here -->
+                    </div>
+                    
+                    <div id="query-params-container" style="display: none;">
+                        <h4>Query Parameters</h4>
+                        <table class="query-params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="query-params-body">
+                                <!-- Query params will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-link"></i>
+                        <p>No URL parsed yet. Enter a URL and click "Parse URL".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this URL Parser:</h3>
+                <ul>
+                    <li>Enter a complete URL in the input field (include http:// or https://)</li>
+                    <li>Click <strong>Parse URL</strong> to break down the URL into components</li>
+                    <li>View all parsed components in the results section</li>
+                    <li>Copy the results or clear them as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About URL Structure:</h3>
+                <ul>
+                    <li><strong>Protocol</strong>: http or https (sometimes ftp, mailto, etc.)</li>
+                    <li><strong>Domain</strong>: The website address (example.com)</li>
+                    <li><strong>Path</strong>: The specific page or resource (/path/to/page)</li>
+                    <li><strong>Query Parameters</strong>: Additional data after the ? symbol (param=value)</li>
+                    <li><strong>Fragment</strong>: Page section identifier after the # symbol</li>
+                    <li><strong>Port</strong>: The network port number (usually implied by protocol)</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All parsing is done in your browser - we never see or store your URLs.</p>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script> 
+    
+    <script>
+        // DOM elements
+        const urlInput = document.getElementById('url-input');
+        const parseBtn = document.getElementById('parse-btn');
+        const parseBtnText = document.getElementById('parse-btn-text');
+        const parseBtnLoader = document.getElementById('parse-btn-loader');
+        const urlComponents = document.getElementById('url-components');
+        const queryParamsContainer = document.getElementById('query-params-container');
+        const queryParamsBody = document.getElementById('query-params-body');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        parseBtn.addEventListener('click', parseUrl);
+        copyBtn.addEventListener('click', copyResults);
+        clearBtn.addEventListener('click', clearResults);
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                parseUrl();
+            }
+        });
+        
+        function parseUrl() {
+            const urlString = urlInput.value.trim();
+            
+            if (!urlString) {
+                showStatus('Please enter a URL', 'error');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                parseBtn.disabled = true;
+                parseBtnText.style.display = 'none';
+                parseBtnLoader.style.display = 'inline-block';
+                
+                // Use the URL API to parse the URL
+                const url = new URL(urlString);
+                
+                // Prepare components data
+                const components = {
+                    'Protocol': url.protocol,
+                    'Hostname': url.hostname,
+                    'Port': url.port || (url.protocol === 'https:' ? '443 (default)' : '80 (default)'),
+                    'Path': url.pathname,
+                    'Query String': url.search || 'None',
+                    'Fragment': url.hash || 'None',
+                    'Full URL': url.href,
+                    'Origin': url.origin
+                };
+                
+                // Parse query parameters
+                const queryParams = [];
+                url.searchParams.forEach((value, key) => {
+                    queryParams.push({ key, value });
+                });
+                
+                // Display the components
+                displayComponents(components, queryParams);
+                showStatus('URL parsed successfully!', 'success');
+                
+            } catch (error) {
+                showStatus('Error parsing URL: ' + error.message, 'error');
+                console.error('URL parsing error:', error);
+                
+                // Display error in results
+                urlComponents.innerHTML = `
+                    <div class="component-card" style="grid-column: 1 / -1;">
+                        <h4>Error</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+                urlComponents.style.display = 'grid';
+                queryParamsContainer.style.display = 'none';
+                emptyState.style.display = 'none';
+                
+            } finally {
+                // Reset loading state
+                parseBtn.disabled = false;
+                parseBtnText.style.display = 'inline-block';
+                parseBtnLoader.style.display = 'none';
+            }
+        }
+        
+        function displayComponents(components, queryParams) {
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            // Prepare components HTML
+            let componentsHtml = '';
+            for (const [name, value] of Object.entries(components)) {
+                componentsHtml += `
+                    <div class="component-card">
+                        <h4>${name}</h4>
+                        <p>${value || 'None'}</p>
+                    </div>
+                `;
+            }
+            
+            // Set components HTML
+            urlComponents.innerHTML = componentsHtml;
+            urlComponents.style.display = 'grid';
+            
+            // Prepare query params HTML if they exist
+            if (queryParams.length > 0) {
+                let paramsHtml = '';
+                queryParams.forEach(param => {
+                    paramsHtml += `
+                        <tr>
+                            <td class="param-name">${param.key}</td>
+                            <td class="param-value">${param.value || '(empty)'}</td>
+                        </tr>
+                    `;
+                });
+                
+                queryParamsBody.innerHTML = paramsHtml;
+                queryParamsContainer.style.display = 'block';
+            } else {
+                queryParamsContainer.style.display = 'none';
+            }
+        }
+        
+        function copyResults() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No results to copy', 'error');
+                return;
+            }
+            
+            // Get all components text
+            const components = Array.from(document.querySelectorAll('.component-card'));
+            let textToCopy = 'URL COMPONENTS\n==============\n';
+            
+            components.forEach(card => {
+                const name = card.querySelector('h4').textContent;
+                const value = card.querySelector('p').textContent;
+                textToCopy += `${name}: ${value}\n`;
+            });
+            
+            // Add query params if they exist
+            if (queryParamsContainer.style.display !== 'none') {
+                textToCopy += '\nQUERY PARAMETERS\n================\n';
+                const params = Array.from(document.querySelectorAll('#query-params-body tr'));
+                
+                params.forEach(row => {
+                    const key = row.querySelector('.param-name').textContent;
+                    const value = row.querySelector('.param-value').textContent;
+                    textToCopy += `${key}: ${value}\n`;
+                });
+            }
+            
+            // Create a temporary textarea to copy from
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showStatus('URL components copied to clipboard!', 'success');
+            } catch (err) {
+                showStatus('Failed to copy results', 'error');
+            }
+            
+            document.body.removeChild(textarea);
+        }
+        
+        function clearResults() {
+            urlComponents.innerHTML = '';
+            urlComponents.style.display = 'none';
+            queryParamsBody.innerHTML = '';
+            queryParamsContainer.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Results cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
