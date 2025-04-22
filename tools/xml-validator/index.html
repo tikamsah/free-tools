@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML Validator - Validate and Format XML | IT Tools</title>
+    <meta name="description" content="Validate XML syntax, format and beautify XML data. Essential tool for developers working with XML APIs and configurations.">
+    <meta name="keywords" content="XML validator, XML formatter, XML beautifier, XML lint, XML checker">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #xml-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #xml-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* Status indicator */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .status-indicator.valid {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-indicator.invalid {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        /* XML output */
+        #xml-output {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            background: #f8fafc;
+            resize: vertical;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        /* Error details */
+        .error-details {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            background: #fee2e2;
+            color: #b91c1c;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>XML Validator</h1>
+            <p>Validate XML syntax, format and beautify XML data</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter XML to Validate</h3>
+                
+                <textarea id="xml-input" placeholder='&lt;root&gt;&lt;element&gt;value&lt;/element&gt;&lt;/root&gt;'>&lt;?xml version="1.0"?&gt;
+&lt;catalog&gt;
+  &lt;book id="bk101"&gt;
+    &lt;author&gt;Gambardella, Matthew&lt;/author&gt;
+    &lt;title&gt;XML Developer's Guide&lt;/title&gt;
+    &lt;genre&gt;Computer&lt;/genre&gt;
+    &lt;price&gt;44.95&lt;/price&gt;
+    &lt;publish_date&gt;2000-10-01&lt;/publish_date&gt;
+    &lt;description&gt;An in-depth look at creating applications with XML.&lt;/description&gt;
+  &lt;/book&gt;
+&lt;/catalog&gt;</textarea>
+                
+                <div class="action-buttons-row">
+                    <button id="validate-btn" class="tool-button">
+                        <span id="validate-btn-text">Validate XML</span>
+                        <span id="validate-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="format-btn" class="tool-button secondary">
+                        <i class="fas fa-indent"></i> Format
+                    </button>
+                    <button id="minify-btn" class="tool-button secondary">
+                        <i class="fas fa-compress-alt"></i> Minify
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Validation Results</h3>
+                </div>
+                
+                <div id="results-content">
+                    <div id="validation-display" style="display: none;">
+                        <div id="validation-summary">
+                            <!-- Validation summary will be populated here -->
+                        </div>
+                        
+                        <h4>Formatted XML</h4>
+                        <pre id="xml-output"></pre>
+                        
+                        <div id="error-details" class="error-details" style="display: none;">
+                            <!-- Error details will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-code"></i>
+                        <p>No XML validated yet. Enter XML and click "Validate XML".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this XML Validator:</h3>
+                <ul>
+                    <li>Paste or type your XML into the input area</li>
+                    <li>Click <strong>Validate XML</strong> to check for syntax errors</li>
+                    <li>Use <strong>Format</strong> to beautify your XML with proper indentation</li>
+                    <li>Use <strong>Minify</strong> to remove all unnecessary whitespace</li>
+                    <li>View validation results and formatted output</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About XML Validation:</h3>
+                <ul>
+                    <li>XML (eXtensible Markup Language) is a markup language for structured data</li>
+                    <li>Valid XML must have:
+                        <ul>
+                            <li>Properly nested and closed tags</li>
+                            <li>A single root element</li>
+                            <li>Properly escaped special characters</li>
+                            <li>Valid attribute syntax (quoted values)</li>
+                        </ul>
+                    </li>
+                    <li>Well-formed XML may include:
+                        <ul>
+                            <li>XML declaration (<?xml version="1.0"?>)</li>
+                            <li>Document Type Definition (DTD) or XML Schema</li>
+                            <li>Comments (<!-- comment -->)</li>
+                            <li>CDATA sections for unparsed data</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your XML data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script> 
+
+    <script>
+        // DOM elements
+        const xmlInput = document.getElementById('xml-input');
+        const validateBtn = document.getElementById('validate-btn');
+        const validateBtnText = document.getElementById('validate-btn-text');
+        const validateBtnLoader = document.getElementById('validate-btn-loader');
+        const formatBtn = document.getElementById('format-btn');
+        const minifyBtn = document.getElementById('minify-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const validationDisplay = document.getElementById('validation-display');
+        const validationSummary = document.getElementById('validation-summary');
+        const xmlOutput = document.getElementById('xml-output');
+        const errorDetails = document.getElementById('error-details');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        validateBtn.addEventListener('click', validateXML);
+        formatBtn.addEventListener('click', formatXML);
+        minifyBtn.addEventListener('click', minifyXML);
+        clearBtn.addEventListener('click', clearXML);
+        
+        function validateXML() {
+            const xmlString = xmlInput.value.trim();
+            
+            if (!xmlString) {
+                showStatus('Please enter some XML to validate', 'error');
+                return;
+            }
+            
+            // Show loading state
+            validateBtn.disabled = true;
+            validateBtnText.style.display = 'none';
+            validateBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Create a DOMParser
+                    const parser = new DOMParser();
+                    
+                    // Parse the XML
+                    const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+                    
+                    // Check for parser errors
+                    const parserErrors = xmlDoc.getElementsByTagName("parsererror");
+                    if (parserErrors.length > 0) {
+                        throw new Error(parserErrors[0].textContent);
+                    }
+                    
+                    // Format the XML for display
+                    const formattedXML = formatXmlString(xmlString);
+                    
+                    // Display results
+                    validationSummary.innerHTML = `
+                        <div class="status-indicator valid">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Valid XML</span>
+                        </div>
+                    `;
+                    
+                    xmlOutput.textContent = formattedXML;
+                    errorDetails.style.display = 'none';
+                    
+                    validationDisplay.style.display = 'block';
+                    emptyState.style.display = 'none';
+                    
+                    showStatus('XML is valid!', 'success');
+                    
+                } catch (error) {
+                    // Display error information
+                    validationSummary.innerHTML = `
+                        <div class="status-indicator invalid">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Invalid XML</span>
+                        </div>
+                    `;
+                    
+                    // Display the error
+                    errorDetails.innerHTML = `
+                        <strong>Error:</strong> ${escapeHtml(error.message)}
+                    `;
+                    errorDetails.style.display = 'block';
+                    
+                    // Show the original XML
+                    xmlOutput.textContent = xmlString;
+                    
+                    validationDisplay.style.display = 'block';
+                    emptyState.style.display = 'none';
+                    
+                    showStatus('XML contains errors: ' + error.message, 'error');
+                    
+                } finally {
+                    validateBtn.disabled = false;
+                    validateBtnText.style.display = 'inline-block';
+                    validateBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function formatXML() {
+            const xmlString = xmlInput.value.trim();
+            
+            if (!xmlString) {
+                showStatus('Please enter some XML to format', 'error');
+                return;
+            }
+            
+            try {
+                const formattedXML = formatXmlString(xmlString);
+                xmlInput.value = formattedXML;
+                showStatus('XML formatted successfully!', 'success');
+            } catch (error) {
+                showStatus('Cannot format invalid XML: ' + error.message, 'error');
+            }
+        }
+        
+        function minifyXML() {
+            const xmlString = xmlInput.value.trim();
+            
+            if (!xmlString) {
+                showStatus('Please enter some XML to minify', 'error');
+                return;
+            }
+            
+            try {
+                // Simple minification - remove extra whitespace between tags
+                const minifiedXML = xmlString
+                    .replace(/>\s+</g, '><')  // Remove whitespace between tags
+                    .replace(/\s+/g, ' ')     // Collapse multiple spaces to one
+                    .trim();
+                
+                xmlInput.value = minifiedXML;
+                showStatus('XML minified successfully!', 'success');
+            } catch (error) {
+                showStatus('Cannot minify invalid XML: ' + error.message, 'error');
+            }
+        }
+        
+        function clearXML() {
+            xmlInput.value = '';
+            validationDisplay.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Cleared XML input!', 'success');
+        }
+        
+        // Helper function to format XML with proper indentation
+        function formatXmlString(xmlString) {
+            // This is a simple formatter - for more complex XML, consider using a library
+            let formatted = '';
+            let indent = '';
+            const tab = '  ';
+            let inTag = false;
+            let inAttribute = false;
+            let currentLine = '';
+            
+            for (let i = 0; i < xmlString.length; i++) {
+                const char = xmlString[i];
+                const nextChar = xmlString[i + 1];
+                
+                currentLine += char;
+                
+                if (char === '<' && nextChar !== '/') {
+                    // Opening tag
+                    if (!inTag) {
+                        formatted += currentLine;
+                        currentLine = '';
+                        indent += tab;
+                    }
+                    inTag = true;
+                } else if (char === '>' && !inAttribute) {
+                    // Closing tag
+                    inTag = false;
+                    formatted += currentLine + '\n' + indent;
+                    currentLine = '';
+                } else if (char === '"') {
+                    // Toggle attribute state
+                    inAttribute = !inAttribute;
+                } else if (char === '<' && nextChar === '/') {
+                    // Closing tag
+                    indent = indent.slice(0, -tab.length);
+                    formatted += '\n' + indent + currentLine;
+                    currentLine = '';
+                }
+            }
+            
+            // Add any remaining content
+            formatted += currentLine;
+            
+            // Clean up empty lines
+            return formatted.replace(/\n\s*\n/g, '\n').trim();
+        }
+        
+        // Helper function to escape HTML for error messages
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
