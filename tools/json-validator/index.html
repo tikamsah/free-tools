@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Validator - Validate and Format JSON | IT Tools</title>
+    <meta name="description" content="Validate JSON syntax, format and beautify JSON data. Essential tool for developers and API engineers.">
+    <meta name="keywords" content="JSON validator, JSON formatter, JSON beautifier, JSON lint, JSON checker">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #json-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #json-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* Status indicator */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .status-indicator.valid {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-indicator.invalid {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        /* JSON output */
+        #json-output {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            background: #f8fafc;
+            resize: vertical;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        
+        /* Error details */
+        .error-details {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            background: #fee2e2;
+            color: #b91c1c;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>JSON Validator</h1>
+            <p>Validate JSON syntax, format and beautify JSON data</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter JSON to Validate</h3>
+                
+                <textarea id="json-input" placeholder='{"key": "value"}'>{"example": {"name": "John", "age": 30, "active": true}}</textarea>
+                
+                <div class="action-buttons-row">
+                    <button id="validate-btn" class="tool-button">
+                        <span id="validate-btn-text">Validate JSON</span>
+                        <span id="validate-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="format-btn" class="tool-button secondary">
+                        <i class="fas fa-indent"></i> Format
+                    </button>
+                    <button id="minify-btn" class="tool-button secondary">
+                        <i class="fas fa-compress-alt"></i> Minify
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Validation Results</h3>
+                </div>
+                
+                <div id="results-content">
+                    <div id="validation-display" style="display: none;">
+                        <div id="validation-summary">
+                            <!-- Validation summary will be populated here -->
+                        </div>
+                        
+                        <h4>Formatted JSON</h4>
+                        <pre id="json-output"></pre>
+                        
+                        <div id="error-details" class="error-details" style="display: none;">
+                            <!-- Error details will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-code"></i>
+                        <p>No JSON validated yet. Enter JSON and click "Validate JSON".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this JSON Validator:</h3>
+                <ul>
+                    <li>Paste or type your JSON into the input area</li>
+                    <li>Click <strong>Validate JSON</strong> to check for syntax errors</li>
+                    <li>Use <strong>Format</strong> to beautify your JSON with proper indentation</li>
+                    <li>Use <strong>Minify</strong> to remove all unnecessary whitespace</li>
+                    <li>View validation results and formatted output</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About JSON Validation:</h3>
+                <ul>
+                    <li>JSON (JavaScript Object Notation) is a lightweight data interchange format</li>
+                    <li>Valid JSON must have proper syntax including:
+                        <ul>
+                            <li>Double quotes around property names and string values</li>
+                            <li>No trailing commas in objects or arrays</li>
+                            <li>Properly matched braces, brackets and quotes</li>
+                        </ul>
+                    </li>
+                    <li>Common JSON data types: string, number, object, array, boolean, null</li>
+                    <li>Well-formatted JSON improves readability and maintainability</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your JSON data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         gtag('config', 'G-61PG9HQVB4');
+     </script> 
+     
+    <script>
+        // DOM elements
+        const jsonInput = document.getElementById('json-input');
+        const validateBtn = document.getElementById('validate-btn');
+        const validateBtnText = document.getElementById('validate-btn-text');
+        const validateBtnLoader = document.getElementById('validate-btn-loader');
+        const formatBtn = document.getElementById('format-btn');
+        const minifyBtn = document.getElementById('minify-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const validationDisplay = document.getElementById('validation-display');
+        const validationSummary = document.getElementById('validation-summary');
+        const jsonOutput = document.getElementById('json-output');
+        const errorDetails = document.getElementById('error-details');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        validateBtn.addEventListener('click', validateJSON);
+        formatBtn.addEventListener('click', formatJSON);
+        minifyBtn.addEventListener('click', minifyJSON);
+        clearBtn.addEventListener('click', clearJSON);
+        
+        function validateJSON() {
+            const jsonString = jsonInput.value.trim();
+            
+            if (!jsonString) {
+                showStatus('Please enter some JSON to validate', 'error');
+                return;
+            }
+            
+            // Show loading state
+            validateBtn.disabled = true;
+            validateBtnText.style.display = 'none';
+            validateBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Parse the JSON
+                    const parsedJSON = JSON.parse(jsonString);
+                    
+                    // Format the JSON for display
+                    const formattedJSON = JSON.stringify(parsedJSON, null, 2);
+                    
+                    // Display results
+                    validationSummary.innerHTML = `
+                        <div class="status-indicator valid">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Valid JSON</span>
+                        </div>
+                    `;
+                    
+                    jsonOutput.textContent = formattedJSON;
+                    errorDetails.style.display = 'none';
+                    
+                    validationDisplay.style.display = 'block';
+                    emptyState.style.display = 'none';
+                    
+                    showStatus('JSON is valid!', 'success');
+                    
+                } catch (error) {
+                    // Display error information
+                    validationSummary.innerHTML = `
+                        <div class="status-indicator invalid">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Invalid JSON</span>
+                        </div>
+                    `;
+                    
+                    // Try to extract line number from error message
+                    const lineMatch = error.message.match(/at position (\d+)/);
+                    let errorPosition = lineMatch ? parseInt(lineMatch[1]) : -1;
+                    
+                    // Display the error
+                    errorDetails.innerHTML = `
+                        <strong>Error:</strong> ${error.message}
+                        ${errorPosition > -1 ? `<br><strong>Position:</strong> ${errorPosition}` : ''}
+                    `;
+                    errorDetails.style.display = 'block';
+                    
+                    // Show the original JSON with error position if possible
+                    jsonOutput.textContent = jsonString;
+                    
+                    validationDisplay.style.display = 'block';
+                    emptyState.style.display = 'none';
+                    
+                    showStatus('JSON contains errors: ' + error.message, 'error');
+                    
+                } finally {
+                    validateBtn.disabled = false;
+                    validateBtnText.style.display = 'inline-block';
+                    validateBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function formatJSON() {
+            const jsonString = jsonInput.value.trim();
+            
+            if (!jsonString) {
+                showStatus('Please enter some JSON to format', 'error');
+                return;
+            }
+            
+            try {
+                const parsedJSON = JSON.parse(jsonString);
+                const formattedJSON = JSON.stringify(parsedJSON, null, 2);
+                jsonInput.value = formattedJSON;
+                showStatus('JSON formatted successfully!', 'success');
+            } catch (error) {
+                showStatus('Cannot format invalid JSON: ' + error.message, 'error');
+            }
+        }
+        
+        function minifyJSON() {
+            const jsonString = jsonInput.value.trim();
+            
+            if (!jsonString) {
+                showStatus('Please enter some JSON to minify', 'error');
+                return;
+            }
+            
+            try {
+                const parsedJSON = JSON.parse(jsonString);
+                const minifiedJSON = JSON.stringify(parsedJSON);
+                jsonInput.value = minifiedJSON;
+                showStatus('JSON minified successfully!', 'success');
+            } catch (error) {
+                showStatus('Cannot minify invalid JSON: ' + error.message, 'error');
+            }
+        }
+        
+        function clearJSON() {
+            jsonInput.value = '';
+            validationDisplay.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Cleared JSON input!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
