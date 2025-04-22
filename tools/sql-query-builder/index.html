@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Builder - Visual SQL Query Generator | IT Tools</title>
+    <meta name="description" content="Build SQL queries visually with this intuitive query builder. Supports SELECT, INSERT, UPDATE, DELETE operations.">
+    <meta name="keywords" content="SQL builder, query generator, visual SQL, database query, SQL helper">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Query builder sections */
+        .builder-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .builder-section h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        /* Query type selector */
+        .query-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .query-type-btn {
+            padding: 10px 15px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .query-type-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .query-type-btn:hover:not(.active) {
+            background: #e5e7eb;
+        }
+        
+        /* Table selector */
+        .table-selector {
+            margin-bottom: 20px;
+        }
+        
+        .table-selector select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        /* Column selector */
+        .column-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .column-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .column-item input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        /* Condition builder */
+        .condition-builder {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .condition-builder select,
+        .condition-builder input {
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .condition-builder input {
+            min-width: 100px;
+        }
+        
+        .add-condition-btn {
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .conditions-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .conditions-list th {
+            background: #f3f4f6;
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .conditions-list td {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .conditions-list td:last-child {
+            text-align: center;
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* Query output */
+        #query-output {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            background-color: #f8fafc;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+
+        #limit-input {
+            padding:8px;
+            border:1px solid #e5e7eb;
+            border-radius:4px;
+            background:white;
+        }
+
+        #order-by-select{
+            padding:8px;
+            border:1px solid #e5e7eb;
+            border-radius:4px;
+            background:white;
+        }
+        #order-direction{
+            padding:8px;
+            border:1px solid #e5e7eb;
+            border-radius:4px;
+            background:white;
+        }
+        .column{
+            padding:8px;
+            border:1px solid #e5e7eb;
+            border-radius:4px;
+            background:white;
+        }
+
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .column-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>SQL Query Builder</h1>
+            <p>Build SQL queries visually with this intuitive query builder</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="builder-section">
+                <h3>Query Type</h3>
+                <div class="query-type-selector">
+                    <button class="query-type-btn active" data-type="select">SELECT</button>
+                    <button class="query-type-btn" data-type="insert">INSERT</button>
+                    <button class="query-type-btn" data-type="update">UPDATE</button>
+                    <button class="query-type-btn" data-type="delete">DELETE</button>
+                </div>
+            </div>
+            
+            <div class="builder-section">
+                <h3>Table Selection</h3>
+                <div class="table-selector">
+                    <select id="table-select">
+                        <option value="users">users</option>
+                        <option value="products">products</option>
+                        <option value="orders">orders</option>
+                        <option value="customers">customers</option>
+                        <option value="categories">categories</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="builder-section" id="columns-section">
+                <h3>Column Selection</h3>
+                <div class="column-selector" id="column-selector">
+                    <!-- Columns will be populated here based on table -->
+                    <div class="column-item">
+                        <input type="checkbox" id="col-id" checked>
+                        <label for="col-id">id</label>
+                    </div>
+                    <div class="column-item">
+                        <input type="checkbox" id="col-name" checked>
+                        <label for="col-name">name</label>
+                    </div>
+                    <div class="column-item">
+                        <input type="checkbox" id="col-email">
+                        <label for="col-email">email</label>
+                    </div>
+                    <div class="column-item">
+                        <input type="checkbox" id="col-created_at">
+                        <label for="col-created_at">created_at</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="builder-section" id="values-section" style="display: none;">
+                <h3>Values</h3>
+                <div id="values-container">
+                    <!-- Values input fields will be populated here -->
+                    <div class="value-row" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" class="column" placeholder="Column name" style="flex: 1;">
+                        <input type="text" class="column" placeholder="Value" style="flex: 2;">
+                    </div>
+                </div>
+                <button class="tool-button secondary" id="add-value-btn" style="margin-top: 10px;">
+                    <i class="fas fa-plus"></i> Add Value
+                </button>
+            </div>
+            
+            <div class="builder-section" id="conditions-section">
+                <h3>Conditions (WHERE)</h3>
+                <div class="condition-builder">
+                    <select id="condition-column">
+                        <option value="">Select column...</option>
+                        <option value="id">id</option>
+                        <option value="name">name</option>
+                        <option value="email">email</option>
+                    </select>
+                    <select id="condition-operator">
+                        <option value="=">=</option>
+                        <option value="!=">!=</option>
+                        <option value=">">></option>
+                        <option value="<"><</option>
+                        <option value=">=">>=</option>
+                        <option value="<="><=</option>
+                        <option value="LIKE">LIKE</option>
+                        <option value="NOT LIKE">NOT LIKE</option>
+                        <option value="IN">IN</option>
+                        <option value="NOT IN">NOT IN</option>
+                        <option value="IS NULL">IS NULL</option>
+                        <option value="IS NOT NULL">IS NOT NULL</option>
+                    </select>
+                    <input type="text" id="condition-value" placeholder="Value">
+                    <button class="add-condition-btn" id="add-condition-btn">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <table class="conditions-list" id="conditions-list">
+                    <thead>
+                        <tr>
+                            <th>Column</th>
+                            <th>Operator</th>
+                            <th>Value</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Conditions will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="builder-section">
+                <h3>Options</h3>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="option-group" style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="distinct-checkbox">
+                        <label for="distinct-checkbox">DISTINCT</label>
+                    </div>
+                    <div class="option-group" style="display: flex; align-items: center; gap: 8px;">
+                        <label for="limit-input">LIMIT:</label>
+                        <input type="number" id="limit-input" min="1" style="width: 60px;">
+                    </div>
+                    <div class="option-group" style="display: flex; align-items: center; gap: 8px;">
+                        <label for="order-by-select">ORDER BY:</label>
+                        <select id="order-by-select">
+                            <option value="">None</option>
+                            <option value="id">id</option>
+                            <option value="name">name</option>
+                        </select>
+                        <select id="order-direction">
+                            <option value="ASC">ASC</option>
+                            <option value="DESC">DESC</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons-row">
+                <button id="generate-btn" class="tool-button">
+                    <span id="generate-btn-text">Generate SQL</span>
+                    <span id="generate-btn-loader" class="loading" style="display: none;"></span>
+                </button>
+                <button id="copy-btn" class="tool-button secondary">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+                <button id="clear-btn" class="tool-button secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Generated SQL Query</h3>
+                </div>
+                
+                <div id="results-content">
+                    <pre id="query-output"><!-- Generated SQL will appear here --></pre>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-database"></i>
+                        <p>No query generated yet. Configure your query and click "Generate SQL".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this SQL Query Builder:</h3>
+                <ul>
+                    <li>Select the type of query you want to build (SELECT, INSERT, UPDATE, DELETE)</li>
+                    <li>Choose the table you want to query</li>
+                    <li>Select columns for SELECT queries or enter values for INSERT/UPDATE</li>
+                    <li>Add conditions to filter your results</li>
+                    <li>Set additional options like LIMIT, ORDER BY</li>
+                    <li>Click <strong>Generate SQL</strong> to create your query</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>SQL Query Examples:</h3>
+                <ul>
+                    <li><strong>Basic SELECT:</strong> SELECT id, name FROM users WHERE active = 1</li>
+                    <li><strong>INSERT:</strong> INSERT INTO products (name, price) VALUES ('Widget', 19.99)</li>
+                    <li><strong>UPDATE:</strong> UPDATE customers SET email = 'new@example.com' WHERE id = 42</li>
+                    <li><strong>DELETE:</strong> DELETE FROM orders WHERE status = 'cancelled'</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         gtag('config', 'G-61PG9HQVB4');
+     </script> 
+
+    <script>
+        // DOM elements
+        const queryTypeBtns = document.querySelectorAll('.query-type-btn');
+        const tableSelect = document.getElementById('table-select');
+        const columnSelector = document.getElementById('column-selector');
+        const valuesSection = document.getElementById('values-section');
+        const valuesContainer = document.getElementById('values-container');
+        const addValueBtn = document.getElementById('add-value-btn');
+        const conditionsSection = document.getElementById('conditions-section');
+        const conditionColumn = document.getElementById('condition-column');
+        const conditionOperator = document.getElementById('condition-operator');
+        const conditionValue = document.getElementById('condition-value');
+        const addConditionBtn = document.getElementById('add-condition-btn');
+        const conditionsList = document.getElementById('conditions-list').querySelector('tbody');
+        const distinctCheckbox = document.getElementById('distinct-checkbox');
+        const limitInput = document.getElementById('limit-input');
+        const orderBySelect = document.getElementById('order-by-select');
+        const orderDirection = document.getElementById('order-direction');
+        const generateBtn = document.getElementById('generate-btn');
+        const generateBtnText = document.getElementById('generate-btn-text');
+        const generateBtnLoader = document.getElementById('generate-btn-loader');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const queryOutput = document.getElementById('query-output');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Sample table schemas
+        const tableSchemas = {
+            users: ['id', 'name', 'email', 'created_at', 'active'],
+            products: ['id', 'name', 'description', 'price', 'stock', 'category_id'],
+            orders: ['id', 'customer_id', 'order_date', 'total_amount', 'status'],
+            customers: ['id', 'name', 'email', 'phone', 'address'],
+            categories: ['id', 'name', 'description']
+        };
+        
+        // Current state
+        let currentQueryType = 'select';
+        let conditions = [];
+        
+        // Initialize
+        updateColumnsForTable();
+        updateConditionColumns();
+        updateOrderByColumns();
+        
+        // Event listeners
+        queryTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                queryTypeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentQueryType = btn.dataset.type;
+                updateUIForQueryType();
+            });
+        });
+        
+        tableSelect.addEventListener('change', () => {
+            updateColumnsForTable();
+            updateConditionColumns();
+            updateOrderByColumns();
+        });
+        
+        addConditionBtn.addEventListener('click', addCondition);
+        addValueBtn.addEventListener('click', addValueRow);
+        generateBtn.addEventListener('click', generateSQL);
+        copyBtn.addEventListener('click', copyQuery);
+        clearBtn.addEventListener('click', clearBuilder);
+        
+        function updateUIForQueryType() {
+            // Show/hide sections based on query type
+            if (currentQueryType === 'select') {
+                document.getElementById('columns-section').style.display = 'block';
+                conditionsSection.style.display = 'block';
+                valuesSection.style.display = 'none';
+            } else if (currentQueryType === 'insert') {
+                document.getElementById('columns-section').style.display = 'none';
+                conditionsSection.style.display = 'none';
+                valuesSection.style.display = 'block';
+            } else if (currentQueryType === 'update') {
+                document.getElementById('columns-section').style.display = 'none';
+                conditionsSection.style.display = 'block';
+                valuesSection.style.display = 'block';
+            } else if (currentQueryType === 'delete') {
+                document.getElementById('columns-section').style.display = 'none';
+                conditionsSection.style.display = 'block';
+                valuesSection.style.display = 'none';
+            }
+        }
+        
+        function updateColumnsForTable() {
+            const table = tableSelect.value;
+            const columns = tableSchemas[table] || [];
+            
+            columnSelector.innerHTML = '';
+            columns.forEach(col => {
+                const colItem = document.createElement('div');
+                colItem.className = 'column-item';
+                colItem.innerHTML = `
+                    <input type="checkbox" id="col-${col}" ${['id', 'name'].includes(col) ? 'checked' : ''}>
+                    <label for="col-${col}">${col}</label>
+                `;
+                columnSelector.appendChild(colItem);
+            });
+        }
+        
+        function updateConditionColumns() {
+            const table = tableSelect.value;
+            const columns = tableSchemas[table] || [];
+            
+            conditionColumn.innerHTML = '<option value="">Select column...</option>';
+            columns.forEach(col => {
+                conditionColumn.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+        }
+        
+        function updateOrderByColumns() {
+            const table = tableSelect.value;
+            const columns = tableSchemas[table] || [];
+            
+            orderBySelect.innerHTML = '<option value="">None</option>';
+            columns.forEach(col => {
+                orderBySelect.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+        }
+        
+        function addValueRow() {
+            const valueRow = document.createElement('div');
+            valueRow.className = 'value-row';
+            valueRow.style.display = 'flex';
+            valueRow.style.gap = '10px';
+            valueRow.style.marginBottom = '10px';
+            valueRow.innerHTML = `
+                <input type="text" class="column" placeholder="Column name" style="flex: 1;">
+                <input type="text" class="column" placeholder="Value" style="flex: 2;">
+                <button class="remove-value-btn" style="background: none; border: none; cursor: pointer;">
+                    <i class="fas fa-times" style="color: #ef4444;"></i>
+                </button>
+            `;
+            
+            valueRow.querySelector('.remove-value-btn').addEventListener('click', () => {
+                valuesContainer.removeChild(valueRow);
+            });
+            
+            valuesContainer.appendChild(valueRow);
+        }
+        
+        function addCondition() {
+            const column = conditionColumn.value;
+            const operator = conditionOperator.value;
+            let value = conditionValue.value;
+            
+            if (!column) {
+                showStatus('Please select a column', 'error');
+                return;
+            }
+            
+            if (operator !== 'IS NULL' && operator !== 'IS NOT NULL' && !value) {
+                showStatus('Please enter a value', 'error');
+                return;
+            }
+            
+            // Special handling for IN/NOT IN
+            if (operator === 'IN' || operator === 'NOT IN') {
+                value = `(${value.split(',').map(v => `'${v.trim()}'`).join(', ')})`;
+            } else if (operator !== 'IS NULL' && operator !== 'IS NOT NULL') {
+                // Quote the value unless it's a number
+                if (isNaN(value)) {
+                    value = `'${value}'`;
+                }
+            } else {
+                value = ''; // No value for IS NULL/IS NOT NULL
+            }
+            
+            conditions.push({ column, operator, value });
+            renderConditions();
+            
+            // Clear inputs
+            conditionValue.value = '';
+        }
+        
+        function renderConditions() {
+            conditionsList.innerHTML = '';
+            
+            conditions.forEach((cond, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${cond.column}</td>
+                    <td>${cond.operator}</td>
+                    <td>${cond.value || '-'}</td>
+                    <td>
+                        <button class="remove-condition-btn" data-index="${index}">
+                            <i class="fas fa-trash-alt" style="color: #ef4444;"></i>
+                        </button>
+                    </td>
+                `;
+                
+                row.querySelector('.remove-condition-btn').addEventListener('click', () => {
+                    conditions.splice(index, 1);
+                    renderConditions();
+                });
+                
+                conditionsList.appendChild(row);
+            });
+        }
+        
+        function generateSQL() {
+            // Show loading state
+            generateBtn.disabled = true;
+            generateBtnText.style.display = 'none';
+            generateBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before processing
+            setTimeout(() => {
+                try {
+                    const table = tableSelect.value;
+                    let query = '';
+                    
+                    switch (currentQueryType) {
+                        case 'select':
+                            query = buildSelectQuery(table);
+                            break;
+                        case 'insert':
+                            query = buildInsertQuery(table);
+                            break;
+                        case 'update':
+                            query = buildUpdateQuery(table);
+                            break;
+                        case 'delete':
+                            query = buildDeleteQuery(table);
+                            break;
+                    }
+                    
+                    // Display the query
+                    queryOutput.textContent = query;
+                    emptyState.style.display = 'none';
+                    showStatus('SQL query generated successfully!', 'success');
+                    
+                } catch (error) {
+                    showStatus('Error generating SQL: ' + error.message, 'error');
+                    console.error('Error generating SQL:', error);
+                } finally {
+                    generateBtn.disabled = false;
+                    generateBtnText.style.display = 'inline-block';
+                    generateBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function buildSelectQuery(table) {
+            // Get selected columns
+            const selectedColumns = [];
+            document.querySelectorAll('#column-selector input[type="checkbox"]:checked').forEach(checkbox => {
+                selectedColumns.push(checkbox.nextElementSibling.textContent);
+            });
+            
+            if (selectedColumns.length === 0) {
+                throw new Error('Please select at least one column');
+            }
+            
+            // Build SELECT clause
+            let selectClause = 'SELECT ';
+            if (distinctCheckbox.checked) {
+                selectClause += 'DISTINCT ';
+            }
+            selectClause += selectedColumns.join(', ');
+            
+            // Build FROM clause
+            const fromClause = ` FROM ${table}`;
+            
+            // Build WHERE clause
+            let whereClause = '';
+            if (conditions.length > 0) {
+                const conditionStrings = conditions.map(cond => {
+                    return `${cond.column} ${cond.operator} ${cond.value}`;
+                });
+                whereClause = ' WHERE ' + conditionStrings.join(' AND ');
+            }
+            
+            // Build ORDER BY clause
+            let orderByClause = '';
+            if (orderBySelect.value) {
+                orderByClause = ` ORDER BY ${orderBySelect.value} ${orderDirection.value}`;
+            }
+            
+            // Build LIMIT clause
+            let limitClause = '';
+            if (limitInput.value) {
+                limitClause = ` LIMIT ${limitInput.value}`;
+            }
+            
+            // Combine all clauses
+            return selectClause + fromClause + whereClause + orderByClause + limitClause + ';';
+        }
+        
+        function buildInsertQuery(table) {
+            // Get values from the values container
+            const valueRows = valuesContainer.querySelectorAll('.value-row');
+            if (valueRows.length === 0) {
+                throw new Error('Please add at least one value');
+            }
+            
+            const columns = [];
+            const values = [];
+            
+            valueRows.forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                const column = inputs[0].value.trim();
+                const value = inputs[1].value.trim();
+                
+                if (!column) {
+                    throw new Error('Column name cannot be empty');
+                }
+                
+                columns.push(column);
+                values.push(isNaN(value) ? `'${value}'` : value);
+            });
+            
+            return `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values.join(', ')});`;
+        }
+        
+        function buildUpdateQuery(table) {
+            // Get values from the values container
+            const valueRows = valuesContainer.querySelectorAll('.value-row');
+            if (valueRows.length === 0) {
+                throw new Error('Please add at least one value');
+            }
+            
+            const setClauses = [];
+            
+            valueRows.forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                const column = inputs[0].value.trim();
+                const value = inputs[1].value.trim();
+                
+                if (!column) {
+                    throw new Error('Column name cannot be empty');
+                }
+                
+                setClauses.push(`${column} = ${isNaN(value) ? `'${value}'` : value}`);
+            });
+            
+            // Build WHERE clause
+            let whereClause = '';
+            if (conditions.length > 0) {
+                const conditionStrings = conditions.map(cond => {
+                    return `${cond.column} ${cond.operator} ${cond.value}`;
+                });
+                whereClause = ' WHERE ' + conditionStrings.join(' AND ');
+            } else {
+                throw new Error('UPDATE queries should have at least one condition for safety');
+            }
+            
+            return `UPDATE ${table} SET ${setClauses.join(', ')}${whereClause};`;
+        }
+        
+        function buildDeleteQuery(table) {
+            // Build WHERE clause
+            let whereClause = '';
+            if (conditions.length > 0) {
+                const conditionStrings = conditions.map(cond => {
+                    return `${cond.column} ${cond.operator} ${cond.value}`;
+                });
+                whereClause = ' WHERE ' + conditionStrings.join(' AND ');
+            } else {
+                throw new Error('DELETE queries should have at least one condition for safety');
+            }
+            
+            return `DELETE FROM ${table}${whereClause};`;
+        }
+        
+        function copyQuery() {
+            if (!queryOutput.textContent) {
+                showStatus('No query to copy', 'error');
+                return;
+            }
+            
+            try {
+                navigator.clipboard.writeText(queryOutput.textContent);
+                showStatus('Query copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy query', 'error');
+            }
+        }
+        
+        function clearBuilder() {
+            // Reset query type to SELECT
+            document.querySelector('.query-type-btn[data-type="select"]').click();
+            
+            // Reset table selection
+            tableSelect.value = 'users';
+            updateColumnsForTable();
+            updateConditionColumns();
+            updateOrderByColumns();
+            
+            // Clear conditions
+            conditions = [];
+            renderConditions();
+            
+            // Clear values
+            valuesContainer.innerHTML = '';
+            
+            // Clear options
+            distinctCheckbox.checked = false;
+            limitInput.value = '';
+            orderBySelect.value = '';
+            orderDirection.value = 'ASC';
+            
+            // Clear output
+            queryOutput.textContent = '';
+            emptyState.style.display = 'block';
+            showStatus('Builder cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
