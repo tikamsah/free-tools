@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Viewer - Visualize and Analyze CSV Data | IT Tools</title>
+    <meta name="description" content="View, analyze and format CSV data. Essential tool for data analysts and developers working with CSV files.">
+    <meta name="keywords" content="CSV viewer, CSV editor, CSV parser, CSV analyzer, CSV table">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #csv-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #csv-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* File upload */
+        .file-upload {
+            margin: 15px 0;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-upload-label:hover {
+            background: #e5e7eb;
+        }
+        
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+        
+        #file-upload {
+            display: none;
+        }
+        
+        /* Options */
+        .options-row {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select, .option-group input {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .option-group input {
+            width: 60px;
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* CSV table */
+        .csv-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        
+        .csv-table th {
+            background: #f3f4f6;
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+        }
+        
+        .csv-table td {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            word-break: break-word;
+        }
+        
+        .csv-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .stat-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .options-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>CSV Viewer</h1>
+            <p>View, analyze and format CSV data</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter or Upload CSV Data</h3>
+                
+                <textarea id="csv-input" placeholder='Name,Age,Email
+John,30,john@example.com
+Jane,25,jane@example.com'>Name,Age,Email
+John,30,john@example.com
+Jane,25,jane@example.com
+Bob,35,bob@example.com</textarea>
+                
+                <div class="file-upload">
+                    <label for="file-upload" class="file-upload-label">
+                        <i class="fas fa-file-upload"></i> Upload CSV File
+                    </label>
+                    <input type="file" id="file-upload" accept=".csv,text/csv">
+                </div>
+                
+                <div class="options-row">
+                    <div class="option-group">
+                        <label for="delimiter">Delimiter:</label>
+                        <select id="delimiter">
+                            <option value="," selected>Comma (,)</option>
+                            <option value=";">Semicolon (;)</option>
+                            <option value="\t">Tab (\t)</option>
+                            <option value="|">Pipe (|)</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <input type="text" id="custom-delimiter" style="display: none;" maxlength="1" placeholder="?">
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="has-headers">Headers:</label>
+                        <select id="has-headers">
+                            <option value="true" selected>First row is headers</option>
+                            <option value="false">No headers</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="action-buttons-row">
+                    <button id="parse-btn" class="tool-button">
+                        <span id="parse-btn-text">Parse CSV</span>
+                        <span id="parse-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="download-btn" class="tool-button secondary">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">CSV Data</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="stats-display" style="display: none;">
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h4>Rows</h4>
+                                <p id="row-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Columns</h4>
+                                <p id="column-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Delimiter</h4>
+                                <p id="delimiter-used">,</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="table-container" style="display: none;">
+                        <table class="csv-table" id="csv-table">
+                            <!-- CSV data will be populated here -->
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-table"></i>
+                        <p>No CSV data parsed yet. Enter CSV and click "Parse CSV".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this CSV Viewer:</h3>
+                <ul>
+                    <li>Paste your CSV data or upload a CSV file</li>
+                    <li>Select the appropriate delimiter (comma, semicolon, tab, etc.)</li>
+                    <li>Specify if the first row contains headers</li>
+                    <li>Click <strong>Parse CSV</strong> to view your data in a table</li>
+                    <li>Download the parsed data or copy it to clipboard</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About CSV Files:</h3>
+                <ul>
+                    <li>CSV (Comma-Separated Values) is a simple file format for tabular data</li>
+                    <li>Each line represents a row, with values separated by a delimiter</li>
+                    <li>Common delimiters include commas (,), semicolons (;), and tabs (\t)</li>
+                    <li>The first row often contains column headers</li>
+                    <li>Values containing the delimiter should be wrapped in quotes</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your CSV data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        // DOM elements
+        const csvInput = document.getElementById('csv-input');
+        const fileUpload = document.getElementById('file-upload');
+        const delimiterSelect = document.getElementById('delimiter');
+        const customDelimiter = document.getElementById('custom-delimiter');
+        const hasHeaders = document.getElementById('has-headers');
+        const parseBtn = document.getElementById('parse-btn');
+        const parseBtnText = document.getElementById('parse-btn-text');
+        const parseBtnLoader = document.getElementById('parse-btn-loader');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const statsDisplay = document.getElementById('stats-display');
+        const tableContainer = document.getElementById('table-container');
+        const csvTable = document.getElementById('csv-table');
+        const rowCount = document.getElementById('row-count');
+        const columnCount = document.getElementById('column-count');
+        const delimiterUsed = document.getElementById('delimiter-used');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        parseBtn.addEventListener('click', parseCSV);
+        downloadBtn.addEventListener('click', downloadCSV);
+        clearBtn.addEventListener('click', clearCSV);
+        copyBtn.addEventListener('click', copyTable);
+        fileUpload.addEventListener('change', handleFileUpload);
+        delimiterSelect.addEventListener('change', toggleCustomDelimiter);
+        
+        function toggleCustomDelimiter() {
+            customDelimiter.style.display = delimiterSelect.value === 'custom' ? 'inline-block' : 'none';
+        }
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                csvInput.value = e.target.result;
+                showStatus('CSV file loaded successfully!', 'success');
+            };
+            reader.readAsText(file);
+        }
+        
+        function parseCSV() {
+            const csvString = csvInput.value.trim();
+            
+            if (!csvString) {
+                showStatus('Please enter some CSV data', 'error');
+                return;
+            }
+            
+            // Show loading state
+            parseBtn.disabled = true;
+            parseBtnText.style.display = 'none';
+            parseBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Get delimiter
+                    let delimiter = delimiterSelect.value;
+                    if (delimiter === 'custom') {
+                        delimiter = customDelimiter.value || ',';
+                    }
+                    
+                    // Parse CSV
+                    const { headers, rows } = parseCSVString(csvString, delimiter, hasHeaders.value === 'true');
+                    
+                    // Display stats
+                    rowCount.textContent = rows.length;
+                    columnCount.textContent = headers.length;
+                    delimiterUsed.textContent = delimiter === '\t' ? 'Tab (\\t)' : delimiter;
+                    
+                    // Build table
+                    let tableHtml = '<thead><tr>';
+                    
+                    // Add headers
+                    headers.forEach(header => {
+                        tableHtml += `<th>${escapeHtml(header)}</th>`;
+                    });
+                    tableHtml += '</tr></thead><tbody>';
+                    
+                    // Add rows
+                    rows.forEach(row => {
+                        tableHtml += '<tr>';
+                        row.forEach(cell => {
+                            tableHtml += `<td>${escapeHtml(cell)}</td>`;
+                        });
+                        tableHtml += '</tr>';
+                    });
+                    
+                    tableHtml += '</tbody>';
+                    csvTable.innerHTML = tableHtml;
+                    
+                    // Show results
+                    statsDisplay.style.display = 'block';
+                    tableContainer.style.display = 'block';
+                    emptyState.style.display = 'none';
+                    
+                    showStatus('CSV parsed successfully!', 'success');
+                    
+                } catch (error) {
+                    showStatus('Error parsing CSV: ' + error.message, 'error');
+                    console.error('Error parsing CSV:', error);
+                } finally {
+                    parseBtn.disabled = false;
+                    parseBtnText.style.display = 'inline-block';
+                    parseBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function parseCSVString(csvString, delimiter, hasHeaders) {
+            const lines = csvString.split(/\r?\n/).filter(line => line.trim() !== '');
+            if (lines.length === 0) throw new Error('No data found in CSV');
+            
+            // Parse headers
+            let headers = [];
+            const firstRow = parseCSVLine(lines[0], delimiter);
+            
+            if (hasHeaders) {
+                headers = firstRow;
+            } else {
+                headers = firstRow.map((_, index) => `Column ${index + 1}`);
+            }
+            
+            // Parse rows
+            const startRow = hasHeaders ? 1 : 0;
+            const rows = [];
+            
+            for (let i = startRow; i < lines.length; i++) {
+                const row = parseCSVLine(lines[i], delimiter);
+                if (row.length !== headers.length) {
+                    console.warn(`Row ${i + 1} has ${row.length} columns, expected ${headers.length}`);
+                }
+                rows.push(row);
+            }
+            
+            return { headers, rows };
+        }
+        
+        function parseCSVLine(line, delimiter) {
+            // Simple CSV parser - doesn't handle quoted fields with delimiters inside
+            return line.split(delimiter).map(field => field.trim());
+        }
+        
+        function downloadCSV() {
+            const csvString = csvInput.value.trim();
+            
+            if (!csvString) {
+                showStatus('No CSV data to download', 'error');
+                return;
+            }
+            
+            try {
+                const blob = new Blob([csvString], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'data.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showStatus('CSV downloaded successfully!', 'success');
+            } catch (error) {
+                showStatus('Error downloading CSV: ' + error.message, 'error');
+            }
+        }
+        
+        function copyTable() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No table to copy', 'error');
+                return;
+            }
+            
+            try {
+                const range = document.createRange();
+                range.selectNode(csvTable);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+                
+                showStatus('Table copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy table', 'error');
+            }
+        }
+        
+        function clearCSV() {
+            csvInput.value = '';
+            statsDisplay.style.display = 'none';
+            tableContainer.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Cleared CSV data!', 'success');
+        }
+        
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

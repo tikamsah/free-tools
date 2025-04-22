@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualizer - Create Charts from JSON/CSV | IT Tools</title>
+    <meta name="description" content="Visualize your JSON or CSV data with interactive charts. Supports bar, line, pie, and scatter plots.">
+    <meta name="keywords" content="data visualization, chart generator, JSON to chart, CSV to chart, data analysis">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #data-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #data-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* File upload */
+        .file-upload {
+            margin: 15px 0;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-upload-label:hover {
+            background: #e5e7eb;
+        }
+        
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+        
+        #file-upload {
+            display: none;
+        }
+        
+        /* Chart options */
+        .chart-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .option-group {
+            margin-bottom: 10px;
+        }
+        
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        
+        .option-group select, .option-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            min-height: 400px;
+            margin: 20px 0;
+        }
+        
+        /* Data preview */
+        .data-preview {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        
+        .preview-table th {
+            background: #f3f4f6;
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .preview-table td {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            word-break: break-word;
+        }
+        
+        .preview-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .chart-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+        <header>
+            <div id="headerContainer"></div>
+        </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Data Visualizer</h1>
+            <p>Create interactive charts from JSON or CSV data</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter or Upload Data</h3>
+                
+                <textarea id="data-input" placeholder='[
+  {"month": "Jan", "revenue": 1200, "expenses": 800},
+  {"month": "Feb", "revenue": 1900, "expenses": 1000},
+  {"month": "Mar", "revenue": 1500, "expenses": 900}
+]'>[
+  {"month": "Jan", "revenue": 1200, "expenses": 800},
+  {"month": "Feb", "revenue": 1900, "expenses": 1000},
+  {"month": "Mar", "revenue": 1500, "expenses": 900}
+]</textarea>
+                
+                <div class="file-upload">
+                    <label for="file-upload" class="file-upload-label">
+                        <i class="fas fa-file-upload"></i> Upload JSON/CSV File
+                    </label>
+                    <input type="file" id="file-upload" accept=".json,.csv,application/json,text/csv">
+                </div>
+                
+                <div class="chart-options">
+                    <div class="option-group">
+                        <label for="chart-type">Chart Type</label>
+                        <select id="chart-type">
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="doughnut">Doughnut Chart</option>
+                            <option value="radar">Radar Chart</option>
+                            <option value="scatter">Scatter Plot</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="x-axis">X-Axis Field</label>
+                        <select id="x-axis">
+                            <option value="">Select field...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="y-axis">Y-Axis Field(s)</label>
+                        <select id="y-axis" multiple>
+                            <option value="">Select fields...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="chart-title">Chart Title</label>
+                        <input type="text" id="chart-title" placeholder="Sales Data">
+                    </div>
+                </div>
+                
+                <div class="action-buttons-row">
+                    <button id="visualize-btn" class="tool-button">
+                        <span id="visualize-btn-text">Visualize Data</span>
+                        <span id="visualize-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="download-btn" class="tool-button secondary">
+                        <i class="fas fa-download"></i> Download Chart
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Chart Visualization</h3>
+                    <div class="action-buttons">
+                        <button class="tool-button secondary" id="toggle-table-btn">
+                            <i class="fas fa-table"></i> Toggle Data
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div class="chart-container">
+                        <canvas id="data-chart"></canvas>
+                    </div>
+                    
+                    <div id="data-preview" class="data-preview" style="display: none;">
+                        <table class="preview-table" id="preview-table">
+                            <!-- Data will be populated here -->
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-chart-bar"></i>
+                        <p>No visualization yet. Enter data and click "Visualize Data".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this Data Visualizer:</h3>
+                <ul>
+                    <li>Paste your JSON array or upload a JSON/CSV file</li>
+                    <li>Select chart type and configure axis fields</li>
+                    <li>Click <strong>Visualize Data</strong> to generate the chart</li>
+                    <li>Toggle the data table to view your raw data</li>
+                    <li>Download the chart as an image</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>Supported Data Formats:</h3>
+                <ul>
+                    <li><strong>JSON</strong>: Array of objects with consistent properties</li>
+                    <li><strong>CSV</strong>: Comma-separated values with header row</li>
+                    <li>Numeric values will be plotted on Y-axis</li>
+                    <li>Text/date values will be used for X-axis labels</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        // DOM elements
+        const dataInput = document.getElementById('data-input');
+        const fileUpload = document.getElementById('file-upload');
+        const chartType = document.getElementById('chart-type');
+        const xAxis = document.getElementById('x-axis');
+        const yAxis = document.getElementById('y-axis');
+        const chartTitle = document.getElementById('chart-title');
+        const visualizeBtn = document.getElementById('visualize-btn');
+        const visualizeBtnText = document.getElementById('visualize-btn-text');
+        const visualizeBtnLoader = document.getElementById('visualize-btn-loader');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const toggleTableBtn = document.getElementById('toggle-table-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        const chartCanvas = document.getElementById('data-chart');
+        const dataPreview = document.getElementById('data-preview');
+        const previewTable = document.getElementById('preview-table');
+        
+        // Chart variables
+        let dataChart = null;
+        let parsedData = [];
+        let dataFields = [];
+        
+        // Event listeners
+        visualizeBtn.addEventListener('click', visualizeData);
+        downloadBtn.addEventListener('click', downloadChart);
+        clearBtn.addEventListener('click', clearData);
+        toggleTableBtn.addEventListener('click', toggleDataPreview);
+        fileUpload.addEventListener('change', handleFileUpload);
+        dataInput.addEventListener('input', detectDataFormat);
+        
+        // Initialize
+        detectDataFormat();
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                dataInput.value = e.target.result;
+                showStatus('File loaded successfully!', 'success');
+                detectDataFormat();
+            };
+            reader.readAsText(file);
+        }
+        
+        function detectDataFormat() {
+            const dataString = dataInput.value.trim();
+            
+            if (!dataString) {
+                resetFieldSelectors();
+                return;
+            }
+            
+            try {
+                // Try to parse as JSON
+                const jsonData = JSON.parse(dataString);
+                if (Array.isArray(jsonData) && jsonData.length > 0) {
+                    processData(jsonData);
+                    showStatus('JSON data detected', 'success');
+                } else {
+                    throw new Error('Data should be a non-empty array');
+                }
+            } catch (jsonError) {
+                // If not JSON, try as CSV
+                try {
+                    const csvData = parseCSV(dataString);
+                    if (csvData.length > 0) {
+                        processData(csvData);
+                        showStatus('CSV data detected', 'success');
+                    } else {
+                        throw new Error('CSV data is empty');
+                    }
+                } catch (csvError) {
+                    resetFieldSelectors();
+                    showStatus('Invalid data format. Please provide valid JSON array or CSV.', 'error');
+                }
+            }
+        }
+        
+        function parseCSV(csvString) {
+            const lines = csvString.split(/\r?\n/).filter(line => line.trim() !== '');
+            if (lines.length < 2) throw new Error('CSV needs at least header row and one data row');
+            
+            const headers = lines[0].split(',').map(h => h.trim());
+            const result = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const row = {};
+                
+                for (let j = 0; j < headers.length; j++) {
+                    if (j < values.length) {
+                        // Try to parse numbers
+                        const numValue = Number(values[j]);
+                        row[headers[j]] = isNaN(numValue) ? values[j].trim() : numValue;
+                    } else {
+                        row[headers[j]] = '';
+                    }
+                }
+                
+                result.push(row);
+            }
+            
+            return result;
+        }
+        
+        function processData(data) {
+            parsedData = data;
+            dataFields = [];
+            
+            // Get all unique field names from the data
+            const fieldSet = new Set();
+            data.forEach(item => {
+                Object.keys(item).forEach(key => fieldSet.add(key));
+            });
+            
+            dataFields = Array.from(fieldSet);
+            
+            // Update field selectors
+            updateFieldSelectors();
+            
+            // Build preview table
+            buildPreviewTable();
+        }
+        
+        function updateFieldSelectors() {
+            // Clear existing options
+            xAxis.innerHTML = '<option value="">Select field...</option>';
+            yAxis.innerHTML = '<option value="">Select fields...</option>';
+            
+            // Add new options
+            dataFields.forEach(field => {
+                xAxis.innerHTML += `<option value="${field}">${field}</option>`;
+                yAxis.innerHTML += `<option value="${field}">${field}</option>`;
+            });
+            
+            // Set default x-axis to first text field if possible
+            if (dataFields.length > 0) {
+                const textFields = dataFields.filter(field => {
+                    return typeof parsedData[0][field] === 'string';
+                });
+                
+                if (textFields.length > 0) {
+                    xAxis.value = textFields[0];
+                }
+            }
+            
+            // Set default y-axis to first numeric field if possible
+            if (dataFields.length > 0) {
+                const numericFields = dataFields.filter(field => {
+                    return typeof parsedData[0][field] === 'number';
+                });
+                
+                if (numericFields.length > 0) {
+                    // Clear and set multiple options
+                    yAxis.innerHTML = '';
+                    numericFields.forEach(field => {
+                        yAxis.innerHTML += `<option value="${field}" selected>${field}</option>`;
+                    });
+                }
+            }
+        }
+        
+        function resetFieldSelectors() {
+            xAxis.innerHTML = '<option value="">Select field...</option>';
+            yAxis.innerHTML = '<option value="">Select fields...</option>';
+            parsedData = [];
+            dataFields = [];
+        }
+        
+        function buildPreviewTable() {
+            if (parsedData.length === 0) {
+                previewTable.innerHTML = '';
+                return;
+            }
+            
+            let tableHtml = '<thead><tr>';
+            
+            // Add headers
+            dataFields.forEach(header => {
+                tableHtml += `<th>${escapeHtml(header)}</th>`;
+            });
+            tableHtml += '</tr></thead><tbody>';
+            
+            // Add rows (limit to 20 for performance)
+            const displayRows = parsedData.slice(0, 20);
+            displayRows.forEach(row => {
+                tableHtml += '<tr>';
+                dataFields.forEach(field => {
+                    const value = row[field] !== undefined ? row[field] : '';
+                    tableHtml += `<td>${escapeHtml(value)}</td>`;
+                });
+                tableHtml += '</tr>';
+            });
+            
+            tableHtml += '</tbody>';
+            
+            if (parsedData.length > 20) {
+                tableHtml += `<tfoot><tr><td colspan="${dataFields.length}" style="text-align: center;">
+                    Showing 20 of ${parsedData.length} rows
+                </td></tr></tfoot>`;
+            }
+            
+            previewTable.innerHTML = tableHtml;
+        }
+        
+        function visualizeData() {
+            if (parsedData.length === 0) {
+                showStatus('No data to visualize. Please enter valid data first.', 'error');
+                return;
+            }
+            
+            const selectedX = xAxis.value;
+            const selectedY = Array.from(yAxis.selectedOptions).map(opt => opt.value);
+            
+            if (!selectedX) {
+                showStatus('Please select an X-axis field', 'error');
+                return;
+            }
+            
+            if (selectedY.length === 0) {
+                showStatus('Please select at least one Y-axis field', 'error');
+                return;
+            }
+            
+            // Show loading state
+            visualizeBtn.disabled = true;
+            visualizeBtnText.style.display = 'none';
+            visualizeBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Prepare chart data
+                    const labels = parsedData.map(item => item[selectedX]);
+                    const datasets = selectedY.map(field => {
+                        return {
+                            label: field,
+                            data: parsedData.map(item => item[field]),
+                            backgroundColor: getRandomColor(),
+                            borderColor: getRandomColor(),
+                            borderWidth: 1
+                        };
+                    });
+                    
+                    // Destroy previous chart if exists
+                    if (dataChart) {
+                        dataChart.destroy();
+                    }
+                    
+                    // Create new chart
+                    const ctx = chartCanvas.getContext('2d');
+                    dataChart = new Chart(ctx, {
+                        type: chartType.value,
+                        data: {
+                            labels: labels,
+                            datasets: datasets
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: chartTitle.value ? true : false,
+                                    text: chartTitle.value || '',
+                                    font: {
+                                        size: 16
+                                    }
+                                },
+                                legend: {
+                                    position: 'top'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Show results
+                    emptyState.style.display = 'none';
+                    showStatus('Chart generated successfully!', 'success');
+                    
+                } catch (error) {
+                    showStatus('Error generating chart: ' + error.message, 'error');
+                    console.error('Error generating chart:', error);
+                } finally {
+                    visualizeBtn.disabled = false;
+                    visualizeBtnText.style.display = 'inline-block';
+                    visualizeBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function downloadChart() {
+            if (!dataChart) {
+                showStatus('No chart to download', 'error');
+                return;
+            }
+            
+            try {
+                const link = document.createElement('a');
+                link.download = 'chart.png';
+                link.href = chartCanvas.toDataURL('image/png');
+                link.click();
+                
+                showStatus('Chart downloaded successfully!', 'success');
+            } catch (error) {
+                showStatus('Error downloading chart: ' + error.message, 'error');
+            }
+        }
+        
+        function toggleDataPreview() {
+            if (parsedData.length === 0) {
+                showStatus('No data to display', 'error');
+                return;
+            }
+            
+            dataPreview.style.display = dataPreview.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function clearData() {
+            dataInput.value = '';
+            chartTitle.value = '';
+            
+            if (dataChart) {
+                dataChart.destroy();
+                dataChart = null;
+            }
+            
+            resetFieldSelectors();
+            dataPreview.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Cleared all data!', 'success');
+        }
+        
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        function escapeHtml(unsafe) {
+            if (unsafe === undefined || unsafe === null) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

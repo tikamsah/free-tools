@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Path Finder - Extract Data from JSON | IT Tools</title>
+    <meta name="description" content="Find and extract data from JSON using JSON Path expressions. Essential tool for developers working with JSON data.">
+    <meta name="keywords" content="JSON Path, JSON extractor, JSON query, JSON parser, JSON data extraction">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #json-input, #path-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #path-input {
+            min-height: 40px;
+            margin-top: 15px;
+        }
+        
+        #json-input:focus, #path-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* File upload */
+        .file-upload {
+            margin: 15px 0;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-upload-label:hover {
+            background: #e5e7eb;
+        }
+        
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+        
+        #file-upload {
+            display: none;
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* JSON output */
+        #json-output {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            background-color: #f8fafc;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .stat-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Examples */
+        .examples {
+            margin: 20px 0;
+        }
+        
+        .example-item {
+            margin-bottom: 10px;
+        }
+        
+        .example-path {
+            font-family: 'Fira Code', monospace;
+            background-color: #f3f4f6;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>JSON Path Finder</h1>
+            <p>Extract data from JSON using JSON Path expressions</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter JSON Data and Path Expression</h3>
+                
+                <textarea id="json-input" placeholder='{
+  "store": {
+    "book": [
+      {
+        "category": "reference",
+        "author": "Nigel Rees",
+        "title": "Sayings of the Century",
+        "price": 8.95
+      },
+      {
+        "category": "fiction",
+        "author": "Evelyn Waugh",
+        "title": "Sword of Honour",
+        "price": 12.99
+      }
+    ],
+    "bicycle": {
+      "color": "red",
+      "price": 19.95
+    }
+  }
+}'></textarea>
+                
+                <input type="text" id="path-input" placeholder="$.store.book[*].author" value="$.store.book[*].author">
+                
+                <div class="file-upload">
+                    <label for="file-upload" class="file-upload-label">
+                        <i class="fas fa-file-upload"></i> Upload JSON File
+                    </label>
+                    <input type="file" id="file-upload" accept=".json,application/json">
+                </div>
+                
+                <div class="action-buttons-row">
+                    <button id="execute-btn" class="tool-button">
+                        <span id="execute-btn-text">Execute Path</span>
+                        <span id="execute-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="format-btn" class="tool-button secondary">
+                        <i class="fas fa-align-left"></i> Format JSON
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Results</h3>
+                    <div class="action-buttons">
+                        <button class="tool-button secondary" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="stats-display" style="display: none;">
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h4>Matches Found</h4>
+                                <p id="match-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Path Executed</h4>
+                                <p id="path-used">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="output-container" style="display: none;">
+                        <pre id="json-output"><!-- Results will be shown here --></pre>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-code"></i>
+                        <p>No results yet. Enter JSON and a path expression, then click "Execute Path".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this JSON Path Finder:</h3>
+                <ul>
+                    <li>Paste your JSON data or upload a JSON file</li>
+                    <li>Enter a JSON Path expression in the input field</li>
+                    <li>Click <strong>Execute Path</strong> to extract matching data</li>
+                    <li>Use <strong>Format JSON</strong> to prettify your JSON data</li>
+                    <li>Copy the results to clipboard</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>JSON Path Examples:</h3>
+                <div class="examples">
+                    <div class="example-item">
+                        <strong>All authors:</strong> <span class="example-path">$.store.book[*].author</span>
+                    </div>
+                    <div class="example-item">
+                        <strong>First book:</strong> <span class="example-path">$.store.book[0]</span>
+                    </div>
+                    <div class="example-item">
+                        <strong>Books under $10:</strong> <span class="example-path">$.store.book[?(@.price < 10)]</span>
+                    </div>
+                    <div class="example-item">
+                        <strong>All prices:</strong> <span class="example-path">$..price</span>
+                    </div>
+                    <div class="example-item">
+                        <strong>Bicycle color:</strong> <span class="example-path">$.store.bicycle.color</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>About JSON Path:</h3>
+                <ul>
+                    <li>JSON Path is a query language for JSON, similar to XPath for XML</li>
+                    <li>It allows you to select and extract data from JSON structures</li>
+                    <li>Common operators: <code>$</code> (root), <code>.</code> (child), <code>[]</code> (array index/wildcard), <code>*</code> (wildcard)</li>
+                    <li>Supports filtering with expressions like <code>[?(@.price > 10)]</code></li>
+                    <li>Not to be confused with JavaScript object paths</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your JSON data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsonpath-plus@5.0.3/dist/jsonpath-plus.min.js"></script>
+    <script>
+        // DOM elements
+        const jsonInput = document.getElementById('json-input');
+        const pathInput = document.getElementById('path-input');
+        const fileUpload = document.getElementById('file-upload');
+        const executeBtn = document.getElementById('execute-btn');
+        const executeBtnText = document.getElementById('execute-btn-text');
+        const executeBtnLoader = document.getElementById('execute-btn-loader');
+        const formatBtn = document.getElementById('format-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const statsDisplay = document.getElementById('stats-display');
+        const outputContainer = document.getElementById('output-container');
+        const jsonOutput = document.getElementById('json-output');
+        const matchCount = document.getElementById('match-count');
+        const pathUsed = document.getElementById('path-used');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        executeBtn.addEventListener('click', executePath);
+        formatBtn.addEventListener('click', formatJSON);
+        clearBtn.addEventListener('click', clearJSON);
+        copyBtn.addEventListener('click', copyResults);
+        fileUpload.addEventListener('change', handleFileUpload);
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                jsonInput.value = e.target.result;
+                showStatus('JSON file loaded successfully!', 'success');
+            };
+            reader.readAsText(file);
+        }
+        
+        function executePath() {
+            const jsonString = jsonInput.value.trim();
+            const pathExpression = pathInput.value.trim();
+            
+            if (!jsonString) {
+                showStatus('Please enter some JSON data', 'error');
+                return;
+            }
+            
+            if (!pathExpression) {
+                showStatus('Please enter a JSON Path expression', 'error');
+                return;
+            }
+            
+            // Show loading state
+            executeBtn.disabled = true;
+            executeBtnText.style.display = 'none';
+            executeBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Parse JSON
+                    const jsonData = JSON.parse(jsonString);
+                    
+                    // Execute JSONPath
+                    const results = JSONPath({ path: pathExpression, json: jsonData });
+                    
+                    // Display results
+                    if (results && results.length > 0) {
+                        jsonOutput.textContent = JSON.stringify(results, null, 2);
+                        matchCount.textContent = results.length;
+                        pathUsed.textContent = pathExpression;
+                        
+                        statsDisplay.style.display = 'block';
+                        outputContainer.style.display = 'block';
+                        emptyState.style.display = 'none';
+                        
+                        showStatus(`Found ${results.length} matches!`, 'success');
+                    } else {
+                        jsonOutput.textContent = 'No matches found for the given path';
+                        matchCount.textContent = '0';
+                        pathUsed.textContent = pathExpression;
+                        
+                        statsDisplay.style.display = 'block';
+                        outputContainer.style.display = 'block';
+                        emptyState.style.display = 'none';
+                        
+                        showStatus('No matches found for the given path', 'warning');
+                    }
+                    
+                } catch (error) {
+                    showStatus('Error processing JSON: ' + error.message, 'error');
+                    console.error('Error processing JSON:', error);
+                } finally {
+                    executeBtn.disabled = false;
+                    executeBtnText.style.display = 'inline-block';
+                    executeBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function formatJSON() {
+            const jsonString = jsonInput.value.trim();
+            
+            if (!jsonString) {
+                showStatus('Please enter some JSON data', 'error');
+                return;
+            }
+            
+            try {
+                const jsonData = JSON.parse(jsonString);
+                jsonInput.value = JSON.stringify(jsonData, null, 2);
+                showStatus('JSON formatted successfully!', 'success');
+            } catch (error) {
+                showStatus('Error formatting JSON: ' + error.message, 'error');
+            }
+        }
+        
+        function copyResults() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No results to copy', 'error');
+                return;
+            }
+            
+            try {
+                const range = document.createRange();
+                range.selectNode(jsonOutput);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+                
+                showStatus('Results copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy results', 'error');
+            }
+        }
+        
+        function clearJSON() {
+            jsonInput.value = '';
+            pathInput.value = '';
+            statsDisplay.style.display = 'none';
+            outputContainer.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Cleared JSON data!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
