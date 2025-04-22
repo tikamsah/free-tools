@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect Checker - Analyze URL Redirections | IT Tools</title>
+    <meta name="description" content="Check URL redirect chains, status codes, and final destination. Essential tool for SEO specialists and webmasters.">
+    <meta name="keywords" content="redirect checker, URL redirect, HTTP status, 301 redirect, 302 redirect, URL chain">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        #url-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            width: 100%;
+        }
+        
+        #url-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Options */
+        .check-options {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select {
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* Redirect chain */
+        .redirect-chain {
+            margin: 20px 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .redirect-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+        
+        .redirect-item:last-child {
+            border-bottom: none;
+        }
+        
+        .redirect-status {
+            width: 80px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+        
+        .redirect-status.redirect-301 {
+            color: #065f46;
+        }
+        
+        .redirect-status.redirect-302 {
+            color: #92400e;
+        }
+        
+        .redirect-status.redirect-other {
+            color: #1e40af;
+        }
+        
+        .redirect-status.redirect-final {
+            color: #111827;
+        }
+        
+        .redirect-arrow {
+            margin: 0 12px;
+            color: #9ca3af;
+        }
+        
+        .redirect-url {
+            flex: 1;
+            word-break: break-all;
+        }
+        
+        /* Summary cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .summary-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .summary-card p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Buttons */
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .url-input-container {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .redirect-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .redirect-arrow {
+                margin: 4px 0;
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Redirect Checker</h1>
+            <p>Check URL redirect chains, status codes, and final destination</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter URL to Check</h3>
+                
+                <div class="url-input-container">
+                    <input type="url" id="url-input" placeholder="https://example.com" value="https://example.com">
+                    <button id="check-btn" class="tool-button">
+                        <span id="check-btn-text">Check Redirects</span>
+                        <span id="check-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div class="check-options">
+                    <div class="option-group">
+                        <label for="max-redirects">Max Redirects:</label>
+                        <select id="max-redirects">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="timeout">Timeout (ms):</label>
+                        <select id="timeout">
+                            <option value="5000">5000</option>
+                            <option value="10000" selected>10000</option>
+                            <option value="15000">15000</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Redirect Analysis</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn" id="clear-btn">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="redirect-display" style="display: none;">
+                        <div class="summary-cards">
+                            <div class="summary-card">
+                                <h4>Redirect Chain Length</h4>
+                                <p id="chain-length">0</p>
+                            </div>
+                            <div class="summary-card">
+                                <h4>Final Status Code</h4>
+                                <p id="final-status">-</p>
+                            </div>
+                            <div class="summary-card">
+                                <h4>Final URL</h4>
+                                <p id="final-url">-</p>
+                            </div>
+                        </div>
+                        
+                        <h4>Redirect Chain</h4>
+                        <div class="redirect-chain" id="redirect-chain">
+                            <!-- Redirect items will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-exchange-alt"></i>
+                        <p>No redirects checked yet. Enter a URL and click "Check Redirects".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this Redirect Checker:</h3>
+                <ul>
+                    <li>Enter the URL you want to check (include http:// or https://)</li>
+                    <li>Click <strong>Check Redirects</strong> to analyze the redirection chain</li>
+                    <li>View each step in the redirect chain with status codes</li>
+                    <li>See the final destination URL and status code</li>
+                    <li>Adjust max redirects and timeout settings as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About URL Redirects:</h3>
+                <ul>
+                    <li><strong>301 Moved Permanently</strong>: Permanent redirect that passes SEO value</li>
+                    <li><strong>302 Found (Moved Temporarily)</strong>: Temporary redirect that doesn't pass SEO value</li>
+                    <li><strong>307 Temporary Redirect</strong>: Similar to 302 but preserves HTTP method</li>
+                    <li><strong>308 Permanent Redirect</strong>: Similar to 301 but preserves HTTP method</li>
+                    <li>Long redirect chains can slow down page loading and hurt SEO</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All checks are performed in real-time from your browser - we never store or log your requests</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const urlInput = document.getElementById('url-input');
+        const checkBtn = document.getElementById('check-btn');
+        const checkBtnText = document.getElementById('check-btn-text');
+        const checkBtnLoader = document.getElementById('check-btn-loader');
+        const maxRedirects = document.getElementById('max-redirects');
+        const timeout = document.getElementById('timeout');
+        const redirectDisplay = document.getElementById('redirect-display');
+        const chainLength = document.getElementById('chain-length');
+        const finalStatus = document.getElementById('final-status');
+        const finalUrl = document.getElementById('final-url');
+        const redirectChain = document.getElementById('redirect-chain');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        checkBtn.addEventListener('click', checkRedirects);
+        copyBtn.addEventListener('click', copyResults);
+        clearBtn.addEventListener('click', clearResults);
+        urlInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkRedirects();
+            }
+        });
+        
+        async function checkRedirects() {
+            let url = urlInput.value.trim();
+            
+            if (!url) {
+                showStatus('Please enter a URL', 'error');
+                return;
+            }
+            
+            // Add https:// if missing
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+                urlInput.value = url;
+            }
+            
+            // Validate URL
+            try {
+                new URL(url);
+            } catch (e) {
+                showStatus('Please enter a valid URL (e.g. https://example.com)', 'error');
+                return;
+            }
+            
+            // Show loading state
+            checkBtn.disabled = true;
+            checkBtnText.style.display = 'none';
+            checkBtnLoader.style.display = 'inline-block';
+            
+            try {
+                const max = parseInt(maxRedirects.value);
+                const timeoutMs = parseInt(timeout.value);
+                
+                // Track redirect chain
+                const redirects = [];
+                let currentUrl = url;
+                let finalStatusCode = 200;
+                let finalResponseUrl = url;
+                
+                // Clear previous results
+                redirectChain.innerHTML = '';
+                
+                // Follow redirects manually to track each step
+                for (let i = 0; i < max; i++) {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+                    
+                    try {
+                        const response = await fetch(currentUrl, {
+                            method: 'HEAD',
+                            redirect: 'manual',
+                            signal: controller.signal
+                        });
+                        clearTimeout(timeoutId);
+                        
+                        // Store redirect info
+                        if (response.redirected) {
+                            const status = response.status;
+                            const redirectedUrl = response.url;
+                            
+                            redirects.push({
+                                from: currentUrl,
+                                to: redirectedUrl,
+                                status: status
+                            });
+                            
+                            currentUrl = redirectedUrl;
+                        } else {
+                            finalStatusCode = response.status;
+                            finalResponseUrl = response.url;
+                            break;
+                        }
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            throw new Error(`Request timed out after ${timeoutMs/1000} seconds`);
+                        } else {
+                            throw error;
+                        }
+                    }
+                }
+                
+                // Display results
+                displayRedirectResults(redirects, finalStatusCode, finalResponseUrl);
+                showStatus('Redirect chain analyzed successfully!', 'success');
+                
+            } catch (error) {
+                showStatus('Error checking redirects: ' + error.message, 'error');
+                console.error('Error checking redirects:', error);
+                
+                // Display error in results
+                redirectChain.innerHTML = `
+                    <div class="redirect-item">
+                        <div class="redirect-url">Error: ${error.message}</div>
+                    </div>
+                `;
+                
+                redirectDisplay.style.display = 'block';
+                emptyState.style.display = 'none';
+                
+            } finally {
+                checkBtn.disabled = false;
+                checkBtnText.style.display = 'inline-block';
+                checkBtnLoader.style.display = 'none';
+            }
+        }
+        
+        function displayRedirectResults(redirects, finalStatus, finalUrl) {
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            // Update summary cards
+            chainLength.textContent = redirects.length;
+            
+            if (redirects.length > 0) {
+                finalStatus.textContent = `${finalStatus} ${getStatusText(finalStatus)}`;
+            } else {
+                finalStatus.textContent = `${finalStatus} (No redirects)`;
+            }
+            
+            finalUrl.textContent = finalUrl;
+            
+            // Build redirect chain display
+            let redirectHtml = '';
+            
+            // Add initial URL
+            redirectHtml += `
+                <div class="redirect-item">
+                    <div class="redirect-status">Start</div>
+                    <div class="redirect-url">${redirects.length > 0 ? redirects[0].from : finalUrl}</div>
+                </div>
+            `;
+            
+            // Add each redirect step
+            redirects.forEach((redirect, index) => {
+                const statusClass = redirect.status === 301 ? 'redirect-301' : 
+                                  redirect.status === 302 ? 'redirect-302' : 'redirect-other';
+                
+                redirectHtml += `
+                    <div class="redirect-item">
+                        <div class="redirect-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="redirect-status ${statusClass}">${redirect.status}</div>
+                        <div class="redirect-url">${redirect.to}</div>
+                    </div>
+                `;
+            });
+            
+            // Add final destination if different
+            if (redirects.length > 0 && redirects[redirects.length - 1].to !== finalUrl) {
+                redirectHtml += `
+                    <div class="redirect-item">
+                        <div class="redirect-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <div class="redirect-status redirect-final">Final</div>
+                        <div class="redirect-url">${finalUrl}</div>
+                    </div>
+                `;
+            }
+            
+            redirectChain.innerHTML = redirectHtml;
+            
+            // Show the results
+            redirectDisplay.style.display = 'block';
+        }
+        
+        function getStatusText(status) {
+            const statusTexts = {
+                200: 'OK',
+                301: 'Moved Permanently',
+                302: 'Found (Moved Temporarily)',
+                303: 'See Other',
+                307: 'Temporary Redirect',
+                308: 'Permanent Redirect',
+                404: 'Not Found',
+                500: 'Internal Server Error'
+            };
+            return statusTexts[status] || '';
+        }
+        
+        function copyResults() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No results to copy', 'error');
+                return;
+            }
+            
+            // Get all results text
+            const redirectItems = Array.from(document.querySelectorAll('.redirect-item'));
+            
+            let textToCopy = 'REDIRECT CHECK REPORT\n====================\n\n';
+            textToCopy += `Initial URL: ${urlInput.value}\n`;
+            textToCopy += `Redirect Chain Length: ${chainLength.textContent}\n`;
+            textToCopy += `Final Status: ${finalStatus.textContent}\n`;
+            textToCopy += `Final URL: ${finalUrl.textContent}\n\n`;
+            
+            textToCopy += 'REDIRECT CHAIN\n--------------\n';
+            
+            redirectItems.forEach((item, index) => {
+                const status = item.querySelector('.redirect-status')?.textContent || '';
+                const url = item.querySelector('.redirect-url')?.textContent || '';
+                
+                if (index === 0) {
+                    textToCopy += `[Start] ${url}\n`;
+                } else {
+                    textToCopy += `→ [${status}] ${url}\n`;
+                }
+            });
+            
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => showStatus('Results copied to clipboard!', 'success'))
+                .catch(() => showStatus('Failed to copy results', 'error'));
+        }
+        
+        function clearResults() {
+            urlInput.value = '';
+            redirectDisplay.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Results cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

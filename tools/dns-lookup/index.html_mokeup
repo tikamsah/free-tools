@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Lookup Tool - Check DNS Records | IT Tools</title>
+    <meta name="description" content="Lookup DNS records including A, AAAA, CNAME, MX, TXT, NS and more. Essential tool for network administrators and webmasters.">
+    <meta name="keywords" content="DNS lookup, DNS checker, DNS records, domain records, DNS query">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        #domain-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            width: 100%;
+        }
+        
+        #domain-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Record type selector */
+        .record-type-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .record-type-btn {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .record-type-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .record-type-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* DNS Records Table */
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        
+        .records-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .records-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .records-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .record-type {
+            color: #1e40af;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .record-value {
+            word-break: break-all;
+        }
+        
+        .record-ttl {
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+        
+        /* Buttons */
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+        
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <img src="https://it-tools.nepexo.com/images/logo.png" alt="IT Tools Logo">
+            </a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools">All Tools</a></li>
+                <li><a href="/categories">Categories</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>DNS Lookup Tool</h1>
+            <p>Lookup DNS records including A, AAAA, CNAME, MX, TXT, NS and more</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter Domain Name</h3>
+                
+                <div class="input-row">
+                    <input type="text" id="domain-input" placeholder="example.com" value="example.com">
+                    <button id="lookup-btn" class="tool-button">
+                        <span id="lookup-btn-text">Lookup DNS</span>
+                        <span id="lookup-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <div class="record-type-selector">
+                    <button class="record-type-btn active" data-type="A">A (IPv4)</button>
+                    <button class="record-type-btn" data-type="AAAA">AAAA (IPv6)</button>
+                    <button class="record-type-btn" data-type="CNAME">CNAME</button>
+                    <button class="record-type-btn" data-type="MX">MX</button>
+                    <button class="record-type-btn" data-type="TXT">TXT</button>
+                    <button class="record-type-btn" data-type="NS">NS</button>
+                    <button class="record-type-btn" data-type="SOA">SOA</button>
+                    <button class="record-type-btn" data-type="PTR">PTR</button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">DNS Records</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn" id="clear-btn">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="records-display" style="display: none;">
+                        <table class="records-table" id="records-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>TTL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="records-body">
+                                <!-- Records will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-server"></i>
+                        <p>No DNS records checked yet. Enter a domain and click "Lookup DNS".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this DNS Lookup Tool:</h3>
+                <ul>
+                    <li>Enter the domain name you want to check (e.g. example.com)</li>
+                    <li>Select the record type(s) you want to lookup</li>
+                    <li>Click <strong>Lookup DNS</strong> to query the DNS records</li>
+                    <li>View the returned records including type, value and TTL</li>
+                    <li>Copy the results or clear them as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About DNS Records:</h3>
+                <ul>
+                    <li><strong>A</strong>: Maps a domain to an IPv4 address</li>
+                    <li><strong>AAAA</strong>: Maps a domain to an IPv6 address</li>
+                    <li><strong>CNAME</strong>: Canonical name record (alias of another domain)</li>
+                    <li><strong>MX</strong>: Mail exchange record for email routing</li>
+                    <li><strong>TXT</strong>: Text record often used for verification</li>
+                    <li><strong>NS</strong>: Nameserver records for the domain</li>
+                    <li><strong>SOA</strong>: Start of Authority record with admin info</li>
+                    <li><strong>PTR</strong>: Pointer record for reverse DNS lookups</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All DNS lookups are performed in real-time - we never store or log your queries</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        // DOM elements
+        const domainInput = document.getElementById('domain-input');
+        const lookupBtn = document.getElementById('lookup-btn');
+        const lookupBtnText = document.getElementById('lookup-btn-text');
+        const lookupBtnLoader = document.getElementById('lookup-btn-loader');
+        const recordTypeBtns = document.querySelectorAll('.record-type-btn');
+        const recordsDisplay = document.getElementById('records-display');
+        const recordsBody = document.getElementById('records-body');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Current selected record type
+        let selectedRecordType = 'A';
+        
+        // Event listeners
+        lookupBtn.addEventListener('click', lookupDNS);
+        copyBtn.addEventListener('click', copyResults);
+        clearBtn.addEventListener('click', clearResults);
+        domainInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                lookupDNS();
+            }
+        });
+        
+        // Record type selector
+        recordTypeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                recordTypeBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedRecordType = this.dataset.type;
+            });
+        });
+        
+        async function lookupDNS() {
+            const domain = domainInput.value.trim();
+            
+            if (!domain) {
+                showStatus('Please enter a domain name', 'error');
+                return;
+            }
+            
+            // Validate domain (simple validation)
+            if (!/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i.test(domain)) {
+                showStatus('Please enter a valid domain name (e.g. example.com)', 'error');
+                return;
+            }
+            
+            // Show loading state
+            lookupBtn.disabled = true;
+            lookupBtnText.style.display = 'none';
+            lookupBtnLoader.style.display = 'inline-block';
+            
+            try {
+                // In a real implementation, you would call a backend API for DNS lookup
+                // This is a mock implementation that simulates the response
+                
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                // Mock response based on record type
+                const mockResponses = {
+                    'A': [
+                        { type: 'A', value: '93.184.216.34', ttl: 300 },
+                        { type: 'A', value: '192.0.2.1', ttl: 300 }
+                    ],
+                    'AAAA': [
+                        { type: 'AAAA', value: '2606:2800:220:1:248:1893:25c8:1946', ttl: 300 }
+                    ],
+                    'CNAME': [
+                        { type: 'CNAME', value: 'example.com', ttl: 3600 }
+                    ],
+                    'MX': [
+                        { type: 'MX', value: '10 mail.example.com', ttl: 3600 },
+                        { type: 'MX', value: '20 backup.example.com', ttl: 3600 }
+                    ],
+                    'TXT': [
+                        { type: 'TXT', value: '"v=spf1 include:_spf.example.com ~all"', ttl: 3600 },
+                        { type: 'TXT', value: '"google-site-verification=ABC123"', ttl: 3600 }
+                    ],
+                    'NS': [
+                        { type: 'NS', value: 'ns1.example.com', ttl: 86400 },
+                        { type: 'NS', value: 'ns2.example.com', ttl: 86400 }
+                    ],
+                    'SOA': [
+                        { type: 'SOA', value: 'ns1.example.com admin.example.com 2023061501 7200 3600 1209600 3600', ttl: 3600 }
+                    ],
+                    'PTR': [
+                        { type: 'PTR', value: 'example.com', ttl: 3600 }
+                    ]
+                };
+                
+                const records = mockResponses[selectedRecordType] || [];
+                
+                // Display the results
+                displayDNSResults(domain, selectedRecordType, records);
+                
+                showStatus(`DNS ${selectedRecordType} records retrieved successfully!`, 'success');
+                
+            } catch (error) {
+                showStatus('Error performing DNS lookup: ' + error.message, 'error');
+                console.error('Error checking DNS:', error);
+                
+                // Display error in results
+                recordsBody.innerHTML = `
+                    <tr>
+                        <td colspan="3">Could not retrieve DNS records</td>
+                    </tr>
+                `;
+                
+                recordsDisplay.style.display = 'block';
+                emptyState.style.display = 'none';
+                
+            } finally {
+                // Reset loading state
+                lookupBtn.disabled = false;
+                lookupBtnText.style.display = 'inline-block';
+                lookupBtnLoader.style.display = 'none';
+            }
+        }
+        
+        function displayDNSResults(domain, recordType, records) {
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            // Prepare records table
+            let recordsHtml = '';
+            
+            if (records.length > 0) {
+                records.forEach(record => {
+                    recordsHtml += `
+                        <tr>
+                            <td class="record-type">${record.type}</td>
+                            <td class="record-value">${record.value}</td>
+                            <td class="record-ttl">${record.ttl} seconds</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                recordsHtml = `
+                    <tr>
+                        <td colspan="3">No ${recordType} records found for ${domain}</td>
+                    </tr>
+                `;
+            }
+            
+            recordsBody.innerHTML = recordsHtml;
+            
+            // Show the results
+            recordsDisplay.style.display = 'block';
+        }
+        
+        function copyResults() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No results to copy', 'error');
+                return;
+            }
+            
+            // Get all results text
+            const rows = Array.from(document.querySelectorAll('#records-body tr'));
+            
+            let textToCopy = 'DNS LOOKUP REPORT\n================\n\n';
+            textToCopy += `Domain: ${domainInput.value}\n`;
+            textToCopy += `Record Type: ${selectedRecordType}\n\n`;
+            
+            textToCopy += 'RECORDS\n-------\n';
+            textToCopy += 'Type\tValue\tTTL\n';
+            
+            rows.forEach(row => {
+                const type = row.querySelector('.record-type').textContent;
+                const value = row.querySelector('.record-value').textContent;
+                const ttl = row.querySelector('.record-ttl')?.textContent || '';
+                textToCopy += `${type}\t${value}\t${ttl}\n`;
+            });
+            
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => showStatus('Results copied to clipboard!', 'success'))
+                .catch(() => showStatus('Failed to copy results', 'error'));
+        }
+        
+        function clearResults() {
+            domainInput.value = '';
+            recordsDisplay.style.display = 'none';
+            emptyState.style.display = 'block';
+            showStatus('Results cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

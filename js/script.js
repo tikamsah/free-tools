@@ -23,15 +23,3 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-61PG9HQVB4');
-
-
-function includeLayout(url,layout) {
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById(layout).innerHTML = html;
-        })
-        .catch(error => console.error('Error fetching layout:', error));
-}
-includeLayout('https://it-tools.nepexo.com/footer.html','footerContainer');
-
