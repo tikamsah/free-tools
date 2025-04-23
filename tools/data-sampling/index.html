@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Sampling Tool - Extract Samples from Datasets | IT Tools</title>
+    <meta name="description" content="Extract random samples from your JSON or CSV data. Perfect for creating test datasets and analyzing large data files.">
+    <meta name="keywords" content="data sampling, random sample, dataset extractor, JSON sampler, CSV sampler">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #data-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #data-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* File upload */
+        .file-upload {
+            margin: 15px 0;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-upload-label:hover {
+            background: #e5e7eb;
+        }
+        
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+        
+        #file-upload {
+            display: none;
+        }
+        
+        /* Sampling options */
+        .sampling-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .option-group {
+            margin-bottom: 10px;
+        }
+        
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        
+        .option-group select, 
+        .option-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* Data preview */
+        .data-preview {
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        
+        .preview-table th {
+            background: #f3f4f6;
+            text-align: left;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+        }
+        
+        .preview-table td {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            word-break: break-word;
+        }
+        
+        .preview-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .stat-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .sampling-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Data Sampling Tool</h1>
+            <p>Extract random samples from your JSON or CSV data</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter or Upload Data</h3>
+                
+                <textarea id="data-input" placeholder='[
+  {"id": 1, "name": "John", "age": 30, "city": "New York"},
+  {"id": 2, "name": "Jane", "age": 25, "city": "Los Angeles"},
+  {"id": 3, "name": "Bob", "age": 35, "city": "Chicago"},
+  {"id": 4, "name": "Alice", "age": 28, "city": "San Francisco"},
+  {"id": 5, "name": "Charlie", "age": 40, "city": "Seattle"}
+]'></textarea>
+                
+                <div class="file-upload">
+                    <label for="file-upload" class="file-upload-label">
+                        <i class="fas fa-file-upload"></i> Upload JSON/CSV File
+                    </label>
+                    <input type="file" id="file-upload" accept=".json,.csv,application/json,text/csv">
+                </div>
+                
+                <div class="sampling-options">
+                    <div class="option-group">
+                        <label for="sample-type">Sample Type</label>
+                        <select id="sample-type">
+                            <option value="random">Random Sample</option>
+                            <option value="first">First N Items</option>
+                            <option value="last">Last N Items</option>
+                            <option value="stratified">Stratified Sample</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="sample-size">Sample Size</label>
+                        <select id="sample-size-type">
+                            <option value="count">Number of Items</option>
+                            <option value="percentage">Percentage</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="sample-value" id="sample-value-label">Items to Extract</label>
+                        <input type="number" id="sample-value" min="1" value="3">
+                    </div>
+                    
+                    <div class="option-group" id="stratify-group" style="display: none;">
+                        <label for="stratify-field">Stratify By Field</label>
+                        <select id="stratify-field">
+                            <option value="">Select field...</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="action-buttons-row">
+                    <button id="sample-btn" class="tool-button">
+                        <span id="sample-btn-text">Extract Sample</span>
+                        <span id="sample-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="copy-btn" class="tool-button secondary">
+                        <i class="fas fa-copy"></i> Copy Sample
+                    </button>
+                    <button id="download-btn" class="tool-button secondary">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Sample Results</h3>
+                    <div class="action-buttons">
+                        <button class="tool-button secondary" id="toggle-stats-btn">
+                            <i class="fas fa-chart-bar"></i> Toggle Stats
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="stats-display" style="display: none;">
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h4>Original Size</h4>
+                                <p id="original-size">0 items</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Sample Size</h4>
+                                <p id="sample-size">0 items</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Sample Type</h4>
+                                <p id="sample-type-used">-</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Fields</h4>
+                                <p id="field-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="data-preview" class="data-preview" style="display: none;">
+                        <table class="preview-table" id="preview-table">
+                            <!-- Sample data will be populated here -->
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-database"></i>
+                        <p>No sample extracted yet. Enter data and click "Extract Sample".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this Data Sampling Tool:</h3>
+                <ul>
+                    <li>Paste your JSON array or upload a JSON/CSV file</li>
+                    <li>Select the sampling method and size</li>
+                    <li>Click <strong>Extract Sample</strong> to generate your sample</li>
+                    <li>Copy or download the sample data</li>
+                    <li>Toggle statistics to see sampling details</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>Sampling Methods Explained:</h3>
+                <ul>
+                    <li><strong>Random Sample</strong>: Selects items randomly from the dataset</li>
+                    <li><strong>First N Items</strong>: Takes the first N items from the dataset</li>
+                    <li><strong>Last N Items</strong>: Takes the last N items from the dataset</li>
+                    <li><strong>Stratified Sample</strong>: Ensures representation from different groups based on a field</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        // DOM elements
+        const dataInput = document.getElementById('data-input');
+        const fileUpload = document.getElementById('file-upload');
+        const sampleType = document.getElementById('sample-type');
+        const sampleSizeType = document.getElementById('sample-size-type');
+        const sampleValue = document.getElementById('sample-value');
+        const sampleValueLabel = document.getElementById('sample-value-label');
+        const stratifyGroup = document.getElementById('stratify-group');
+        const stratifyField = document.getElementById('stratify-field');
+        const sampleBtn = document.getElementById('sample-btn');
+        const sampleBtnText = document.getElementById('sample-btn-text');
+        const sampleBtnLoader = document.getElementById('sample-btn-loader');
+        const copyBtn = document.getElementById('copy-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const toggleStatsBtn = document.getElementById('toggle-stats-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const dataPreview = document.getElementById('data-preview');
+        const previewTable = document.getElementById('preview-table');
+        const emptyState = document.getElementById('empty-state');
+        const statsDisplay = document.getElementById('stats-display');
+        const originalSize = document.getElementById('original-size');
+        const sampleSize = document.getElementById('sample-size');
+        const sampleTypeUsed = document.getElementById('sample-type-used');
+        const fieldCount = document.getElementById('field-count');
+        
+        // Current data state
+        let originalData = [];
+        let sampledData = [];
+        let dataFields = [];
+        
+        // Event listeners
+        sampleBtn.addEventListener('click', extractSample);
+        copyBtn.addEventListener('click', copySample);
+        downloadBtn.addEventListener('click', downloadSample);
+        clearBtn.addEventListener('click', clearAll);
+        toggleStatsBtn.addEventListener('click', toggleStats);
+        fileUpload.addEventListener('change', handleFileUpload);
+        sampleType.addEventListener('change', updateSampleUI);
+        sampleSizeType.addEventListener('change', updateSampleValueLabel);
+        
+        // Initialize
+        updateSampleValueLabel();
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                dataInput.value = e.target.result;
+                showStatus('File loaded successfully!', 'success');
+            };
+            reader.readAsText(file);
+        }
+        
+        function updateSampleUI() {
+            // Show/hide stratify field based on sample type
+            if (sampleType.value === 'stratified') {
+                stratifyGroup.style.display = 'block';
+            } else {
+                stratifyGroup.style.display = 'none';
+            }
+        }
+        
+        function updateSampleValueLabel() {
+            if (sampleSizeType.value === 'percentage') {
+                sampleValueLabel.textContent = 'Percentage to Extract';
+                sampleValue.min = 1;
+                sampleValue.max = 100;
+                sampleValue.value = Math.min(100, Math.max(1, sampleValue.value));
+            } else {
+                sampleValueLabel.textContent = 'Items to Extract';
+                sampleValue.min = 1;
+                sampleValue.max = '';
+            }
+        }
+        
+        function extractSample() {
+            const dataString = dataInput.value.trim();
+            
+            if (!dataString) {
+                showStatus('Please enter some data', 'error');
+                return;
+            }
+            
+            // Show loading state
+            sampleBtn.disabled = true;
+            sampleBtnText.style.display = 'none';
+            sampleBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Parse the input data
+                    parseInputData(dataString);
+                    
+                    // Get sample parameters
+                    const type = sampleType.value;
+                    const sizeType = sampleSizeType.value;
+                    let sizeValue = parseInt(sampleValue.value);
+                    
+                    if (isNaN(sizeValue)) {
+                        throw new Error('Please enter a valid sample size');
+                    }
+                    
+                    // Calculate actual sample size
+                    let sampleCount;
+                    if (sizeType === 'percentage') {
+                        sizeValue = Math.min(100, Math.max(1, sizeValue));
+                        sampleCount = Math.max(1, Math.floor(originalData.length * (sizeValue / 100)));
+                    } else {
+                        sampleCount = Math.min(originalData.length, Math.max(1, sizeValue));
+                    }
+                    
+                    // Extract sample based on type
+                    switch (type) {
+                        case 'random':
+                            sampledData = getRandomSample(originalData, sampleCount);
+                            break;
+                        case 'first':
+                            sampledData = originalData.slice(0, sampleCount);
+                            break;
+                        case 'last':
+                            sampledData = originalData.slice(-sampleCount);
+                            break;
+                        case 'stratified':
+                            if (!stratifyField.value) {
+                                throw new Error('Please select a field to stratify by');
+                            }
+                            sampledData = getStratifiedSample(originalData, sampleCount, stratifyField.value);
+                            break;
+                    }
+                    
+                    // Update UI with results
+                    displaySampleResults();
+                    updateStats(type, sizeType, sizeValue);
+                    
+                    showStatus(`Extracted ${sampledData.length} items successfully!`, 'success');
+                    
+                } catch (error) {
+                    showStatus('Error extracting sample: ' + error.message, 'error');
+                    console.error('Error extracting sample:', error);
+                } finally {
+                    sampleBtn.disabled = false;
+                    sampleBtnText.style.display = 'inline-block';
+                    sampleBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function parseInputData(dataString) {
+            try {
+                // Try to parse as JSON
+                const jsonData = JSON.parse(dataString);
+                originalData = Array.isArray(jsonData) ? jsonData : [jsonData];
+                
+                // Get all unique field names from the data
+                const fieldSet = new Set();
+                originalData.forEach(item => {
+                    Object.keys(item).forEach(key => fieldSet.add(key));
+                });
+                
+                dataFields = Array.from(fieldSet);
+                
+                // Update stratify field options
+                stratifyField.innerHTML = '<option value="">Select field...</option>';
+                dataFields.forEach(field => {
+                    stratifyField.innerHTML += `<option value="${field}">${field}</option>`;
+                });
+                
+            } catch (jsonError) {
+                // If not JSON, try as CSV
+                try {
+                    originalData = parseCSV(dataString);
+                    
+                    // Get fields from CSV (first row is headers)
+                    if (originalData.length > 0) {
+                        dataFields = Object.keys(originalData[0]);
+                        
+                        // Update stratify field options
+                        stratifyField.innerHTML = '<option value="">Select field...</option>';
+                        dataFields.forEach(field => {
+                            stratifyField.innerHTML += `<option value="${field}">${field}</option>`;
+                        });
+                    }
+                } catch (csvError) {
+                    throw new Error('Invalid data format. Please provide valid JSON array or CSV.');
+                }
+            }
+            
+            if (originalData.length === 0) {
+                throw new Error('No data found in input');
+            }
+        }
+        
+        function parseCSV(csvString) {
+            const lines = csvString.split(/\r?\n/).filter(line => line.trim() !== '');
+            if (lines.length < 2) throw new Error('CSV needs at least header row and one data row');
+            
+            const headers = lines[0].split(',').map(h => h.trim());
+            const result = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const row = {};
+                
+                for (let j = 0; j < headers.length; j++) {
+                    if (j < values.length) {
+                        // Try to parse numbers
+                        const numValue = Number(values[j]);
+                        row[headers[j]] = isNaN(numValue) ? values[j].trim() : numValue;
+                    } else {
+                        row[headers[j]] = '';
+                    }
+                }
+                
+                result.push(row);
+            }
+            
+            return result;
+        }
+        
+        function getRandomSample(data, count) {
+            // Create a copy of the array to avoid modifying the original
+            const shuffled = [...data];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled.slice(0, count);
+        }
+        
+        function getStratifiedSample(data, count, field) {
+            // Group data by the stratify field
+            const groups = {};
+            data.forEach(item => {
+                const key = item[field] !== undefined ? item[field] : 'undefined';
+                if (!groups[key]) {
+                    groups[key] = [];
+                }
+                groups[key].push(item);
+            });
+            
+            // Calculate how many items to take from each group
+            const groupKeys = Object.keys(groups);
+            const samplePerGroup = Math.max(1, Math.floor(count / groupKeys.length));
+            const result = [];
+            
+            // Take samples from each group
+            groupKeys.forEach(key => {
+                const group = groups[key];
+                const groupSample = getRandomSample(group, Math.min(samplePerGroup, group.length));
+                result.push(...groupSample);
+            });
+            
+            // If we didn't get enough items, add more random ones
+            if (result.length < count) {
+                const remaining = count - result.length;
+                const extraSample = getRandomSample(data.filter(item => 
+                    !result.includes(item)
+                ), remaining);
+                result.push(...extraSample);
+            }
+            
+            return result.slice(0, count);
+        }
+        
+        function displaySampleResults() {
+            if (sampledData.length === 0) {
+                dataPreview.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            // Build table header
+            let tableHtml = '<thead><tr>';
+            
+            // Include index column
+            tableHtml += '<th>#</th>';
+            
+            // Add headers for each field
+            dataFields.forEach(field => {
+                tableHtml += `<th>${escapeHtml(field)}</th>`;
+            });
+            
+            tableHtml += '</tr></thead><tbody>';
+            
+            // Build table rows
+            sampledData.forEach((item, index) => {
+                tableHtml += '<tr>';
+                
+                // Add index
+                tableHtml += `<td>${index + 1}</td>`;
+                
+                // Add values for each field
+                dataFields.forEach(field => {
+                    const value = item[field];
+                    tableHtml += '<td>';
+                    
+                    if (value === undefined || value === null) {
+                        tableHtml += '<em>null</em>';
+                    } else if (typeof value === 'object') {
+                        tableHtml += escapeHtml(JSON.stringify(value));
+                    } else {
+                        tableHtml += escapeHtml(value.toString());
+                    }
+                    
+                    tableHtml += '</td>';
+                });
+                
+                tableHtml += '</tr>';
+            });
+            
+            tableHtml += '</tbody>';
+            previewTable.innerHTML = tableHtml;
+            
+            // Show results
+            dataPreview.style.display = 'block';
+            emptyState.style.display = 'none';
+        }
+        
+        function updateStats(type, sizeType, sizeValue) {
+            originalSize.textContent = `${originalData.length} items`;
+            sampleSize.textContent = `${sampledData.length} items`;
+            
+            let typeText = '';
+            switch (type) {
+                case 'random': typeText = 'Random Sample'; break;
+                case 'first': typeText = 'First N Items'; break;
+                case 'last': typeText = 'Last N Items'; break;
+                case 'stratified': typeText = `Stratified by ${stratifyField.value}`; break;
+            }
+            
+            if (sizeType === 'percentage') {
+                typeText += ` (${sizeValue}%)`;
+            } else {
+                typeText += ` (${sizeValue} items)`;
+            }
+            
+            sampleTypeUsed.textContent = typeText;
+            fieldCount.textContent = dataFields.length;
+        }
+        
+        function copySample() {
+            if (sampledData.length === 0) {
+                showStatus('No sample to copy', 'error');
+                return;
+            }
+            
+            try {
+                const jsonString = JSON.stringify(sampledData, null, 2);
+                navigator.clipboard.writeText(jsonString);
+                showStatus('Sample copied to clipboard as JSON!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy sample', 'error');
+            }
+        }
+        
+        function downloadSample() {
+            if (sampledData.length === 0) {
+                showStatus('No sample to download', 'error');
+                return;
+            }
+            
+            try {
+                const jsonString = JSON.stringify(sampledData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'data-sample.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showStatus('Sample downloaded as JSON!', 'success');
+            } catch (error) {
+                showStatus('Error downloading sample', 'error');
+            }
+        }
+        
+        function clearAll() {
+            dataInput.value = '';
+            previewTable.innerHTML = '';
+            dataPreview.style.display = 'none';
+            emptyState.style.display = 'block';
+            statsDisplay.style.display = 'none';
+            originalData = [];
+            sampledData = [];
+            dataFields = [];
+            showStatus('Cleared all data!', 'success');
+        }
+        
+        function toggleStats() {
+            statsDisplay.style.display = statsDisplay.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function escapeHtml(unsafe) {
+            if (unsafe === undefined || unsafe === null) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
