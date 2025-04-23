@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML to Schema Converter - Generate XSD from XML | IT Tools</title>
+    <meta name="description" content="Convert XML documents to XSD schemas automatically. Perfect for developers working with XML data structures.">
+    <meta name="keywords" content="XML to XSD, schema generator, XML schema, XSD converter, XML tools">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #xml-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #xml-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* File upload */
+        .file-upload {
+            margin: 15px 0;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-upload-label:hover {
+            background: #e5e7eb;
+        }
+        
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+        
+        #file-upload {
+            display: none;
+        }
+        
+        /* Schema options */
+        .schema-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .option-group {
+            margin-bottom: 10px;
+        }
+        
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        
+        .option-group select, 
+        .option-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* Schema output */
+        #schema-output {
+            width: 100%;
+            min-height: 300px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            background-color: #f8fafc;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .stat-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .schema-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>XML to Schema Converter</h1>
+            <p>Generate XSD schemas from XML documents automatically</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter or Upload XML</h3>
+                
+                <textarea id="xml-input" placeholder='<catalog>
+  <book id="bk101">
+    <author>Gambardella, Matthew</author>
+    <title>XML Developer\'s Guide</title>
+    <genre>Computer</genre>
+    <price>44.95</price>
+    <publish_date>2000-10-01</publish_date>
+    <description>An in-depth look at creating applications with XML.</description>
+  </book>
+  <book id="bk102">
+    <author>Ralls, Kim</author>
+    <title>Midnight Rain</title>
+    <genre>Fantasy</genre>
+    <price>5.95</price>
+    <publish_date>2000-12-16</publish_date>
+    <description>A former architect battles corporate zombies.</description>
+  </book>
+</catalog>'></textarea>
+                
+                <div class="file-upload">
+                    <label for="file-upload" class="file-upload-label">
+                        <i class="fas fa-file-upload"></i> Upload XML File
+                    </label>
+                    <input type="file" id="file-upload" accept=".xml,application/xml,text/xml">
+                </div>
+                
+                <div class="schema-options">
+                    <div class="option-group">
+                        <label for="schema-version">Schema Version</label>
+                        <select id="schema-version">
+                            <option value="1.0">XSD 1.0</option>
+                            <option value="1.1">XSD 1.1</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="element-form">Element Form Default</label>
+                        <select id="element-form">
+                            <option value="qualified">qualified</option>
+                            <option value="unqualified">unqualified</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="attribute-form">Attribute Form Default</label>
+                        <select id="attribute-form">
+                            <option value="unqualified">unqualified</option>
+                            <option value="qualified">qualified</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="target-namespace">Target Namespace</label>
+                        <input type="text" id="target-namespace" placeholder="http://example.com/namespace">
+                    </div>
+                </div>
+                
+                <div class="action-buttons-row">
+                    <button id="convert-btn" class="tool-button">
+                        <span id="convert-btn-text">Generate Schema</span>
+                        <span id="convert-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="copy-btn" class="tool-button secondary">
+                        <i class="fas fa-copy"></i> Copy Schema
+                    </button>
+                    <button id="download-btn" class="tool-button secondary">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Generated XSD Schema</h3>
+                    <div class="action-buttons">
+                        <button class="tool-button secondary" id="toggle-stats-btn">
+                            <i class="fas fa-chart-bar"></i> Toggle Stats
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="stats-display" style="display: none;">
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h4>Elements</h4>
+                                <p id="element-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Attributes</h4>
+                                <p id="attribute-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Complex Types</h4>
+                                <p id="complex-type-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Simple Types</h4>
+                                <p id="simple-type-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <pre id="schema-output"><!-- Generated schema will appear here --></pre>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-code"></i>
+                        <p>No schema generated yet. Enter XML and click "Generate Schema".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this XML to Schema Converter:</h3>
+                <ul>
+                    <li>Paste your XML document or upload an XML file</li>
+                    <li>Configure schema generation options as needed</li>
+                    <li>Click <strong>Generate Schema</strong> to create the XSD</li>
+                    <li>Copy or download the generated schema</li>
+                    <li>Toggle statistics to see schema details</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About XML Schemas (XSD):</h3>
+                <ul>
+                    <li>XSD defines the structure and data types for XML documents</li>
+                    <li>Schemas are used to validate XML documents</li>
+                    <li>Supports complex data structures and constraints</li>
+                    <li>Provides better data validation than DTDs</li>
+                    <li>Widely used in web services and data exchange</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your XML data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        // DOM elements
+        const xmlInput = document.getElementById('xml-input');
+        const fileUpload = document.getElementById('file-upload');
+        const schemaVersion = document.getElementById('schema-version');
+        const elementForm = document.getElementById('element-form');
+        const attributeForm = document.getElementById('attribute-form');
+        const targetNamespace = document.getElementById('target-namespace');
+        const convertBtn = document.getElementById('convert-btn');
+        const convertBtnText = document.getElementById('convert-btn-text');
+        const convertBtnLoader = document.getElementById('convert-btn-loader');
+        const copyBtn = document.getElementById('copy-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const toggleStatsBtn = document.getElementById('toggle-stats-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const schemaOutput = document.getElementById('schema-output');
+        const emptyState = document.getElementById('empty-state');
+        const statsDisplay = document.getElementById('stats-display');
+        const elementCount = document.getElementById('element-count');
+        const attributeCount = document.getElementById('attribute-count');
+        const complexTypeCount = document.getElementById('complex-type-count');
+        const simpleTypeCount = document.getElementById('simple-type-count');
+        
+        // Event listeners
+        convertBtn.addEventListener('click', generateSchema);
+        copyBtn.addEventListener('click', copySchema);
+        downloadBtn.addEventListener('click', downloadSchema);
+        clearBtn.addEventListener('click', clearAll);
+        toggleStatsBtn.addEventListener('click', toggleStats);
+        fileUpload.addEventListener('change', handleFileUpload);
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                xmlInput.value = e.target.result;
+                showStatus('XML file loaded successfully!', 'success');
+            };
+            reader.readAsText(file);
+        }
+        
+        function generateSchema() {
+            const xmlString = xmlInput.value.trim();
+            
+            if (!xmlString) {
+                showStatus('Please enter some XML data', 'error');
+                return;
+            }
+            
+            // Show loading state
+            convertBtn.disabled = true;
+            convertBtnText.style.display = 'none';
+            convertBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Parse XML
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+                    
+                    // Check for XML parsing errors
+                    const parserErrors = xmlDoc.getElementsByTagName("parsererror");
+                    if (parserErrors.length > 0) {
+                        throw new Error('Invalid XML: ' + parserErrors[0].textContent);
+                    }
+                    
+                    // Generate schema
+                    const schema = generateXsdSchema(xmlDoc);
+                    
+                    // Update UI with results
+                    schemaOutput.textContent = schema.xsd;
+                    emptyState.style.display = 'none';
+                    
+                    // Update stats
+                    elementCount.textContent = schema.stats.elements;
+                    attributeCount.textContent = schema.stats.attributes;
+                    complexTypeCount.textContent = schema.stats.complexTypes;
+                    simpleTypeCount.textContent = schema.stats.simpleTypes;
+                    
+                    showStatus('XSD schema generated successfully!', 'success');
+                    
+                } catch (error) {
+                    showStatus('Error generating schema: ' + error.message, 'error');
+                    console.error('Error generating schema:', error);
+                } finally {
+                    convertBtn.disabled = false;
+                    convertBtnText.style.display = 'inline-block';
+                    convertBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function generateXsdSchema(xmlDoc) {
+            const rootElement = xmlDoc.documentElement;
+            const elements = new Set();
+            const attributes = new Set();
+            let complexTypes = 0;
+            let simpleTypes = 0;
+            
+            // Analyze XML structure
+            function analyzeNode(node) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    elements.add(node.tagName);
+                    
+                    // Count attributes
+                    for (let i = 0; i < node.attributes.length; i++) {
+                        attributes.add(node.attributes[i].name);
+                    }
+                    
+                    // Check if complex type (has child elements)
+                    if (node.children.length > 0) {
+                        complexTypes++;
+                    } else if (node.textContent.trim() !== '') {
+                        simpleTypes++;
+                    }
+                    
+                    // Process child nodes
+                    for (let i = 0; i < node.children.length; i++) {
+                        analyzeNode(node.children[i]);
+                    }
+                }
+            }
+            
+            analyzeNode(rootElement);
+            
+            // Generate XSD
+            const version = schemaVersion.value;
+            const eForm = elementForm.value;
+            const aForm = attributeForm.value;
+            const tns = targetNamespace.value.trim();
+            
+            let xsd = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+            xsd += `<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" `;
+            
+            if (tns) {
+                xsd += `targetNamespace="${tns}" `;
+                xsd += `elementFormDefault="${eForm}" `;
+                xsd += `attributeFormDefault="${aForm}">\n\n`;
+            } else {
+                xsd += `elementFormDefault="${eForm}">\n\n`;
+            }
+            
+            // Generate element declarations
+            elements.forEach(element => {
+                xsd += `  <xs:element name="${element}" type="${element}Type"/>\n`;
+            });
+            
+            xsd += `\n`;
+            
+            // Generate complex types
+            if (complexTypes > 0) {
+                xsd += `  <!-- Complex type definitions -->\n`;
+                elements.forEach(element => {
+                    xsd += `  <xs:complexType name="${element}Type">\n`;
+                    xsd += `    <xs:sequence>\n`;
+                    // For simplicity, we assume all child elements are optional
+                    // In a real implementation, you'd analyze the actual structure
+                    xsd += `      <xs:element name="childElement" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>\n`;
+                    xsd += `    </xs:sequence>\n`;
+                    
+                    // Add attributes if any
+                    if (attributes.size > 0) {
+                        attributes.forEach(attr => {
+                            xsd += `    <xs:attribute name="${attr}" type="xs:string"/>\n`;
+                        });
+                    }
+                    
+                    xsd += `  </xs:complexType>\n\n`;
+                });
+            }
+            
+            // Close schema
+            xsd += `</xs:schema>`;
+            
+            return {
+                xsd: xsd,
+                stats: {
+                    elements: elements.size,
+                    attributes: attributes.size,
+                    complexTypes: complexTypes,
+                    simpleTypes: simpleTypes
+                }
+            };
+        }
+        
+        function copySchema() {
+            if (!schemaOutput.textContent) {
+                showStatus('No schema to copy', 'error');
+                return;
+            }
+            
+            try {
+                navigator.clipboard.writeText(schemaOutput.textContent);
+                showStatus('Schema copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy schema', 'error');
+            }
+        }
+        
+        function downloadSchema() {
+            if (!schemaOutput.textContent) {
+                showStatus('No schema to download', 'error');
+                return;
+            }
+            
+            try {
+                const blob = new Blob([schemaOutput.textContent], { type: 'application/xml' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'schema.xsd';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showStatus('Schema downloaded as XSD file!', 'success');
+            } catch (error) {
+                showStatus('Error downloading schema', 'error');
+            }
+        }
+        
+        function clearAll() {
+            xmlInput.value = '';
+            schemaOutput.textContent = '';
+            emptyState.style.display = 'block';
+            statsDisplay.style.display = 'none';
+            showStatus('Cleared all data!', 'success');
+        }
+        
+        function toggleStats() {
+            statsDisplay.style.display = statsDisplay.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
