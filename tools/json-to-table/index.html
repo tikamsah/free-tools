@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to Table Converter - Visualize JSON as HTML Table | IT Tools</title>
+    <meta name="description" content="Convert JSON data to HTML tables instantly. Perfect for visualizing and analyzing JSON structures.">
+    <meta name="keywords" content="JSON to table, JSON visualizer, JSON converter, HTML table, JSON analyzer">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #json-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #json-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* File upload */
+        .file-upload {
+            margin: 15px 0;
+        }
+        
+        .file-upload-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-upload-label:hover {
+            background: #e5e7eb;
+        }
+        
+        .file-upload-label i {
+            margin-right: 8px;
+        }
+        
+        #file-upload {
+            display: none;
+        }
+        
+        /* Options */
+        .options-row {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results section */
+        .results-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .results-title {
+            margin: 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+        
+        /* JSON table */
+        .json-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+        
+        .json-table th {
+            background: #f3f4f6;
+            text-align: left;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+        }
+        
+        .json-table td {
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .json-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        .json-table .nested-cell {
+            padding: 0;
+        }
+        
+        .json-table .nested-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: -1px;
+        }
+        
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .stat-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #1e40af;
+            font-size: 0.9rem;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 40px 0;
+            width: 100%;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .options-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>JSON to Table Converter</h1>
+            <p>Convert JSON data to HTML tables instantly</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter or Upload JSON Data</h3>
+                
+                <textarea id="json-input" placeholder='[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "age": 30,
+    "active": true,
+    "address": {
+      "street": "123 Main St",
+      "city": "New York"
+    },
+    "skills": ["JavaScript", "HTML", "CSS"]
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "age": 25,
+    "active": false,
+    "address": {
+      "street": "456 Oak Ave",
+      "city": "Los Angeles"
+    },
+    "skills": ["Python", "SQL"]
+  }
+]'></textarea>
+                
+                <div class="file-upload">
+                    <label for="file-upload" class="file-upload-label">
+                        <i class="fas fa-file-upload"></i> Upload JSON File
+                    </label>
+                    <input type="file" id="file-upload" accept=".json,application/json">
+                </div>
+                
+                <div class="options-row">
+                    <div class="option-group">
+                        <input type="checkbox" id="flatten-nested" checked>
+                        <label for="flatten-nested">Flatten nested objects</label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <input type="checkbox" id="parse-arrays" checked>
+                        <label for="parse-arrays">Display arrays as strings</label>
+                    </div>
+                    
+                    <div class="option-group">
+                        <input type="checkbox" id="include-index">
+                        <label for="include-index">Include row index</label>
+                    </div>
+                </div>
+                
+                <div class="action-buttons-row">
+                    <button id="convert-btn" class="tool-button">
+                        <span id="convert-btn-text">Convert to Table</span>
+                        <span id="convert-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="copy-btn" class="tool-button secondary">
+                        <i class="fas fa-copy"></i> Copy Table
+                    </button>
+                    <button id="download-btn" class="tool-button secondary">
+                        <i class="fas fa-download"></i> Download HTML
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <h3 class="results-title">Table Output</h3>
+                    <div class="action-buttons">
+                        <button class="tool-button secondary" id="toggle-stats-btn">
+                            <i class="fas fa-chart-bar"></i> Toggle Stats
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results-content">
+                    <div id="stats-display" style="display: none;">
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <h4>Rows</h4>
+                                <p id="row-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Columns</h4>
+                                <p id="column-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Nested Objects</h4>
+                                <p id="nested-count">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Arrays</h4>
+                                <p id="array-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="table-container" style="display: none;">
+                        <table class="json-table" id="json-table">
+                            <!-- JSON data will be populated here -->
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state">
+                        <i class="fas fa-table"></i>
+                        <p>No JSON data converted yet. Enter JSON and click "Convert to Table".</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this JSON to Table Converter:</h3>
+                <ul>
+                    <li>Paste your JSON data or upload a JSON file</li>
+                    <li>Configure options for nested objects and arrays</li>
+                    <li>Click <strong>Convert to Table</strong> to view your data</li>
+                    <li>Copy the table or download as HTML</li>
+                    <li>Toggle statistics to see data insights</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>Supported JSON Formats:</h3>
+                <ul>
+                    <li><strong>Array of objects</strong>: Most common format for tabular data</li>
+                    <li><strong>Single object</strong>: Will be displayed as a single row</li>
+                    <li><strong>Nested objects</strong>: Can be flattened or displayed as nested tables</li>
+                    <li><strong>Arrays</strong>: Can be displayed as strings or expanded</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your JSON data never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script>
+        // DOM elements
+        const jsonInput = document.getElementById('json-input');
+        const fileUpload = document.getElementById('file-upload');
+        const flattenNested = document.getElementById('flatten-nested');
+        const parseArrays = document.getElementById('parse-arrays');
+        const includeIndex = document.getElementById('include-index');
+        const convertBtn = document.getElementById('convert-btn');
+        const convertBtnText = document.getElementById('convert-btn-text');
+        const convertBtnLoader = document.getElementById('convert-btn-loader');
+        const copyBtn = document.getElementById('copy-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const toggleStatsBtn = document.getElementById('toggle-stats-btn');
+        const statsDisplay = document.getElementById('stats-display');
+        const tableContainer = document.getElementById('table-container');
+        const jsonTable = document.getElementById('json-table');
+        const rowCount = document.getElementById('row-count');
+        const columnCount = document.getElementById('column-count');
+        const nestedCount = document.getElementById('nested-count');
+        const arrayCount = document.getElementById('array-count');
+        const statusMessage = document.getElementById('statusMessage');
+        const emptyState = document.getElementById('empty-state');
+        
+        // Event listeners
+        convertBtn.addEventListener('click', convertJsonToTable);
+        copyBtn.addEventListener('click', copyTable);
+        downloadBtn.addEventListener('click', downloadHtml);
+        clearBtn.addEventListener('click', clearAll);
+        toggleStatsBtn.addEventListener('click', toggleStats);
+        fileUpload.addEventListener('change', handleFileUpload);
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                jsonInput.value = e.target.result;
+                showStatus('JSON file loaded successfully!', 'success');
+            };
+            reader.readAsText(file);
+        }
+        
+        function convertJsonToTable() {
+            const jsonString = jsonInput.value.trim();
+            
+            if (!jsonString) {
+                showStatus('Please enter some JSON data', 'error');
+                return;
+            }
+            
+            // Show loading state
+            convertBtn.disabled = true;
+            convertBtnText.style.display = 'none';
+            convertBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(() => {
+                try {
+                    // Parse JSON
+                    const jsonData = JSON.parse(jsonString);
+                    
+                    // Convert to array if single object
+                    const dataArray = Array.isArray(jsonData) ? jsonData : [jsonData];
+                    
+                    // Generate table
+                    const { tableHtml, stats } = generateTableFromJson(dataArray);
+                    
+                    // Update table display
+                    jsonTable.innerHTML = tableHtml;
+                    
+                    // Update stats
+                    rowCount.textContent = stats.rows;
+                    columnCount.textContent = stats.columns;
+                    nestedCount.textContent = stats.nestedObjects;
+                    arrayCount.textContent = stats.arrays;
+                    
+                    // Show results
+                    tableContainer.style.display = 'block';
+                    emptyState.style.display = 'none';
+                    
+                    showStatus('JSON converted to table successfully!', 'success');
+                    
+                } catch (error) {
+                    showStatus('Error converting JSON: ' + error.message, 'error');
+                    console.error('Error converting JSON:', error);
+                } finally {
+                    convertBtn.disabled = false;
+                    convertBtnText.style.display = 'inline-block';
+                    convertBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function generateTableFromJson(data) {
+            if (!data || data.length === 0) {
+                return { tableHtml: '', stats: { rows: 0, columns: 0, nestedObjects: 0, arrays: 0 } };
+            }
+            
+            // Collect all unique keys (columns)
+            const allKeys = new Set();
+            let nestedObjects = 0;
+            let arrays = 0;
+            
+            data.forEach(item => {
+                Object.keys(item).forEach(key => {
+                    allKeys.add(key);
+                    const value = item[key];
+                    
+                    if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+                        nestedObjects++;
+                    } else if (Array.isArray(value)) {
+                        arrays++;
+                    }
+                });
+            });
+            
+            // Include index if needed
+            if (includeIndex.checked) {
+                allKeys.add('_index');
+            }
+            
+            const keys = Array.from(allKeys);
+            
+            // Build table header
+            let tableHtml = '<thead><tr>';
+            
+            if (includeIndex.checked) {
+                tableHtml += '<th>#</th>';
+            }
+            
+            keys.forEach(key => {
+                if (key !== '_index') {
+                    tableHtml += `<th>${escapeHtml(key)}</th>`;
+                }
+            });
+            
+            tableHtml += '</tr></thead><tbody>';
+            
+            // Build table rows
+            data.forEach((item, index) => {
+                tableHtml += '<tr>';
+                
+                if (includeIndex.checked) {
+                    tableHtml += `<td>${index + 1}</td>`;
+                }
+                
+                keys.forEach(key => {
+                    if (key === '_index') return;
+                    
+                    const value = item[key];
+                    tableHtml += '<td>';
+                    
+                    if (value === undefined || value === null) {
+                        tableHtml += '<em>null</em>';
+                    } else if (typeof value === 'object' && !Array.isArray(value)) {
+                        // Nested object
+                        if (flattenNested.checked) {
+                            tableHtml += flattenObject(value);
+                        } else {
+                            tableHtml += createNestedTable(value);
+                        }
+                    } else if (Array.isArray(value)) {
+                        // Array
+                        if (parseArrays.checked) {
+                            tableHtml += escapeHtml(JSON.stringify(value));
+                        } else {
+                            tableHtml += createArrayList(value);
+                        }
+                    } else if (typeof value === 'boolean') {
+                        tableHtml += `<span class="badge ${value ? 'badge-success' : 'badge-danger'}">${value.toString()}</span>`;
+                    } else {
+                        tableHtml += escapeHtml(value.toString());
+                    }
+                    
+                    tableHtml += '</td>';
+                });
+                
+                tableHtml += '</tr>';
+            });
+            
+            tableHtml += '</tbody>';
+            
+            return {
+                tableHtml,
+                stats: {
+                    rows: data.length,
+                    columns: keys.length - (includeIndex.checked ? 1 : 0),
+                    nestedObjects,
+                    arrays
+                }
+            };
+        }
+        
+        function flattenObject(obj) {
+            if (!obj) return '';
+            
+            let result = '';
+            const entries = Object.entries(obj);
+            
+            entries.forEach(([key, value], index) => {
+                result += `<strong>${escapeHtml(key)}</strong>: `;
+                
+                if (value === null || value === undefined) {
+                    result += '<em>null</em>';
+                } else if (typeof value === 'object') {
+                    result += escapeHtml(JSON.stringify(value));
+                } else {
+                    result += escapeHtml(value.toString());
+                }
+                
+                if (index < entries.length - 1) {
+                    result += '<br>';
+                }
+            });
+            
+            return result;
+        }
+        
+        function createNestedTable(obj) {
+            if (!obj) return '';
+            
+            const entries = Object.entries(obj);
+            if (entries.length === 0) return '<em>empty</em>';
+            
+            let tableHtml = '<table class="nested-table"><tbody>';
+            
+            entries.forEach(([key, value]) => {
+                tableHtml += '<tr>';
+                tableHtml += `<td><strong>${escapeHtml(key)}</strong></td>`;
+                tableHtml += '<td>';
+                
+                if (value === null || value === undefined) {
+                    tableHtml += '<em>null</em>';
+                } else if (typeof value === 'object' && !Array.isArray(value)) {
+                    tableHtml += createNestedTable(value);
+                } else if (Array.isArray(value)) {
+                    tableHtml += createArrayList(value);
+                } else {
+                    tableHtml += escapeHtml(value.toString());
+                }
+                
+                tableHtml += '</td>';
+                tableHtml += '</tr>';
+            });
+            
+            tableHtml += '</tbody></table>';
+            return tableHtml;
+        }
+        
+        function createArrayList(arr) {
+            if (!arr || arr.length === 0) return '<em>empty</em>';
+            
+            let listHtml = '<ul style="margin: 0; padding-left: 20px;">';
+            
+            arr.forEach(item => {
+                listHtml += '<li>';
+                
+                if (item === null || item === undefined) {
+                    listHtml += '<em>null</em>';
+                } else if (typeof item === 'object') {
+                    listHtml += createNestedTable(item);
+                } else {
+                    listHtml += escapeHtml(item.toString());
+                }
+                
+                listHtml += '</li>';
+            });
+            
+            listHtml += '</ul>';
+            return listHtml;
+        }
+        
+        function copyTable() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No table to copy', 'error');
+                return;
+            }
+            
+            try {
+                const range = document.createRange();
+                range.selectNode(jsonTable);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+                
+                showStatus('Table copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy table', 'error');
+            }
+        }
+        
+        function downloadHtml() {
+            if (emptyState.style.display !== 'none') {
+                showStatus('No table to download', 'error');
+                return;
+            }
+            
+            try {
+                const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Table Export</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    ${jsonTable.outerHTML}
+</body>
+</html>`;
+                
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'json-table.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showStatus('HTML table downloaded!', 'success');
+            } catch (error) {
+                showStatus('Error downloading HTML', 'error');
+            }
+        }
+        
+        function clearAll() {
+            jsonInput.value = '';
+            jsonTable.innerHTML = '';
+            tableContainer.style.display = 'none';
+            emptyState.style.display = 'block';
+            statsDisplay.style.display = 'none';
+            showStatus('Cleared all data!', 'success');
+        }
+        
+        function toggleStats() {
+            statsDisplay.style.display = statsDisplay.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function escapeHtml(unsafe) {
+            if (unsafe === undefined || unsafe === null) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
