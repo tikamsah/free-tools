@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Reverser Tool - Reverse Text Online | IT Tools</title>
+    <meta name="description" content="Reverse any string or text online. Simple tool to flip text backwards instantly.">
+    <meta name="keywords" content="string reverser, text reverser, reverse text, flip text, backward text">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        /* Main container styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        /* Header styling */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Input section */
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .input-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #text-input, #output-text {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        #text-input:focus, #output-text:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Action buttons */
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Status message */
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        /* Privacy note */
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        /* Output section */
+        .output-group {
+            background: #f9fafb;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>String Reverser Tool</h1>
+            <p>Reverse any string or text instantly with this online tool</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="input-group">
+                <h3>Enter Your Text</h3>
+                
+                <textarea id="text-input" placeholder="Type or paste your text here to reverse it...">Hello World! This tool reverses any text you enter.</textarea>
+                
+                <div class="action-buttons-row">
+                    <button id="reverse-btn" class="tool-button">
+                        <span id="reverse-btn-text">Reverse Text</span>
+                        <span id="reverse-btn-loader" class="loading" style="display: none;"></span>
+                    </button>
+                    <button id="copy-btn" class="tool-button secondary">
+                        <i class="fas fa-copy"></i> Copy Reversed Text
+                    </button>
+                    <button id="clear-btn" class="tool-button secondary">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+            
+            <div class="output-group">
+                <h3>Reversed Text</h3>
+                <textarea id="output-text" placeholder="Your reversed text will appear here..." readonly></textarea>
+            </div>
+            
+            <div class="instructions">
+                <h3>How to use this String Reverser:</h3>
+                <ul>
+                    <li>Type or paste your text into the input box</li>
+                    <li>Click <strong>Reverse Text</strong> to flip your text backwards</li>
+                    <li>View the reversed text in the output box</li>
+                    <li>Copy the reversed text or clear the input as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About String Reversing:</h3>
+                <ul>
+                    <li><strong>Complete reversal</strong>: The entire string is reversed character by character</li>
+                    <li><strong>Preserves formatting</strong>: Line breaks and spacing are maintained in the reversed output</li>
+                    <li><strong>Unicode support</strong>: Works with all characters including emojis and special symbols</li>
+                    <li><strong>Instant processing</strong>: Reversing happens immediately as you type or click the button</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your text never leaves your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         gtag('config', 'G-61PG9HQVB4');
+     </script>
+     
+    <script>
+        // DOM elements
+        const textInput = document.getElementById('text-input');
+        const outputText = document.getElementById('output-text');
+        const reverseBtn = document.getElementById('reverse-btn');
+        const reverseBtnText = document.getElementById('reverse-btn-text');
+        const reverseBtnLoader = document.getElementById('reverse-btn-loader');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        // Event listeners
+        reverseBtn.addEventListener('click', reverseText);
+        copyBtn.addEventListener('click', copyReversedText);
+        clearBtn.addEventListener('click', clearAll);
+        textInput.addEventListener('input', reverseText);
+        
+        // Initial reverse
+        reverseText();
+        
+        function reverseText() {
+            const text = textInput.value;
+            
+            // Show loading state
+            reverseBtn.disabled = true;
+            reverseBtnText.style.display = 'none';
+            reverseBtnLoader.style.display = 'inline-block';
+            
+            // Use setTimeout to allow UI to update before processing
+            setTimeout(() => {
+                try {
+                    // Reverse the string
+                    const reversedText = text.split('').reverse().join('');
+                    
+                    // Update output
+                    outputText.value = reversedText;
+                    
+                    showStatus('Text reversed successfully!', 'success');
+                    
+                } catch (error) {
+                    showStatus('Error reversing text: ' + error.message, 'error');
+                    console.error('Error reversing text:', error);
+                } finally {
+                    reverseBtn.disabled = false;
+                    reverseBtnText.style.display = 'inline-block';
+                    reverseBtnLoader.style.display = 'none';
+                }
+            }, 100);
+        }
+        
+        function copyReversedText() {
+            if (!outputText.value.trim()) {
+                showStatus('No reversed text to copy', 'error');
+                return;
+            }
+            
+            try {
+                navigator.clipboard.writeText(outputText.value);
+                showStatus('Reversed text copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy reversed text', 'error');
+            }
+        }
+        
+        function clearAll() {
+            textInput.value = '';
+            outputText.value = '';
+            showStatus('Cleared all text!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
