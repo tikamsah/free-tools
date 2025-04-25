@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Preview | IT Tools</title>
+    <meta name="description" content="Live Markdown editor with real-time preview. Write Markdown and see the rendered output instantly.">
+    <meta name="keywords" content="markdown, preview, editor, live preview, markdown editor">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Markdown CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
+    
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .editor-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .editor-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-header {
+            background: white;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 16px;
+            border: 1px solid #e1e4e8;
+            border-bottom: none;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .editor-content {
+            flex: 1;
+            border: 1px solid #e1e4e8;
+            border-radius: 0 0 8px 8px;
+            background: white;
+            overflow: hidden;
+            position: relative;
+            min-height: 400px;
+        }
+        
+        .markdown-editor {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 16px;
+            resize: none;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.6;
+            tab-size: 4;
+            white-space: pre-wrap;
+            background-color: transparent;
+        }
+        
+        .markdown-editor:focus {
+            outline: none;
+        }
+        
+        .markdown-preview {
+            padding: 16px;
+            overflow-y: auto;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* GitHub Markdown styles */
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        .markdown-body pre {
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            padding: 16px;
+        }
+        
+        .markdown-body code {
+            font-family: 'Fira Code', monospace;
+            background-color: rgba(175, 184, 193, 0.2);
+            border-radius: 6px;
+            padding: 0.2em 0.4em;
+            font-size: 85%;
+        }
+        
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .editor-container {
+                flex-direction: column;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Markdown Preview</h1>
+            <p>Write Markdown in the editor and see the rendered output in real-time</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="editor-container">
+                <div class="editor-column">
+                    <div class="editor-header">Markdown Editor</div>
+                    <div class="editor-content">
+                        <textarea id="markdown-input" class="markdown-editor" spellcheck="false"># Welcome to Markdown Preview
+
+## This is a subheading
+
+Here's some **bold text** and *italic text*.
+
+### Code Example
+```javascript
+function helloWorld() {
+    console.log("Hello, world!");
+}
