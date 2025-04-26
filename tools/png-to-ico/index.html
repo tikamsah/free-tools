@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNG to ICO Converter | IT Tools</title>
+    <meta name="description" content="Convert PNG images to ICO format for favicons and Windows applications. Multiple sizes supported.">
+    <meta name="keywords" content="png to ico, ico converter, favicon generator, icon converter">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        :root {
+            --color-primary: #3b82f6;
+            --color-border: #e1e4e8;
+            --color-text: #24292e;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tool-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .upload-header {
+            background: white;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 16px;
+            border: 1px solid var(--color-border);
+            border-bottom: none;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .upload-content {
+            flex: 1;
+            border: 1px solid var(--color-border);
+            border-radius: 0 0 8px 8px;
+            background: white;
+            overflow: hidden;
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        
+        .upload-area {
+            text-align: center;
+            padding: 40px 20px;
+            cursor: pointer;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #9ca3af;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .options-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .options-header {
+            background: white;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 16px;
+            border: 1px solid var(--color-border);
+            border-bottom: none;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .options-content {
+            flex: 1;
+            border: 1px solid var(--color-border);
+            border-radius: 0 0 8px 8px;
+            background: white;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input {
+            margin: 0;
+        }
+        
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+        }
+        
+        .preview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .preview-img {
+            border: 1px solid var(--color-border);
+            background-color: white;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        
+        .preview-size {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .action-buttons-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .tool-button.secondary {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            width: 100%;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--color-primary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .code-example {
+            font-family: 'Fira Code', monospace;
+            background-color: #f3f4f6;
+            padding: 2px 4px;
+            border-radius: 4px;
+            color: #d63384;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .converter-container {
+                flex-direction: column;
+            }
+            
+            .action-buttons-row {
+                flex-direction: column;
+            }
+            
+            .tool-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>PNG to ICO Converter</h1>
+            <p>Convert PNG images to ICO format for favicons and Windows applications</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="converter-container">
+                <div class="upload-container">
+                    <div class="upload-header">PNG Image</div>
+                    <div class="upload-content" id="drop-area">
+                        <img id="preview-image" class="preview-image" alt="Preview">
+                        <div class="upload-area" id="upload-area">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                <strong>Drag & drop a PNG</strong> or click to browse
+                            </div>
+                            <div class="upload-text">
+                                Transparent PNGs are supported
+                            </div>
+                            <input type="file" id="file-input" class="file-input" accept="image/png">
+                        </div>
+                        <div id="file-info" class="file-info"></div>
+                    </div>
+                </div>
+                
+                <div class="options-container">
+                    <div class="options-header">ICO Options</div>
+                    <div class="options-content">
+                        <div class="form-group">
+                            <label class="form-label">ICO File Name</label>
+                            <input type="text" id="ico-name" class="form-control" value="favicon">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Include Sizes</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="size" value="16" checked> 16×16
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="size" value="32" checked> 32×32
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="size" value="48" checked> 48×48
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="size" value="64"> 64×64
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="size" value="128" checked> 128×128
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="size" value="256"> 256×256
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="preview-container" class="preview-container" style="display: none;">
+                            <h4 style="width: 100%; margin: 0;">Preview:</h4>
+                            <!-- Preview items will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons-row">
+                <button id="convert-btn" class="tool-button" disabled>
+                    <i class="fas fa-exchange-alt"></i> Convert to ICO
+                </button>
+                <button id="download-btn" class="tool-button secondary" disabled>
+                    <i class="fas fa-download"></i> Download ICO
+                </button>
+                <button id="clear-btn" class="tool-button secondary">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <div class="instructions">
+                <h3>How to use this converter:</h3>
+                <ul>
+                    <li>Upload a PNG image (transparency is supported)</li>
+                    <li>Select the sizes you want to include in your ICO file</li>
+                    <li>Click <strong>Convert to ICO</strong> to generate the file</li>
+                    <li>Download the ICO file for your website or application</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>ICO File Information:</h3>
+                <ul>
+                    <li>ICO files can contain multiple image sizes in one file</li>
+                    <li>Windows selects the best size automatically</li>
+                    <li>Recommended sizes: 16×16, 32×32, 48×48 (for Windows applications)</li>
+                    <li>For favicons: 16×16, 32×32 (browser favorites), 64×64 (desktop shortcuts)</li>
+                    <li>Larger sizes (128×128, 256×256) are useful for high-DPI displays</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>HTML Implementation:</h3>
+                <ul>
+                    <li>Standard favicon: <span class="code-example">&lt;link rel="icon" href="/favicon.ico" type="image/x-icon"&gt;</span></li>
+                    <li>For modern browsers: <span class="code-example">&lt;link rel="icon" href="/favicon.ico" sizes="any"&gt;</span></li>
+                    <li>For IE 11 and below: <span class="code-example">&lt;link rel="shortcut icon" href="/favicon.ico"&gt;</span></li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing is done in your browser - your images never leave your computer</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <!-- ico.js library for ICO generation -->
+    <script src="https://cdn.jsdelivr.net/npm/icojs@1.0.2/dist/ico.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+
+    <script>
+        // DOM elements
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-area');
+        const dropArea = document.getElementById('drop-area');
+        const previewImage = document.getElementById('preview-image');
+        const fileInfo = document.getElementById('file-info');
+        const convertBtn = document.getElementById('convert-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const previewContainer = document.getElementById('preview-container');
+        
+        // Variables
+        let icoFile = null;
+        let originalImage = null;
+        
+        // Event listeners
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        dropArea.addEventListener('dragover', handleDragOver);
+        dropArea.addEventListener('drop', handleDrop);
+        convertBtn.addEventListener('click', convertToIco);
+        downloadBtn.addEventListener('click', downloadIco);
+        clearBtn.addEventListener('click', clearAll);
+        
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                processImageFile(file);
+            }
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.style.backgroundColor = '#f0f4f8';
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.style.backgroundColor = '';
+            
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                processImageFile(file);
+            }
+        }
+        
+        function processImageFile(file) {
+            if (!file.type.match('image/png')) {
+                showStatus('Please select a PNG image file', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const image = new Image();
+                image.onload = function() {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    uploadArea.style.display = 'none';
+                    
+                    // Store original image for conversion
+                    originalImage = image;
+                    
+                    // Update file info
+                    fileInfo.textContent = `${file.name} (${image.width}×${image.height}px, ${formatFileSize(file.size)})`;
+                    
+                    convertBtn.disabled = false;
+                    showStatus('PNG image loaded successfully', 'success');
+                };
+                image.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function convertToIco() {
+            if (!originalImage) {
+                showStatus('Please upload a PNG image first', 'error');
+                return;
+            }
+            
+            try {
+                // Get selected sizes
+                const sizes = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(el => parseInt(el.value));
+                
+                if (sizes.length === 0) {
+                    showStatus('Please select at least one size', 'error');
+                    return;
+                }
+                
+                // Create canvas elements for each size
+                const canvases = sizes.map(size => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Draw image on canvas (centered and scaled)
+                    const ratio = Math.min(canvas.width / originalImage.width, canvas.height / originalImage.height);
+                    const centerShiftX = (canvas.width - originalImage.width * ratio) / 2;
+                    const centerShiftY = (canvas.height - originalImage.height * ratio) / 2;
+                    
+                    ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height,
+                                  centerShiftX, centerShiftY, originalImage.width * ratio, originalImage.height * ratio);
+                    
+                    return canvas;
+                });
+                
+                // Generate ICO file
+                ICO.fromCanvas(canvases).then(ico => {
+                    icoFile = ico;
+                    downloadBtn.disabled = false;
+                    
+                    // Show preview of generated sizes
+                    previewContainer.innerHTML = '<h4 style="width: 100%; margin: 0;">Preview:</h4>';
+                    sizes.forEach((size, index) => {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'preview-item';
+                        previewItem.innerHTML = `
+                            <img src="${canvases[index].toDataURL('image/png')}" class="preview-img" width="${size}" height="${size}" alt="${size}x${size}">
+                            <span class="preview-size">${size}×${size}px</span>
+                        `;
+                        previewContainer.appendChild(previewItem);
+                    });
+                    previewContainer.style.display = 'flex';
+                    
+                    showStatus(`ICO file generated with ${sizes.length} sizes`, 'success');
+                }).catch(error => {
+                    showStatus('Error generating ICO file: ' + error.message, 'error');
+                });
+                
+            } catch (error) {
+                showStatus('Error converting to ICO: ' + error.message, 'error');
+            }
+        }
+        
+        function downloadIco() {
+            if (!icoFile) {
+                showStatus('No ICO file to download', 'error');
+                return;
+            }
+            
+            try {
+                const icoName = document.getElementById('ico-name').value || 'favicon';
+                const fileName = `${icoName}.ico`;
+                
+                const blob = new Blob([icoFile], { type: 'image/x-icon' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Clean up
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                showStatus('ICO file downloaded', 'success');
+            } catch (error) {
+                showStatus('Error downloading ICO: ' + error.message, 'error');
+            }
+        }
+        
+        function clearAll() {
+            fileInput.value = '';
+            previewImage.src = '';
+            previewImage.style.display = 'none';
+            uploadArea.style.display = 'block';
+            fileInfo.textContent = '';
+            previewContainer.innerHTML = '';
+            previewContainer.style.display = 'none';
+            
+            convertBtn.disabled = true;
+            downloadBtn.disabled = true;
+            
+            icoFile = null;
+            originalImage = null;
+            
+            showStatus('Cleared all content', 'success');
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            else return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
