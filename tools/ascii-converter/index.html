@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Converter - Online ASCII Code Translator | IT Tools</title>
+    <meta name="description" content="Convert text to ASCII codes and vice versa instantly. Supports decimal, hexadecimal, binary and character representations.">
+    <meta name="keywords" content="ASCII converter, ASCII code, text to ASCII, ASCII to text, character encoding">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .output-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3, .output-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            resize: vertical;
+            background: #f9fafb;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+        }
+        
+        .options-container {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .option-group label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .option-group select {
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: white;
+            width: 100%;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: #8b5cf6;
+        }
+        
+        .tool-button.secondary:hover {
+            background: #7c3aed;
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .conversion-types {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .conversion-type-btn {
+            padding: 8px 15px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .conversion-type-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .ascii-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .ascii-table th, .ascii-table td {
+            border: 1px solid #e5e7eb;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .ascii-table th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        
+        .ascii-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>ASCII Converter</h1>
+            <p>Convert between text and ASCII codes in various formats</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="converter-container">
+                <div class="input-group">
+                    <h3>Input</h3>
+                    
+                    <div class="conversion-types">
+                        <button class="conversion-type-btn active" data-type="text">Text</button>
+                        <button class="conversion-type-btn" data-type="decimal">Decimal</button>
+                        <button class="conversion-type-btn" data-type="hex">Hexadecimal</button>
+                        <button class="conversion-type-btn" data-type="binary">Binary</button>
+                    </div>
+                    
+                    <textarea id="input-text" placeholder="Enter text or ASCII codes here...">Hello World!</textarea>
+                    
+                    <div class="options-container">
+                        <div class="option-group">
+                            <label for="input-format">Input Format</label>
+                            <select id="input-format">
+                                <option value="text">Text</option>
+                                <option value="decimal">Decimal (e.g. 72 101 108 108 111)</option>
+                                <option value="hex">Hexadecimal (e.g. 48 65 6C 6C 6F)</option>
+                                <option value="binary">Binary (e.g. 01001000 01100101)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label for="output-format">Output Format</label>
+                            <select id="output-format">
+                                <option value="decimal">Decimal</option>
+                                <option value="hex">Hexadecimal</option>
+                                <option value="binary">Binary</option>
+                                <option value="text">Text</option>
+                                <option value="all">All Formats</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="convert-btn" class="tool-button">
+                            <i class="fas fa-exchange-alt"></i> Convert
+                        </button>
+                        <button id="clear-btn" class="tool-button outline">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Output</h3>
+                    <textarea id="output-text" readonly placeholder="Conversion results will appear here..."></textarea>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-output-btn">
+                            <i class="fas fa-copy"></i> Copy Output
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this ASCII Converter:</h3>
+                <ul>
+                    <li>Enter your text or ASCII codes in the input box</li>
+                    <li>Select the appropriate input format (text, decimal, hex, or binary)</li>
+                    <li>Choose your desired output format</li>
+                    <li>Click <strong>Convert</strong> to translate between formats</li>
+                    <li>Use the <strong>Copy</strong> button to copy the results</li>
+                    <li>Click the format buttons above the input to quickly switch modes</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>ASCII Reference Table</h3>
+                <table class="ascii-table">
+                    <thead>
+                        <tr>
+                            <th>Dec</th>
+                            <th>Hex</th>
+                            <th>Binary</th>
+                            <th>Char</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ascii-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <p class="privacy-note">All conversions happen in your browser - we never store or transmit your data</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const inputText = document.getElementById('input-text');
+        const outputText = document.getElementById('output-text');
+        const inputFormat = document.getElementById('input-format');
+        const outputFormat = document.getElementById('output-format');
+        const convertBtn = document.getElementById('convert-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyOutputBtn = document.getElementById('copy-output-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const conversionTypeBtns = document.querySelectorAll('.conversion-type-btn');
+        const asciiTableBody = document.getElementById('ascii-table-body');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            convertBtn.addEventListener('click', convertASCII);
+            clearBtn.addEventListener('click', clearInput);
+            copyOutputBtn.addEventListener('click', copyOutput);
+            
+            // Conversion type buttons
+            conversionTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    conversionTypeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const type = this.dataset.type;
+                    inputFormat.value = type;
+                    
+                    // Update placeholder text
+                    switch(type) {
+                        case 'text':
+                            inputText.placeholder = 'Enter text here...';
+                            break;
+                        case 'decimal':
+                            inputText.placeholder = 'Enter decimal codes (e.g. 72 101 108 108 111)';
+                            break;
+                        case 'hex':
+                            inputText.placeholder = 'Enter hex codes (e.g. 48 65 6C 6C 6F)';
+                            break;
+                        case 'binary':
+                            inputText.placeholder = 'Enter binary codes (e.g. 01001000 01100101)';
+                            break;
+                    }
+                    
+                    // Auto-convert if there's input
+                    if (inputText.value.trim()) {
+                        convertASCII();
+                    }
+                });
+            });
+            
+            // Input format change
+            inputFormat.addEventListener('change', function() {
+                const type = this.value;
+                // Update active button
+                conversionTypeBtns.forEach(btn => {
+                    if (btn.dataset.type === type) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // Update placeholder
+                switch(type) {
+                    case 'text':
+                        inputText.placeholder = 'Enter text here...';
+                        break;
+                    case 'decimal':
+                        inputText.placeholder = 'Enter decimal codes (e.g. 72 101 108 108 111)';
+                        break;
+                    case 'hex':
+                        inputText.placeholder = 'Enter hex codes (e.g. 48 65 6C 6C 6F)';
+                        break;
+                    case 'binary':
+                        inputText.placeholder = 'Enter binary codes (e.g. 01001000 01100101)';
+                        break;
+                }
+            });
+            
+            // Populate ASCII table
+            populateASCIITable();
+            
+            // Convert on initial load
+            convertASCII();
+        });
+        
+        function convertASCII() {
+            const input = inputText.value.trim();
+            const inFormat = inputFormat.value;
+            const outFormat = outputFormat.value;
+            
+            if (!input) {
+                showStatus('Please enter some input to convert', 'error');
+                outputText.value = '';
+                return;
+            }
+            
+            try {
+                let result = '';
+                
+                if (inFormat === 'text') {
+                    // Convert text to ASCII codes
+                    if (outFormat === 'decimal') {
+                        result = textToDecimal(input);
+                    } else if (outFormat === 'hex') {
+                        result = textToHex(input);
+                    } else if (outFormat === 'binary') {
+                        result = textToBinary(input);
+                    } else if (outFormat === 'all') {
+                        result = `Decimal: ${textToDecimal(input)}\n\nHex: ${textToHex(input)}\n\nBinary: ${textToBinary(input)}`;
+                    } else {
+                        result = input; // Text to text (no conversion)
+                    }
+                } else {
+                    // Convert ASCII codes to text or other formats
+                    const text = asciiToText(input, inFormat);
+                    
+                    if (outFormat === 'text') {
+                        result = text;
+                    } else if (outFormat === 'decimal') {
+                        result = textToDecimal(text);
+                    } else if (outFormat === 'hex') {
+                        result = textToHex(text);
+                    } else if (outFormat === 'binary') {
+                        result = textToBinary(text);
+                    } else if (outFormat === 'all') {
+                        result = `Text: ${text}\n\nDecimal: ${textToDecimal(text)}\n\nHex: ${textToHex(text)}\n\nBinary: ${textToBinary(text)}`;
+                    }
+                }
+                
+                outputText.value = result;
+                showStatus('Conversion successful!', 'success');
+            } catch (error) {
+                showStatus('Conversion error: ' + error.message, 'error');
+                console.error(error);
+                outputText.value = 'Error: ' + error.message;
+            }
+        }
+        
+        function textToDecimal(text) {
+            return Array.from(text).map(char => char.charCodeAt(0)).join(' ');
+        }
+        
+        function textToHex(text) {
+            return Array.from(text).map(char => 
+                char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')
+            ).join(' ');
+        }
+        
+        function textToBinary(text) {
+            return Array.from(text).map(char => 
+                char.charCodeAt(0).toString(2).padStart(8, '0')
+            ).join(' ');
+        }
+        
+        function asciiToText(input, format) {
+            let codes = [];
+            
+            // Parse input based on format
+            if (format === 'decimal') {
+                codes = input.split(/\s+/).filter(Boolean).map(Number);
+            } else if (format === 'hex') {
+                codes = input.split(/\s+/).filter(Boolean).map(hex => parseInt(hex, 16));
+            } else if (format === 'binary') {
+                codes = input.split(/\s+/).filter(Boolean).map(bin => parseInt(bin, 2));
+            }
+            
+            // Validate codes
+            for (const code of codes) {
+                if (isNaN(code)) {
+                    throw new Error('Invalid code format');
+                }
+                if (code < 0 || code > 255) {
+                    throw new Error('Code out of range (0-255)');
+                }
+            }
+            
+            // Convert codes to text
+            return codes.map(code => String.fromCharCode(code)).join('');
+        }
+        
+        function clearInput() {
+            inputText.value = '';
+            outputText.value = '';
+            showStatus('Input cleared!', 'success');
+        }
+        
+        async function copyOutput() {
+            try {
+                await navigator.clipboard.writeText(outputText.value);
+                showStatus('Output copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy output', 'error');
+                console.error(error);
+            }
+        }
+        
+        function populateASCIITable() {
+            const rows = [];
+            
+            // Standard ASCII (0-127)
+            for (let i = 0; i <= 127; i++) {
+                const char = i < 32 || i === 127 ? 
+                    (i === 9 ? 'TAB' : 
+                     i === 10 ? 'LF' : 
+                     i === 13 ? 'CR' : 
+                     i === 27 ? 'ESC' : 
+                     i === 127 ? 'DEL' : 
+                     'CTRL') : 
+                    String.fromCharCode(i);
+                
+                const description = getASCIIDescription(i);
+                
+                rows.push(`
+                    <tr>
+                        <td>${i}</td>
+                        <td>${i.toString(16).toUpperCase().padStart(2, '0')}</td>
+                        <td>${i.toString(2).padStart(8, '0')}</td>
+                        <td>${char}</td>
+                        <td>${description}</td>
+                    </tr>
+                `);
+            }
+            
+            asciiTableBody.innerHTML = rows.join('');
+        }
+        
+        function getASCIIDescription(code) {
+            const descriptions = {
+                0: 'Null character',
+                1: 'Start of Header',
+                2: 'Start of Text',
+                3: 'End of Text',
+                4: 'End of Transmission',
+                5: 'Enquiry',
+                6: 'Acknowledge',
+                7: 'Bell (alert)',
+                8: 'Backspace',
+                9: 'Horizontal Tab',
+                10: 'Line Feed',
+                11: 'Vertical Tab',
+                12: 'Form Feed',
+                13: 'Carriage Return',
+                14: 'Shift Out',
+                15: 'Shift In',
+                16: 'Data Link Escape',
+                17: 'Device Control 1',
+                18: 'Device Control 2',
+                19: 'Device Control 3',
+                20: 'Device Control 4',
+                21: 'Negative Acknowledge',
+                22: 'Synchronous Idle',
+                23: 'End of Transmission Block',
+                24: 'Cancel',
+                25: 'End of Medium',
+                26: 'Substitute',
+                27: 'Escape',
+                28: 'File Separator',
+                29: 'Group Separator',
+                30: 'Record Separator',
+                31: 'Unit Separator',
+                32: 'Space',
+                127: 'Delete',
+            };
+            
+            return descriptions[code] || 
+                   (code >= 33 && code <= 126 ? 'Printable character' : 'Control character');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
