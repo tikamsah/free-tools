@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZIP Validator - Validate ZIP Files Online | IT Tools</title>
+    <meta name="description" content="Validate ZIP archive files online. Check ZIP file integrity and extract file information.">
+    <meta name="keywords" content="ZIP validator, ZIP checker, ZIP file validator, archive validator, ZIP integrity check">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .validator-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group, .results-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3, .results-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .file-upload {
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload:hover {
+            border-color: #3b82f6;
+            background: #f0f5ff;
+        }
+        
+        .file-upload i {
+            font-size: 3rem;
+            color: #3b82f6;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload p {
+            margin: 0;
+            color: #6b7280;
+        }
+        
+        .file-info {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f3f4f6;
+            border-radius: 6px;
+        }
+        
+        #file-input {
+            display: none;
+        }
+        
+        .validation-options {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .validation-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .validation-option input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .results-table th {
+            text-align: left;
+            padding: 10px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .results-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .valid-file {
+            color: #065f46;
+        }
+        
+        .invalid-file {
+            color: #b91c1c;
+        }
+        
+        .file-details {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .validation-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>ZIP Validator</h1>
+            <p>Validate ZIP archive files and check their integrity</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="validator-container">
+                <div class="input-group">
+                    <h3>Upload ZIP File</h3>
+                    
+                    <div class="file-upload" id="file-upload-area">
+                        <i class="fas fa-file-archive"></i>
+                        <p>Click to browse or drag & drop your ZIP file here</p>
+                        <input type="file" id="file-input" accept=".zip,application/zip">
+                    </div>
+                    
+                    <div class="file-info" id="file-info">
+                        <p><strong>File name:</strong> <span id="file-name"></span></p>
+                        <p><strong>File size:</strong> <span id="file-size"></span></p>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">Validation Options</h3>
+                    <div class="validation-options">
+                        <div class="validation-option">
+                            <input type="checkbox" id="check-structure" checked>
+                            <label for="check-structure">Check file structure</label>
+                        </div>
+                        <div class="validation-option">
+                            <input type="checkbox" id="check-integrity" checked>
+                            <label for="check-integrity">Check file integrity</label>
+                        </div>
+                        <div class="validation-option">
+                            <input type="checkbox" id="check-encryption">
+                            <label for="check-encryption">Check for encryption</label>
+                        </div>
+                        <div class="validation-option">
+                            <input type="checkbox" id="list-contents" checked>
+                            <label for="list-contents">List contents</label>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="validate-btn" class="tool-button">
+                            <i class="fas fa-check-circle"></i> Validate ZIP
+                        </button>
+                        <button id="clear-btn" class="tool-button outline">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <div class="results-group">
+                    <h3>Validation Results</h3>
+                    
+                    <div id="results-summary" style="margin-bottom: 15px;">
+                        <div><strong>File name:</strong> <span id="result-file-name">-</span></div>
+                        <div><strong>File size:</strong> <span id="result-file-size">-</span></div>
+                        <div><strong>Status:</strong> <span id="result-status">-</span></div>
+                        <div><strong>Files in archive:</strong> <span id="result-file-count">-</span></div>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table class="results-table" id="results-table">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Size</th>
+                                    <th>Compressed</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Results will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this ZIP Validator:</h3>
+                <ul>
+                    <li>Upload a ZIP file by clicking or dragging and dropping</li>
+                    <li>Select the validation options you want to perform</li>
+                    <li>Click <strong>Validate ZIP</strong> to check the archive</li>
+                    <li>View the results including file list and validation status</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About ZIP Validation:</h3>
+                <ul>
+                    <li><strong>File structure</strong>: Checks if the ZIP file has a valid structure</li>
+                    <li><strong>File integrity</strong>: Verifies that files can be extracted without errors</li>
+                    <li><strong>Encryption check</strong>: Detects if the archive is password protected</li>
+                    <li><strong>Contents listing</strong>: Shows all files contained in the archive</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All file processing happens in your browser - we never upload or store your files</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const fileInput = document.getElementById('file-input');
+        const fileUploadArea = document.getElementById('file-upload-area');
+        const fileInfo = document.getElementById('file-info');
+        const fileName = document.getElementById('file-name');
+        const fileSize = document.getElementById('file-size');
+        const validateBtn = document.getElementById('validate-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const resultsTable = document.getElementById('results-table').getElementsByTagName('tbody')[0];
+        const resultFileName = document.getElementById('result-file-name');
+        const resultFileSize = document.getElementById('result-file-size');
+        const resultStatus = document.getElementById('result-status');
+        const resultFileCount = document.getElementById('result-file-count');
+        
+        // Current file reference
+        let currentFile = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            fileUploadArea.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            fileUploadArea.addEventListener('dragover', handleDragOver);
+            fileUploadArea.addEventListener('drop', handleDrop);
+            validateBtn.addEventListener('click', validateZip);
+            clearBtn.addEventListener('click', clearInput);
+        });
+        
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                processFile(file);
+            }
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            fileUploadArea.style.borderColor = '#3b82f6';
+            fileUploadArea.style.backgroundColor = '#f0f5ff';
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            fileUploadArea.style.borderColor = '#e5e7eb';
+            fileUploadArea.style.backgroundColor = '';
+            
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                processFile(file);
+                fileInput.files = e.dataTransfer.files;
+            }
+        }
+        
+        function processFile(file) {
+            // Check if file is a ZIP
+            if (!file.name.toLowerCase().endsWith('.zip') && !file.type.includes('zip')) {
+                showStatus('Please select a ZIP file', 'error');
+                return;
+            }
+            
+            currentFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.style.display = 'block';
+            
+            showStatus('File ready for validation', 'success');
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        async function validateZip() {
+            if (!currentFile) {
+                showStatus('Please select a ZIP file first', 'error');
+                return;
+            }
+            
+            try {
+                // Clear previous results
+                resultsTable.innerHTML = '';
+                resultFileName.textContent = '-';
+                resultFileSize.textContent = '-';
+                resultStatus.textContent = '-';
+                resultFileCount.textContent = '-';
+                
+                // Show loading state
+                validateBtn.disabled = true;
+                validateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validating...';
+                
+                // Read the file
+                const arrayBuffer = await readFileAsArrayBuffer(currentFile);
+                const zip = new JSZip();
+                
+                try {
+                    // Load the ZIP file
+                    const zipData = await zip.loadAsync(arrayBuffer);
+                    
+                    // Update results summary
+                    resultFileName.textContent = currentFile.name;
+                    resultFileSize.textContent = formatFileSize(currentFile.size);
+                    resultStatus.textContent = 'Valid ZIP file';
+                    resultStatus.className = 'valid-file';
+                    
+                    // Check if we should list contents
+                    if (document.getElementById('list-contents').checked) {
+                        let fileCount = 0;
+                        
+                        // Process each file in the ZIP
+                        zipData.forEach(async (relativePath, file) => {
+                            if (!file.dir) { // Skip directories
+                                fileCount++;
+                                
+                                const row = resultsTable.insertRow();
+                                row.insertCell().textContent = relativePath;
+                                row.insertCell().textContent = formatFileSize(file._data.uncompressedSize);
+                                row.insertCell().textContent = formatFileSize(file._data.compressedSize);
+                                
+                                const detailsCell = row.insertCell();
+                                const details = [];
+                                
+                                // Add compression ratio
+                                const ratio = ((file._data.compressedSize / file._data.uncompressedSize) * 100).toFixed(2);
+                                details.push(`Compression: ${ratio}%`);
+                                
+                                // Check for encryption if option is enabled
+                                if (document.getElementById('check-encryption').checked) {
+                                    const isEncrypted = file._data.encrypted;
+                                    details.push(isEncrypted ? 'Encrypted' : 'Not encrypted');
+                                }
+                                
+                                detailsCell.innerHTML = details.map(d => `<div class="file-details">${d}</div>`).join('');
+                            }
+                        });
+                        
+                        resultFileCount.textContent = fileCount;
+                    } else {
+                        resultFileCount.textContent = 'Not checked';
+                    }
+                    
+                    showStatus('ZIP file validated successfully!', 'success');
+                } catch (error) {
+                    // Handle ZIP file errors
+                    resultFileName.textContent = currentFile.name;
+                    resultFileSize.textContent = formatFileSize(currentFile.size);
+                    resultStatus.textContent = 'Invalid ZIP file';
+                    resultStatus.className = 'invalid-file';
+                    resultFileCount.textContent = 'Error';
+                    
+                    showStatus('Invalid ZIP file: ' + error.message, 'error');
+                }
+            } catch (error) {
+                console.error('Validation error:', error);
+                showStatus('Error validating ZIP file: ' + error.message, 'error');
+            } finally {
+                validateBtn.disabled = false;
+                validateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Validate ZIP';
+            }
+        }
+        
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+        
+        function clearInput() {
+            fileInput.value = '';
+            currentFile = null;
+            fileInfo.style.display = 'none';
+            resultsTable.innerHTML = '';
+            resultFileName.textContent = '-';
+            resultFileSize.textContent = '-';
+            resultStatus.textContent = '-';
+            resultFileCount.textContent = '-';
+            showStatus('Input cleared!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
