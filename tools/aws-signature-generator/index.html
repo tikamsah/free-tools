@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Signature Generator - Create AWS V4 Signatures | IT Tools</title>
+    <meta name="description" content="Generate AWS Signature Version 4 for API requests. Create signed AWS requests with our online tool.">
+    <meta name="keywords" content="AWS signature, AWS v4 signature, AWS API signature, AWS request signing, AWS authentication, AWS API gateway">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .signature-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group, .output-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3, .output-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            resize: vertical;
+            background: #f9fafb;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #ffffff;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .signature-components {
+            margin-top: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8fafc;
+        }
+        
+        .signature-component {
+            margin-bottom: 10px;
+        }
+        
+        .signature-component label {
+            font-weight: 500;
+            color: #374151;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .signature-component pre {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>AWS Signature Generator</h1>
+            <p>Generate AWS Signature Version 4 for your API requests</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="signature-container">
+                <div class="input-group">
+                    <h3>AWS Credentials</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="access-key">AWS Access Key ID</label>
+                            <input type="text" id="access-key" placeholder="AKIAXXXXXXXXXXXXXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label for="secret-key">AWS Secret Access Key</label>
+                            <input type="password" id="secret-key" placeholder="Your secret key">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="region">AWS Region</label>
+                            <input type="text" id="region" placeholder="us-east-1" value="us-east-1">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">AWS Service</label>
+                            <input type="text" id="service" placeholder="s3" value="s3">
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">Request Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="http-method">HTTP Method</label>
+                        <select id="http-method">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                            <option value="HEAD">HEAD</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="endpoint">Endpoint URL</label>
+                        <input type="text" id="endpoint" placeholder="https://s3.amazonaws.com/mybucket">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="request-body">Request Body (for POST/PUT)</label>
+                        <textarea id="request-body" placeholder='{"key": "value"}'></textarea>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="generate-btn" class="tool-button">
+                            <i class="fas fa-key"></i> Generate Signature
+                        </button>
+                        <button id="clear-btn" class="tool-button outline">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Signature Components</h3>
+                    
+                    <div class="signature-components">
+                        <div class="signature-component">
+                            <label>Authorization Header</label>
+                            <pre id="auth-header">(Will be generated here)</pre>
+                        </div>
+                        
+                        <div class="signature-component">
+                            <label>Canonical Request</label>
+                            <pre id="canonical-request">(Will be generated here)</pre>
+                        </div>
+                        
+                        <div class="signature-component">
+                            <label>String to Sign</label>
+                            <pre id="string-to-sign">(Will be generated here)</pre>
+                        </div>
+                        
+                        <div class="signature-component">
+                            <label>Signed Headers</label>
+                            <pre id="signed-headers">(Will be generated here)</pre>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">Complete cURL Command</h3>
+                    <textarea id="curl-command" readonly placeholder="Complete cURL command will appear here..."></textarea>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-curl-btn">
+                            <i class="fas fa-copy"></i> Copy cURL
+                        </button>
+                        <button class="action-btn" id="copy-auth-btn">
+                            <i class="fas fa-copy"></i> Copy Auth Header
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this AWS Signature Generator:</h3>
+                <ul>
+                    <li>Enter your AWS credentials (Access Key ID and Secret Access Key)</li>
+                    <li>Specify the AWS region and service you're working with</li>
+                    <li>Select the HTTP method and enter your endpoint URL</li>
+                    <li>For POST/PUT requests, include the request body if needed</li>
+                    <li>Click <strong>Generate Signature</strong> to create the V4 signature</li>
+                    <li>Use the generated Authorization header in your requests</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About AWS Signature Version 4:</h3>
+                <ul>
+                    <li><strong>Secure authentication</strong>: Used to authenticate requests to AWS services</li>
+                    <li><strong>Required for API calls</strong>: Needed for most AWS API requests</li>
+                    <li><strong>Components</strong>: Includes timestamp, credential scope, signed headers, and signature</li>
+                    <li><strong>Process</strong>: Creates canonical request, string to sign, and final signature</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All signature generation happens in your browser - we never store or transmit your AWS credentials</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const accessKey = document.getElementById('access-key');
+        const secretKey = document.getElementById('secret-key');
+        const region = document.getElementById('region');
+        const service = document.getElementById('service');
+        const httpMethod = document.getElementById('http-method');
+        const endpoint = document.getElementById('endpoint');
+        const requestBody = document.getElementById('request-body');
+        const generateBtn = document.getElementById('generate-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyCurlBtn = document.getElementById('copy-curl-btn');
+        const copyAuthBtn = document.getElementById('copy-auth-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const authHeader = document.getElementById('auth-header');
+        const canonicalRequest = document.getElementById('canonical-request');
+        const stringToSign = document.getElementById('string-to-sign');
+        const signedHeaders = document.getElementById('signed-headers');
+        const curlCommand = document.getElementById('curl-command');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            generateBtn.addEventListener('click', generateSignature);
+            clearBtn.addEventListener('click', clearInput);
+            copyCurlBtn.addEventListener('click', copyCurlCommand);
+            copyAuthBtn.addEventListener('click', copyAuthHeader);
+            
+            // Generate sample signature on load
+            generateSignature();
+        });
+        
+        function generateSignature() {
+            const awsAccessKey = accessKey.value.trim();
+            const awsSecretKey = secretKey.value.trim();
+            const awsRegion = region.value.trim();
+            const awsService = service.value.trim();
+            const method = httpMethod.value;
+            const url = endpoint.value.trim();
+            
+            if (!awsAccessKey || !awsSecretKey) {
+                showStatus('Please enter both AWS Access Key and Secret Key', 'error');
+                return;
+            }
+            
+            if (!awsRegion || !awsService) {
+                showStatus('Please specify AWS Region and Service', 'error');
+                return;
+            }
+            
+            if (!url) {
+                showStatus('Please enter an endpoint URL', 'error');
+                return;
+            }
+            
+            try {
+                // Create a timestamp (current time in ISO 8601 format)
+                const now = new Date();
+                const amzDate = now.toISOString().replace(/[:\-]|\.\d{3}/g, '');
+                const dateStamp = amzDate.substr(0, 8);
+                
+                // Parse the URL
+                let parsedUrl;
+                try {
+                    parsedUrl = new URL(url);
+                } catch (e) {
+                    showStatus('Invalid URL: ' + e.message, 'error');
+                    return;
+                }
+                
+                const host = parsedUrl.hostname;
+                const path = parsedUrl.pathname || '/';
+                const query = parsedUrl.search || '';
+                
+                // Create canonical headers
+                const headers = {
+                    'host': host,
+                    'x-amz-date': amzDate,
+                    'x-amz-content-sha256': CryptoJS.SHA256(requestBody.value || '').toString(CryptoJS.enc.Hex)
+                };
+                
+                // Create signed headers string
+                const signedHeadersList = Object.keys(headers).sort();
+                const signedHeadersStr = signedHeadersList.join(';');
+                
+                // Create canonical request
+                const canonicalHeaders = signedHeadersList.map(h => `${h}:${headers[h]}\n`).join('');
+                
+                const canonicalRequestStr = [
+                    method,
+                    path,
+                    query,
+                    canonicalHeaders,
+                    signedHeadersStr,
+                    headers['x-amz-content-sha256']
+                ].join('\n');
+                
+                // Create string to sign
+                const algorithm = 'AWS4-HMAC-SHA256';
+                const credentialScope = `${dateStamp}/${awsRegion}/${awsService}/aws4_request`;
+                
+                const stringToSignStr = [
+                    algorithm,
+                    amzDate,
+                    credentialScope,
+                    CryptoJS.SHA256(canonicalRequestStr).toString(CryptoJS.enc.Hex)
+                ].join('\n');
+                
+                // Calculate the signature
+                const signature = calculateSignature(
+                    awsSecretKey,
+                    dateStamp,
+                    awsRegion,
+                    awsService,
+                    stringToSignStr
+                );
+                
+                // Create authorization header
+                const authHeaderStr = `${algorithm} Credential=${awsAccessKey}/${credentialScope}, SignedHeaders=${signedHeadersStr}, Signature=${signature}`;
+                
+                // Display results
+                authHeader.textContent = authHeaderStr;
+                canonicalRequest.textContent = canonicalRequestStr;
+                stringToSign.textContent = stringToSignStr;
+                signedHeaders.textContent = signedHeadersStr;
+                
+                // Generate cURL command
+                let curlCmd = `curl -X ${method} \\\n`;
+                curlCmd += `  '${url}' \\\n`;
+                curlCmd += `  -H 'authorization: ${authHeaderStr}' \\\n`;
+                curlCmd += `  -H 'x-amz-date: ${amzDate}' \\\n`;
+                curlCmd += `  -H 'x-amz-content-sha256: ${headers['x-amz-content-sha256']}'`;
+                
+                if (method === 'POST' || method === 'PUT') {
+                    curlCmd += ` \\\n  -d '${requestBody.value || ''}'`;
+                }
+                
+                curlCommand.value = curlCmd;
+                
+                showStatus('AWS Signature generated successfully!', 'success');
+            } catch (error) {
+                console.error('Signature generation error:', error);
+                showStatus('Error generating signature: ' + error.message, 'error');
+            }
+        }
+        
+        function calculateSignature(key, dateStamp, region, service, stringToSign) {
+            const kDate = CryptoJS.HmacSHA256(dateStamp, 'AWS4' + key);
+            const kRegion = CryptoJS.HmacSHA256(region, kDate);
+            const kService = CryptoJS.HmacSHA256(service, kRegion);
+            const kSigning = CryptoJS.HmacSHA256('aws4_request', kService);
+            return CryptoJS.HmacSHA256(stringToSign, kSigning).toString(CryptoJS.enc.Hex);
+        }
+        
+        function clearInput() {
+            accessKey.value = '';
+            secretKey.value = '';
+            region.value = 'us-east-1';
+            service.value = 's3';
+            endpoint.value = '';
+            requestBody.value = '';
+            authHeader.textContent = '(Will be generated here)';
+            canonicalRequest.textContent = '(Will be generated here)';
+            stringToSign.textContent = '(Will be generated here)';
+            signedHeaders.textContent = '(Will be generated here)';
+            curlCommand.value = '';
+            showStatus('Input cleared!', 'success');
+        }
+        
+        async function copyCurlCommand() {
+            try {
+                await navigator.clipboard.writeText(curlCommand.value);
+                showStatus('cURL command copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy cURL command', 'error');
+                console.error(error);
+            }
+        }
+        
+        async function copyAuthHeader() {
+            try {
+                await navigator.clipboard.writeText(authHeader.textContent);
+                showStatus('Authorization header copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy Authorization header', 'error');
+                console.error(error);
+            }
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
