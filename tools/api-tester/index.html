@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Tester - Test REST API Endpoints | IT Tools</title>
+    <meta name="description" content="Test and debug REST API endpoints with this powerful API tester tool. Supports GET, POST, PUT, DELETE methods with headers and parameters.">
+    <meta name="keywords" content="API tester, REST API, API debugger, HTTP requests, endpoint tester">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .api-tester-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .request-panel, .response-panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .request-panel h3, .response-panel h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .request-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .request-row {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .request-row label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .request-row input, .request-row select {
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .request-row input[type="url"] {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .tab-container {
+            margin-top: 15px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .tab-button {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        
+        .tab-button.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 15px 0;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .headers-table, .params-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .headers-table th, .params-table th {
+            text-align: left;
+            padding: 8px 0;
+            font-weight: 500;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .headers-table td, .params-table td {
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .headers-table input, .params-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .add-row-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .add-row-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .delete-row-btn {
+            color: #ef4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .request-body {
+            width: 100%;
+            min-height: 150px;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .tool-button:disabled {
+            background: #e5e7eb;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .response-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .response-status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-error {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .status-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .response-time {
+            color: #6b7280;
+        }
+        
+        .response-size {
+            color: #6b7280;
+        }
+        
+        .response-body {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            background: #f9fafb;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .response-tabs {
+            margin-top: 15px;
+        }
+        
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .copy-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .request-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .response-info {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>API Tester</h1>
+            <p>Test and debug REST API endpoints with support for GET, POST, PUT, DELETE methods</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="api-tester-container">
+                <div class="request-panel">
+                    <h3>API Request</h3>
+                    
+                    <div class="request-form">
+                        <div class="request-row">
+                            <label for="request-method">Method:</label>
+                            <select id="request-method">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="PATCH">PATCH</option>
+                                <option value="DELETE">DELETE</option>
+                                <option value="HEAD">HEAD</option>
+                                <option value="OPTIONS">OPTIONS</option>
+                            </select>
+                        </div>
+                        
+                        <div class="request-row">
+                            <label for="request-url">URL:</label>
+                            <input type="url" id="request-url" placeholder="https://api.example.com/endpoint">
+                        </div>
+                        
+                        <div class="tab-container">
+                            <div class="tab-buttons">
+                                <button class="tab-button active" data-tab="headers">Headers</button>
+                                <button class="tab-button" data-tab="params">Params</button>
+                                <button class="tab-button" data-tab="body">Body</button>
+                                <button class="tab-button" data-tab="auth">Auth</button>
+                            </div>
+                            
+                            <div class="tab-content active" id="headers-tab">
+                                <table class="headers-table" id="headers-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Key</th>
+                                            <th>Value</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" placeholder="Content-Type"></td>
+                                            <td><input type="text" placeholder="application/json"></td>
+                                            <td><button class="delete-row-btn"><i class="fas fa-trash"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button class="add-row-btn" id="add-header-btn">
+                                    <i class="fas fa-plus"></i> Add Header
+                                </button>
+                            </div>
+                            
+                            <div class="tab-content" id="params-tab">
+                                <table class="params-table" id="params-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Key</th>
+                                            <th>Value</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" placeholder="param1"></td>
+                                            <td><input type="text" placeholder="value1"></td>
+                                            <td><button class="delete-row-btn"><i class="fas fa-trash"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button class="add-row-btn" id="add-param-btn">
+                                    <i class="fas fa-plus"></i> Add Param
+                                </button>
+                            </div>
+                            
+                            <div class="tab-content" id="body-tab">
+                                <select id="body-type" style="margin-bottom: 10px;">
+                                    <option value="json">JSON</option>
+                                    <option value="text">Text</option>
+                                    <option value="xml">XML</option>
+                                    <option value="form">Form Data</option>
+                                </select>
+                                <textarea class="request-body" id="request-body" placeholder='{"key": "value"}'></textarea>
+                            </div>
+                            
+                            <div class="tab-content" id="auth-tab">
+                                <div class="request-row" style="margin-bottom: 10px;">
+                                    <label for="auth-type">Type:</label>
+                                    <select id="auth-type">
+                                        <option value="none">No Auth</option>
+                                        <option value="basic">Basic Auth</option>
+                                        <option value="bearer">Bearer Token</option>
+                                        <option value="api-key">API Key</option>
+                                    </select>
+                                </div>
+                                
+                                <div id="auth-fields">
+                                    <!-- Auth fields will be dynamically inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="buttons">
+                            <button id="send-btn" class="tool-button">
+                                <i class="fas fa-paper-plane"></i> Send Request
+                            </button>
+                            <button id="reset-btn" class="tool-button outline">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                        
+                        <div id="statusMessage" class="status-message"></div>
+                    </div>
+                </div>
+                
+                <div class="response-panel">
+                    <h3>API Response</h3>
+                    
+                    <div id="response-info" class="response-info">
+                        <div id="response-status" class="response-status">Status: -</div>
+                        <div id="response-time" class="response-time">Time: -</div>
+                        <div id="response-size" class="response-size">Size: -</div>
+                    </div>
+                    
+                    <div class="response-tabs">
+                        <div class="tab-buttons">
+                            <button class="tab-button active" data-tab="response-body">Body</button>
+                            <button class="tab-button" data-tab="response-headers">Headers</button>
+                        </div>
+                        
+                        <div class="tab-content active" id="response-body-tab">
+                            <pre class="response-body" id="response-body">No response yet. Send a request to see results.</pre>
+                        </div>
+                        
+                        <div class="tab-content" id="response-headers-tab">
+                            <pre class="response-body" id="response-headers">No headers yet. Send a request to see results.</pre>
+                        </div>
+                    </div>
+                    
+                    <button class="copy-btn" id="copy-response-btn">
+                        <i class="fas fa-copy"></i> Copy Response
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this API Tester:</h3>
+                <ul>
+                    <li>Select the HTTP method (GET, POST, PUT, DELETE, etc.)</li>
+                    <li>Enter the API endpoint URL</li>
+                    <li>Add headers, parameters, or request body as needed</li>
+                    <li>Configure authentication if required</li>
+                    <li>Click <strong>Send Request</strong> to test the API</li>
+                    <li>View the response in the results panel</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>API Testing Tips:</h3>
+                <ul>
+                    <li>For JSON requests, set <code>Content-Type: application/json</code> header</li>
+                    <li>Use the Params tab for query parameters in GET requests</li>
+                    <li>For POST/PUT requests, use the Body tab to send data</li>
+                    <li>Check the response status code to understand the result</li>
+                    <li>200-299 means success, 400-499 means client error, 500-599 means server error</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All API requests are made directly from your browser - we never store or log your API calls</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const requestMethod = document.getElementById('request-method');
+        const requestUrl = document.getElementById('request-url');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const headersTable = document.getElementById('headers-table').getElementsByTagName('tbody')[0];
+        const paramsTable = document.getElementById('params-table').getElementsByTagName('tbody')[0];
+        const addHeaderBtn = document.getElementById('add-header-btn');
+        const addParamBtn = document.getElementById('add-param-btn');
+        const bodyType = document.getElementById('body-type');
+        const requestBody = document.getElementById('request-body');
+        const authType = document.getElementById('auth-type');
+        const authFields = document.getElementById('auth-fields');
+        const sendBtn = document.getElementById('send-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const responseStatus = document.getElementById('response-status');
+        const responseTime = document.getElementById('response-time');
+        const responseSize = document.getElementById('response-size');
+        const responseBody = document.getElementById('response-body');
+        const responseHeaders = document.getElementById('response-headers');
+        const copyResponseBtn = document.getElementById('copy-response-btn');
+        const responseTabs = document.querySelectorAll('.response-tabs .tab-button');
+        const responseTabContents = document.querySelectorAll('.response-tabs .tab-content');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Hide all tabs
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Show selected tab
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Response tab switching
+            responseTabs.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Hide all tabs
+                    responseTabs.forEach(btn => btn.classList.remove('active'));
+                    responseTabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Show selected tab
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Add header row
+            addHeaderBtn.addEventListener('click', addHeaderRow);
+            
+            // Add param row
+            addParamBtn.addEventListener('click', addParamRow);
+            
+            // Handle auth type change
+            authType.addEventListener('change', updateAuthFields);
+            
+            // Send request
+            sendBtn.addEventListener('click', sendRequest);
+            
+            // Reset form
+            resetBtn.addEventListener('click', resetForm);
+            
+            // Copy response
+            copyResponseBtn.addEventListener('click', copyResponse);
+            
+            // Add initial rows
+            addHeaderRow();
+            addParamRow();
+            updateAuthFields();
+        });
+        
+        function addHeaderRow() {
+            const row = headersTable.insertRow();
+            row.innerHTML = `
+                <td><input type="text" placeholder="Header name"></td>
+                <td><input type="text" placeholder="Header value"></td>
+                <td><button class="delete-row-btn"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            // Add delete functionality
+            row.querySelector('.delete-row-btn').addEventListener('click', function() {
+                if (headersTable.rows.length > 1) {
+                    row.remove();
+                }
+            });
+        }
+        
+        function addParamRow() {
+            const row = paramsTable.insertRow();
+            row.innerHTML = `
+                <td><input type="text" placeholder="Param name"></td>
+                <td><input type="text" placeholder="Param value"></td>
+                <td><button class="delete-row-btn"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            // Add delete functionality
+            row.querySelector('.delete-row-btn').addEventListener('click', function() {
+                if (paramsTable.rows.length > 1) {
+                    row.remove();
+                }
+            });
+        }
+        
+        function updateAuthFields() {
+            let fieldsHtml = '';
+            
+            switch(authType.value) {
+                case 'basic':
+                    fieldsHtml = `
+                        <div class="request-row">
+                            <label for="basic-username">Username:</label>
+                            <input type="text" id="basic-username" placeholder="Username">
+                        </div>
+                        <div class="request-row">
+                            <label for="basic-password">Password:</label>
+                            <input type="password" id="basic-password" placeholder="Password">
+                        </div>
+                    `;
+                    break;
+                
+                case 'bearer':
+                    fieldsHtml = `
+                        <div class="request-row">
+                            <label for="bearer-token">Token:</label>
+                            <input type="text" id="bearer-token" placeholder="Bearer token">
+                        </div>
+                    `;
+                    break;
+                
+                case 'api-key':
+                    fieldsHtml = `
+                        <div class="request-row">
+                            <label for="api-key">Key:</label>
+                            <input type="text" id="api-key" placeholder="API key">
+                        </div>
+                        <div class="request-row">
+                            <label for="api-value">Value:</label>
+                            <input type="text" id="api-value" placeholder="API value">
+                        </div>
+                        <div class="request-row">
+                            <label for="api-location">Location:</label>
+                            <select id="api-location">
+                                <option value="header">Header</option>
+                                <option value="query">Query Param</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            authFields.innerHTML = fieldsHtml;
+        }
+        
+        async function sendRequest() {
+            const method = requestMethod.value;
+            let url = requestUrl.value.trim();
+            
+            if (!url) {
+                showStatus('Error: Please enter a URL', 'error');
+                return;
+            }
+            
+            try {
+                sendBtn.disabled = true;
+                showStatus('Sending request...', 'success');
+                
+                // Collect headers
+                const headers = {};
+                const headerRows = headersTable.rows;
+                for (let i = 0; i < headerRows.length; i++) {
+                    const keyInput = headerRows[i].cells[0].querySelector('input');
+                    const valueInput = headerRows[i].cells[1].querySelector('input');
+                    
+                    if (keyInput.value && valueInput.value) {
+                        headers[keyInput.value] = valueInput.value;
+                    }
+                }
+                
+                // Collect query params
+                const params = new URLSearchParams();
+                const paramRows = paramsTable.rows;
+                for (let i = 0; i < paramRows.length; i++) {
+                    const keyInput = paramRows[i].cells[0].querySelector('input');
+                    const valueInput = paramRows[i].cells[1].querySelector('input');
+                    
+                    if (keyInput.value) {
+                        params.append(keyInput.value, valueInput.value || '');
+                    }
+                }
+                
+                // Add query params to URL if GET request
+                if (method === 'GET' && params.toString()) {
+                    url += (url.includes('?') ? '&' : '?') + params.toString();
+                }
+                
+                // Handle authentication
+                handleAuth(headers, params);
+                
+                // Prepare request options
+                const options = {
+                    method: method,
+                    headers: headers
+                };
+                
+                // Add body for non-GET requests
+                if (method !== 'GET' && method !== 'HEAD') {
+                    const bodyContent = requestBody.value.trim();
+                    if (bodyContent) {
+                        options.body = bodyContent;
+                        
+                        // Set Content-Type header if not already set
+                        if (!headers['Content-Type']) {
+                            switch(bodyType.value) {
+                                case 'json':
+                                    headers['Content-Type'] = 'application/json';
+                                    break;
+                                case 'xml':
+                                    headers['Content-Type'] = 'application/xml';
+                                    break;
+                                case 'form':
+                                    headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                                    break;
+                                default:
+                                    headers['Content-Type'] = 'text/plain';
+                            }
+                        }
+                    } else if (method === 'POST' || method === 'PUT') {
+                        // For form data when no body is provided
+                        if (bodyType.value === 'form') {
+                            headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                        }
+                    }
+                }
+                
+                // Start timer
+                const startTime = Date.now();
+                
+                // Send the request
+                const response = await fetch(url, options);
+                const responseTimeMs = Date.now() - startTime;
+                
+                // Get response data
+                const responseHeadersText = [...response.headers].map(([key, value]) => `${key}: ${value}`).join('\n');
+                let responseBodyText = await response.text();
+                
+                // Try to pretty-print JSON
+                try {
+                    const json = JSON.parse(responseBodyText);
+                    responseBodyText = JSON.stringify(json, null, 2);
+                } catch (e) {
+                    // Not JSON, leave as is
+                }
+                
+                // Update UI with response
+                responseStatus.textContent = `Status: ${response.status} ${response.statusText}`;
+                responseStatus.className = `response-status ${response.ok ? 'status-success' : 'status-error'}`;
+                responseTime.textContent = `Time: ${responseTimeMs}ms`;
+                responseSize.textContent = `Size: ${formatBytes(responseBodyText.length)}`;
+                responseBody.textContent = responseBodyText;
+                responseHeaders.textContent = responseHeadersText;
+                
+                showStatus('Request completed successfully!', 'success');
+            } catch (error) {
+                console.error('Request failed:', error);
+                responseStatus.textContent = `Status: Error`;
+                responseStatus.className = 'response-status status-error';
+                responseBody.textContent = `Error: ${error.message}`;
+                showStatus(`Error: ${error.message}`, 'error');
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+        
+        function handleAuth(headers, params) {
+            switch(authType.value) {
+                case 'basic':
+                    const username = document.getElementById('basic-username')?.value || '';
+                    const password = document.getElementById('basic-password')?.value || '';
+                    if (username || password) {
+                        headers['Authorization'] = `Basic ${btoa(`${username}:${password}`)}`;
+                    }
+                    break;
+                
+                case 'bearer':
+                    const token = document.getElementById('bearer-token')?.value || '';
+                    if (token) {
+                        headers['Authorization'] = `Bearer ${token}`;
+                    }
+                    break;
+                
+                case 'api-key':
+                    const key = document.getElementById('api-key')?.value || '';
+                    const value = document.getElementById('api-value')?.value || '';
+                    const location = document.getElementById('api-location')?.value || 'header';
+                    
+                    if (key && value) {
+                        if (location === 'header') {
+                            headers[key] = value;
+                        } else {
+                            params.append(key, value);
+                        }
+                    }
+                    break;
+            }
+        }
+        
+        function formatBytes(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            else return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+        
+        function resetForm() {
+            requestMethod.value = 'GET';
+            requestUrl.value = '';
+            
+            // Clear headers table
+            headersTable.innerHTML = '';
+            addHeaderRow();
+            
+            // Clear params table
+            paramsTable.innerHTML = '';
+            addParamRow();
+            
+            // Clear body
+            bodyType.value = 'json';
+            requestBody.value = '';
+            
+            // Reset auth
+            authType.value = 'none';
+            updateAuthFields();
+            
+            // Clear response
+            responseStatus.textContent = 'Status: -';
+            responseStatus.className = 'response-status';
+            responseTime.textContent = 'Time: -';
+            responseSize.textContent = 'Size: -';
+            responseBody.textContent = 'No response yet. Send a request to see results.';
+            responseHeaders.textContent = 'No headers yet. Send a request to see results.';
+            
+            showStatus('Form reset!', 'success');
+        }
+        
+        async function copyResponse() {
+            try {
+                const activeTab = document.querySelector('.response-tabs .tab-button.active');
+                const textToCopy = activeTab.dataset.tab === 'response-body' 
+                    ? responseBody.textContent 
+                    : responseHeaders.textContent;
+                
+                await navigator.clipboard.writeText(textToCopy);
+                showStatus('Response copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy response', 'error');
+                console.error(error);
+            }
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

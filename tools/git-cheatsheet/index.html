@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Cheatsheet - Quick Reference Guide | IT Tools</title>
+    <meta name="description" content="Comprehensive Git command cheatsheet with quick references for common Git operations, workflows, and best practices.">
+    <meta name="keywords" content="git cheatsheet, git commands, git reference, git guide, version control">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cheatsheet-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .cheatsheet-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .cheatsheet-section h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .command-category {
+            margin-bottom: 25px;
+        }
+        
+        .command-category h4 {
+            margin: 0 0 15px 0;
+            color: #3b82f6;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .command-category h4 i {
+            font-size: 1.2rem;
+        }
+        
+        .command-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        @media (min-width: 768px) {
+            .command-grid {
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            }
+        }
+        
+        .command-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.2s ease;
+        }
+        
+        .command-item:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+        
+        .command {
+            font-family: 'Fira Code', monospace;
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            overflow-x: auto;
+        }
+        
+        .command-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .command-options {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+        
+        .command-options strong {
+            color: #374151;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 15px;
+        }
+        
+        .tab-button {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        
+        .tab-button.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .workflow-diagram {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9fafb;
+        }
+        
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .workflow-step i {
+            margin-right: 10px;
+            color: #3b82f6;
+            font-size: 1.2rem;
+        }
+        
+        .workflow-arrow {
+            text-align: center;
+            margin: 5px 0;
+            color: #9ca3af;
+        }
+        
+        .quick-reference {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .reference-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.2s ease;
+        }
+        
+        .reference-card:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+        
+        .reference-card h5 {
+            margin: 0 0 10px 0;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .reference-card ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .reference-card li {
+            margin-bottom: 6px;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .copy-btn {
+            float: right;
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .copy-btn:hover {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Git Cheatsheet</h1>
+            <p>Quick reference guide for common Git commands and workflows</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="cheatsheet-container">
+                <div class="cheatsheet-section">
+                    <h3>Getting Started</h3>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-cog"></i> Configuration</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git config --global user.name \"Your Name\"')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git config --global user.name "Your Name"</div>
+                                <div class="command-description">Set your username globally for all repositories</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git config --global user.email \"your.email@example.com\"')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git config --global user.email "your.email@example.com"</div>
+                                <div class="command-description">Set your email globally for all repositories</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git config --global core.editor \"code --wait\"')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git config --global core.editor "code --wait"</div>
+                                <div class="command-description">Set VS Code as your default editor</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git config --list')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git config --list</div>
+                                <div class="command-description">View all configuration settings</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-folder-plus"></i> Creating Repositories</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git init')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git init</div>
+                                <div class="command-description">Initialize a new local repository</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git clone https://github.com/user/repo.git')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git clone https://github.com/user/repo.git</div>
+                                <div class="command-description">Clone an existing repository</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    --depth 1 (shallow clone), 
+                                    --branch [name] (specific branch)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cheatsheet-section">
+                    <h3>Basic Workflow</h3>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-tasks"></i> Making Changes</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git status')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git status</div>
+                                <div class="command-description">Show changed files in working directory</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git add .')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git add .</div>
+                                <div class="command-description">Stage all changed files</div>
+                                <div class="command-options">
+                                    <strong>Alternatives:</strong> 
+                                    git add [file] (specific file), 
+                                    git add -p (interactive)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git commit -m \"Commit message\"')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git commit -m "Commit message"</div>
+                                <div class="command-description">Commit staged changes with a message</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    -a (stage and commit), 
+                                    --amend (modify last commit)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git restore --staged [file]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git restore --staged [file]</div>
+                                <div class="command-description">Unstage a file while keeping changes</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-history"></i> Viewing History</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git log')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git log</div>
+                                <div class="command-description">Show commit history</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    --oneline (compact view), 
+                                    --graph (with branch graph),
+                                    -p (with changes),
+                                    -n [number] (limit commits)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git show [commit]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git show [commit]</div>
+                                <div class="command-description">Show changes in a specific commit</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git diff')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git diff</div>
+                                <div class="command-description">Show unstaged changes</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    --staged (staged changes),
+                                    [commit1] [commit2] (between commits)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git blame [file]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git blame [file]</div>
+                                <div class="command-description">Show who changed each line in a file</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cheatsheet-section">
+                    <h3>Branching & Merging</h3>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-code-branch"></i> Branches</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git branch')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git branch</div>
+                                <div class="command-description">List all local branches</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    -a (all branches), 
+                                    -r (remote branches),
+                                    -v (with last commit)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git branch [name]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git branch [name]</div>
+                                <div class="command-description">Create a new branch</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git checkout [branch]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git checkout [branch]</div>
+                                <div class="command-description">Switch to a branch</div>
+                                <div class="command-options">
+                                    <strong>Alternatives:</strong> 
+                                    git switch [branch] (newer alternative)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git checkout -b [name]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git checkout -b [name]</div>
+                                <div class="command-description">Create and switch to a new branch</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git branch -d [name]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git branch -d [name]</div>
+                                <div class="command-description">Delete a branch</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    -D (force delete unmerged branch)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-code-merge"></i> Merging & Rebasing</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git merge [branch]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git merge [branch]</div>
+                                <div class="command-description">Merge a branch into current branch</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    --no-ff (always create merge commit),
+                                    --squash (combine commits)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git rebase [branch]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git rebase [branch]</div>
+                                <div class="command-description">Reapply commits on top of another branch</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    -i (interactive rebase),
+                                    --continue (after resolving conflicts),
+                                    --abort (cancel rebase)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git mergetool')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git mergetool</div>
+                                <div class="command-description">Launch merge conflict resolution tool</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cheatsheet-section">
+                    <h3>Remote Repositories</h3>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-cloud"></i> Working with Remotes</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git remote -v')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git remote -v</div>
+                                <div class="command-description">List all remote repositories</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git remote add [name] [url]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git remote add [name] [url]</div>
+                                <div class="command-description">Add a new remote repository</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git fetch [remote]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git fetch [remote]</div>
+                                <div class="command-description">Download changes without merging</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git pull [remote] [branch]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git pull [remote] [branch]</div>
+                                <div class="command-description">Fetch and merge remote changes</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    --rebase (rebase instead of merge)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git push [remote] [branch]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git push [remote] [branch]</div>
+                                <div class="command-description">Upload local changes to remote</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    -u (set upstream), 
+                                    --force (force push),
+                                    --tags (push tags)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cheatsheet-section">
+                    <h3>Advanced Commands</h3>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-undo"></i> Undoing Changes</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git restore [file]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git restore [file]</div>
+                                <div class="command-description">Discard changes in working directory</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git reset [commit]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git reset [commit]</div>
+                                <div class="command-description">Reset current branch to a specific commit</div>
+                                <div class="command-options">
+                                    <strong>Modes:</strong> 
+                                    --soft (keep changes staged),
+                                    --mixed (default, keep changes unstaged),
+                                    --hard (discard all changes)
+                                </div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git revert [commit]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git revert [commit]</div>
+                                <div class="command-description">Create a new commit that undoes a previous commit</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git clean -fd')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git clean -fd</div>
+                                <div class="command-description">Remove untracked files and directories</div>
+                                <div class="command-options">
+                                    <strong>Options:</strong> 
+                                    -n (dry run),
+                                    -x (include ignored files)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-tags"></i> Tags</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git tag')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git tag</div>
+                                <div class="command-description">List all tags</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git tag [name]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git tag [name]</div>
+                                <div class="command-description">Create a lightweight tag</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git tag -a [name] -m \"message\"')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git tag -a [name] -m "message"</div>
+                                <div class="command-description">Create an annotated tag</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git push [remote] [tagname]')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git push [remote] [tagname]</div>
+                                <div class="command-description">Push a specific tag to remote</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git push [remote] --tags')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git push [remote] --tags</div>
+                                <div class="command-description">Push all tags to remote</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="command-category">
+                        <h4><i class="fas fa-broom"></i> Cleaning Up</h4>
+                        <div class="command-grid">
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git gc')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git gc</div>
+                                <div class="command-description">Cleanup unnecessary files and optimize local repository</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git prune')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git prune</div>
+                                <div class="command-description">Remove unreachable objects</div>
+                            </div>
+                            
+                            <div class="command-item">
+                                <button class="copy-btn" onclick="copyToClipboard('git reflog expire --expire=now --all')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                                <div class="command">git reflog expire --expire=now --all</div>
+                                <div class="command-description">Clean up reflog entries</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cheatsheet-section">
+                    <h3>Git Workflows</h3>
+                    
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="basic">Basic Workflow</button>
+                        <button class="tab-button" data-tab="feature-branch">Feature Branch</button>
+                        <button class="tab-button" data-tab="gitflow">GitFlow</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="basic-tab">
+                        <div class="workflow-diagram">
+                            <div class="workflow-step">
+                                <i class="fas fa-edit"></i>
+                                <span>Make changes in your working directory</span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Stage changes with <code>git add</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-code-commit"></i>
+                                <span>Commit changes with <code>git commit</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Push changes with <code>git push</code></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="feature-branch-tab">
+                        <div class="workflow-diagram">
+                            <div class="workflow-step">
+                                <i class="fas fa-code-branch"></i>
+                                <span>Create a new feature branch with <code>git checkout -b feature-name</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-edit"></i>
+                                <span>Make and commit changes on the feature branch</span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-code-branch"></i>
+                                <span>Switch back to main branch with <code>git checkout main</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Pull latest changes with <code>git pull origin main</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-code-merge"></i>
+                                <span>Merge feature branch with <code>git merge feature-name</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-trash-alt"></i>
+                                <span>Delete the feature branch with <code>git branch -d feature-name</code></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="gitflow-tab">
+                        <div class="workflow-diagram">
+                            <div class="workflow-step">
+                                <i class="fas fa-code-branch"></i>
+                                <span>Main branches: <code>main</code> (production) and <code>develop</code> (integration)</span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-code-branch"></i>
+                                <span>Feature branches: <code>feature/*</code> branched from <code>develop</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-code-branch"></i>
+                                <span>Release branches: <code>release/*</code> branched from <code>develop</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-code-branch"></i>
+                                <span>Hotfix branches: <code>hotfix/*</code> branched from <code>main</code></span>
+                            </div>
+                            <div class="workflow-arrow">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="workflow-step">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Merge features to <code>develop</code>, releases to both <code>main</code> and <code>develop</code></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cheatsheet-section">
+                    <h3>Quick Reference</h3>
+                    
+                    <div class="quick-reference">
+                        <div class="reference-card">
+                            <h5><i class="fas fa-exclamation-circle"></i> Common Mistakes</h5>
+                            <ul>
+                                <li>Forgot to <code>git add</code> before commit</li>
+                                <li>Committing to wrong branch</li>
+                                <li>Force pushing to shared branches</li>
+                                <li>Not pulling before pushing</li>
+                                <li>Large commits instead of small, focused ones</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="reference-card">
+                            <h5><i class="fas fa-lightbulb"></i> Best Practices</h5>
+                            <ul>
+                                <li>Commit often, perfect later, publish once</li>
+                                <li>Write clear, concise commit messages</li>
+                                <li>Keep commits small and focused</li>
+                                <li>Test before you push</li>
+                                <li>Use branches for features/bugfixes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="reference-card">
+                            <h5><i class="fas fa-book"></i> Useful Resources</h5>
+                            <ul>
+                                <li>Pro Git Book: git-scm.com/book</li>
+                                <li>GitHub Docs: docs.github.com</li>
+                                <li>Git Documentation: git-scm.com/docs</li>
+                                <li>Interactive Learning: learngitbranching.js.org</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this Git Cheatsheet:</h3>
+                <ul>
+                    <li>Browse commands by category (Basic Workflow, Branching, Remotes, etc.)</li>
+                    <li>Click the copy button next to any command to copy it to your clipboard</li>
+                    <li>Review the different workflow tabs to understand common Git strategies</li>
+                    <li>Refer to the quick reference section for best practices and resources</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All interactions happen in your browser - we never store or transmit your data</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    
+    <script>
+        // Tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Hide all tabs
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab
+                    this.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        });
+        
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary notification
+                const notification = document.createElement('div');
+                notification.textContent = 'Copied!';
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.right = '20px';
+                notification.style.backgroundColor = '#3b82f6';
+                notification.style.color = 'white';
+                notification.style.padding = '10px 20px';
+                notification.style.borderRadius = '4px';
+                notification.style.zIndex = '1000';
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
