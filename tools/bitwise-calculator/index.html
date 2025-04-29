@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitwise Calculator - Perform Bitwise Operations Online | IT Tools</title>
+    <meta name="description" content="Perform bitwise operations (AND, OR, XOR, NOT, shift) on numbers with our online calculator. Supports binary, decimal, and hexadecimal inputs.">
+    <meta name="keywords" content="bitwise calculator, bitwise operations, AND OR XOR NOT, binary calculator, bit shift calculator">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group, .output-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3, .output-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .operation-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .operation-type {
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .operation-type:hover {
+            border-color: #3b82f6;
+            background: #f0f5ff;
+        }
+        
+        .operation-type.active {
+            border-color: #3b82f6;
+            background: #f0f5ff;
+            box-shadow: 0 0 0 1px #3b82f6;
+        }
+        
+        .operation-type i {
+            font-size: 1.5rem;
+            color: #3b82f6;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .operation-type h4 {
+            margin: 0 0 5px 0;
+            color: #374151;
+        }
+        
+        .input-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .input-field {
+            margin-bottom: 15px;
+        }
+        
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .number-format {
+            margin: 15px 0;
+        }
+        
+        .number-format label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .number-format select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .result-display {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin: 15px 0;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .result-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .result-value {
+            color: #3b82f6;
+            word-break: break-all;
+            text-align: right;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .operation-types {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .input-fields {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Bitwise Calculator</h1>
+            <p>Perform bitwise operations on numbers in binary, decimal, or hexadecimal format</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="calculator-container">
+                <div class="input-group">
+                    <h3>Bitwise Operation</h3>
+                    
+                    <div class="operation-types">
+                        <div class="operation-type active" data-type="AND">
+                            <i class="fas fa-android"></i>
+                            <h4>AND (&)</h4>
+                        </div>
+                        <div class="operation-type" data-type="OR">
+                            <i class="fas fa-orcid"></i>
+                            <h4>OR (|)</h4>
+                        </div>
+                        <div class="operation-type" data-type="XOR">
+                            <i class="fas fa-xing"></i>
+                            <h4>XOR (^)</h4>
+                        </div>
+                        <div class="operation-type" data-type="NOT">
+                            <i class="fas fa-not-equal"></i>
+                            <h4>NOT (~)</h4>
+                        </div>
+                        <div class="operation-type" data-type="LEFT_SHIFT">
+                            <i class="fas fa-arrow-left"></i>
+                            <h4>Left Shift (<<)</h4>
+                        </div>
+                        <div class="operation-type" data-type="RIGHT_SHIFT">
+                            <i class="fas fa-arrow-right"></i>
+                            <h4>Right Shift (>>)</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="number-format">
+                        <label for="number-format">Number Format</label>
+                        <select id="number-format">
+                            <option value="decimal">Decimal</option>
+                            <option value="binary">Binary</option>
+                            <option value="hexadecimal">Hexadecimal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-fields">
+                        <div class="input-field" id="first-number-field">
+                            <label for="first-number">First Number</label>
+                            <input type="text" id="first-number" placeholder="Enter first number">
+                        </div>
+                        <div class="input-field" id="second-number-field">
+                            <label for="second-number">Second Number</label>
+                            <input type="text" id="second-number" placeholder="Enter second number">
+                        </div>
+                        <div class="input-field" id="shift-amount-field" style="display: none;">
+                            <label for="shift-amount">Shift Amount</label>
+                            <input type="number" id="shift-amount" placeholder="Enter shift amount" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="calculate-btn" class="tool-button">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                        <button id="clear-btn" class="tool-button outline">
+                            <i class="fas fa-trash-alt"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Calculation Results</h3>
+                    
+                    <div class="result-display" id="result-display">
+                        <div class="result-row">
+                            <span class="result-label">Operation:</span>
+                            <span class="result-value" id="operation-result">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Decimal:</span>
+                            <span class="result-value" id="decimal-result">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Binary:</span>
+                            <span class="result-value" id="binary-result">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Hexadecimal:</span>
+                            <span class="result-value" id="hexadecimal-result">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn" id="copy-decimal-btn">
+                            <i class="fas fa-copy"></i> Copy Decimal
+                        </button>
+                        <button class="action-btn" id="copy-binary-btn">
+                            <i class="fas fa-copy"></i> Copy Binary
+                        </button>
+                        <button class="action-btn" id="copy-hex-btn">
+                            <i class="fas fa-copy"></i> Copy Hex
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this Bitwise Calculator:</h3>
+                <ul>
+                    <li>Select the bitwise operation you want to perform</li>
+                    <li>Choose the number format (decimal, binary, or hexadecimal)</li>
+                    <li>Enter the numbers (for NOT operation, only the first number is needed)</li>
+                    <li>Click <strong>Calculate</strong> to see the results in all formats</li>
+                    <li>Use the copy buttons to save results in your preferred format</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>Bitwise Operations Explained:</h3>
+                <ul>
+                    <li><strong>AND (&)</strong>: Each bit is 1 if both corresponding bits are 1</li>
+                    <li><strong>OR (|)</strong>: Each bit is 1 if either corresponding bit is 1</li>
+                    <li><strong>XOR (^)</strong>: Each bit is 1 if only one corresponding bit is 1</li>
+                    <li><strong>NOT (~)</strong>: Inverts all the bits (unary operation)</li>
+                    <li><strong>Left Shift (<<)</strong>: Shifts bits to the left, filling with 0s</li>
+                    <li><strong>Right Shift (>>)</strong>: Shifts bits to the right, preserving sign</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All calculations happen in your browser - we never store or transmit your data</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const operationTypes = document.querySelectorAll('.operation-type');
+        const numberFormat = document.getElementById('number-format');
+        const firstNumberField = document.getElementById('first-number-field');
+        const secondNumberField = document.getElementById('second-number-field');
+        const shiftAmountField = document.getElementById('shift-amount-field');
+        const firstNumberInput = document.getElementById('first-number');
+        const secondNumberInput = document.getElementById('second-number');
+        const shiftAmountInput = document.getElementById('shift-amount');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        const operationResult = document.getElementById('operation-result');
+        const decimalResult = document.getElementById('decimal-result');
+        const binaryResult = document.getElementById('binary-result');
+        const hexadecimalResult = document.getElementById('hexadecimal-result');
+        const copyDecimalBtn = document.getElementById('copy-decimal-btn');
+        const copyBinaryBtn = document.getElementById('copy-binary-btn');
+        const copyHexBtn = document.getElementById('copy-hex-btn');
+        
+        // Current operation type
+        let currentOperationType = 'AND';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            operationTypes.forEach(type => {
+                type.addEventListener('click', function() {
+                    operationTypes.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentOperationType = this.dataset.type;
+                    
+                    // Show/hide appropriate fields
+                    if (currentOperationType === 'NOT') {
+                        secondNumberField.style.display = 'none';
+                        shiftAmountField.style.display = 'none';
+                    } else if (currentOperationType === 'LEFT_SHIFT' || currentOperationType === 'RIGHT_SHIFT') {
+                        secondNumberField.style.display = 'none';
+                        shiftAmountField.style.display = 'block';
+                    } else {
+                        secondNumberField.style.display = 'block';
+                        shiftAmountField.style.display = 'none';
+                    }
+                    
+                    // Clear previous results
+                    clearResults();
+                });
+            });
+            
+            numberFormat.addEventListener('change', function() {
+                updateInputPlaceholders();
+                clearResults();
+            });
+            
+            calculateBtn.addEventListener('click', calculateBitwise);
+            clearBtn.addEventListener('click', clearInput);
+            copyDecimalBtn.addEventListener('click', () => copyResult('decimal'));
+            copyBinaryBtn.addEventListener('click', () => copyResult('binary'));
+            copyHexBtn.addEventListener('click', () => copyResult('hex'));
+            
+            // Set first option as active by default
+            operationTypes[0].classList.add('active');
+            updateInputPlaceholders();
+        });
+        
+        function updateInputPlaceholders() {
+            const format = numberFormat.value;
+            let placeholder1 = '';
+            let placeholder2 = '';
+            
+            switch(format) {
+                case 'binary':
+                    placeholder1 = 'e.g., 1010';
+                    placeholder2 = 'e.g., 1100';
+                    break;
+                case 'hexadecimal':
+                    placeholder1 = 'e.g., A5';
+                    placeholder2 = 'e.g., 3F';
+                    break;
+                default: // decimal
+                    placeholder1 = 'e.g., 42';
+                    placeholder2 = 'e.g., 13';
+                    break;
+            }
+            
+            firstNumberInput.placeholder = `Enter first number (${placeholder1})`;
+            secondNumberInput.placeholder = `Enter second number (${placeholder2})`;
+        }
+        
+        function parseInputNumber(input, format) {
+            if (!input) return null;
+            
+            input = input.trim();
+            
+            try {
+                switch(format) {
+                    case 'binary':
+                        // Remove any 0b prefix and non-binary characters
+                        const cleanBinary = input.replace(/^0b|[^01]/g, '');
+                        if (!cleanBinary) throw new Error('Invalid binary number');
+                        return parseInt(cleanBinary, 2);
+                    case 'hexadecimal':
+                        // Remove any 0x prefix and non-hex characters
+                        const cleanHex = input.replace(/^0x|[^0-9a-fA-F]/g, '');
+                        if (!cleanHex) throw new Error('Invalid hexadecimal number');
+                        return parseInt(cleanHex, 16);
+                    default: // decimal
+                        // Remove any non-digit characters (allow negative sign)
+                        const cleanDecimal = input.replace(/[^\d-]/g, '');
+                        if (!cleanDecimal) throw new Error('Invalid decimal number');
+                        return parseInt(cleanDecimal, 10);
+                }
+            } catch (e) {
+                throw new Error(`Invalid ${format} number: ${input}`);
+            }
+        }
+        
+        function calculateBitwise() {
+            try {
+                const format = numberFormat.value;
+                const num1 = parseInputNumber(firstNumberInput.value, format);
+                
+                if (num1 === null) {
+                    throw new Error('Please enter the first number');
+                }
+                
+                let num2 = null;
+                let shiftAmount = null;
+                
+                if (currentOperationType !== 'NOT') {
+                    if (currentOperationType === 'LEFT_SHIFT' || currentOperationType === 'RIGHT_SHIFT') {
+                        shiftAmount = parseInt(shiftAmountInput.value);
+                        if (isNaN(shiftAmount)) {
+                            throw new Error('Please enter a valid shift amount');
+                        }
+                    } else {
+                        num2 = parseInputNumber(secondNumberInput.value, format);
+                        if (num2 === null) {
+                            throw new Error('Please enter the second number');
+                        }
+                    }
+                }
+                
+                let result;
+                let operationSymbol;
+                
+                switch(currentOperationType) {
+                    case 'AND':
+                        result = num1 & num2;
+                        operationSymbol = '&';
+                        break;
+                    case 'OR':
+                        result = num1 | num2;
+                        operationSymbol = '|';
+                        break;
+                    case 'XOR':
+                        result = num1 ^ num2;
+                        operationSymbol = '^';
+                        break;
+                    case 'NOT':
+                        result = ~num1;
+                        operationSymbol = '~';
+                        break;
+                    case 'LEFT_SHIFT':
+                        result = num1 << shiftAmount;
+                        operationSymbol = '<<';
+                        break;
+                    case 'RIGHT_SHIFT':
+                        result = num1 >> shiftAmount;
+                        operationSymbol = '>>';
+                        break;
+                }
+                
+                // Display operation
+                if (currentOperationType === 'NOT') {
+                    operationResult.textContent = `${operationSymbol}${num1}`;
+                } else if (currentOperationType === 'LEFT_SHIFT' || currentOperationType === 'RIGHT_SHIFT') {
+                    operationResult.textContent = `${num1} ${operationSymbol} ${shiftAmount}`;
+                } else {
+                    operationResult.textContent = `${num1} ${operationSymbol} ${num2}`;
+                }
+                
+                // Display results in all formats
+                decimalResult.textContent = result;
+                binaryResult.textContent = '0b' + (result >>> 0).toString(2);
+                hexadecimalResult.textContent = '0x' + result.toString(16).toUpperCase();
+                
+                showStatus('Calculation completed successfully!', 'success');
+            } catch (error) {
+                console.error('Calculation error:', error);
+                clearResults();
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+        
+        function clearResults() {
+            operationResult.textContent = '-';
+            decimalResult.textContent = '-';
+            binaryResult.textContent = '-';
+            hexadecimalResult.textContent = '-';
+        }
+        
+        function clearInput() {
+            firstNumberInput.value = '';
+            secondNumberInput.value = '';
+            shiftAmountInput.value = '';
+            clearResults();
+            showStatus('Input cleared!', 'success');
+        }
+        
+        async function copyResult(format) {
+            try {
+                let textToCopy;
+                
+                switch(format) {
+                    case 'decimal':
+                        textToCopy = decimalResult.textContent;
+                        break;
+                    case 'binary':
+                        textToCopy = binaryResult.textContent;
+                        break;
+                    case 'hex':
+                        textToCopy = hexadecimalResult.textContent;
+                        break;
+                }
+                
+                if (textToCopy === '-') {
+                    throw new Error('No result to copy');
+                }
+                
+                await navigator.clipboard.writeText(textToCopy);
+                showStatus(`${format} result copied to clipboard!`, 'success');
+            } catch (error) {
+                showStatus('Failed to copy result', 'error');
+                console.error(error);
+            }
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
