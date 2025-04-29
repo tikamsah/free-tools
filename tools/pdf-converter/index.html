@@ -14,7 +14,12 @@
     <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <!-- PDF Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         .tool-container {
@@ -153,6 +158,11 @@
             background-color: #d1d5db;
         }
         
+        .btn-convert {
+            margin-top: 15px;
+            width: 100%;
+        }
+        
         .supported-formats {
             margin-top: 20px;
             font-size: 0.9rem;
@@ -246,6 +256,21 @@
             margin-top: 10px;
             text-align: center;
         }
+        
+        #pdf-preview-container {
+            width: 100%;
+            height: 200px;
+            overflow: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin: 15px auto;
+            background: #f8fafc;
+        }
+        
+        .canvas-wrapper {
+            margin: 0 auto;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -277,6 +302,10 @@
                     
                     <div class="file-info" id="toPdfFileInfo"></div>
                     <div class="file-preview-container" id="toPdfPreview"></div>
+                    
+                    <button class="btn btn-convert" id="toPdfConvertBtn" style="display: none;">
+                        <i class="fas fa-file-pdf"></i> Convert to PDF
+                    </button>
                     
                     <div class="progress-container" id="toPdfProgress">
                         <div class="progress-bar">
@@ -310,18 +339,20 @@
                     </div>
                     
                     <div class="file-info" id="fromPdfFileInfo"></div>
-                    <div class="file-preview-container" id="fromPdfPreview"></div>
+                    <div id="pdf-preview-container"></div>
                     
                     <div class="format-selector" style="margin-top: 15px;">
                         <label for="outputFormat" style="display: block; margin-bottom: 8px; color: #374151; font-weight: 500;">Convert to:</label>
                         <select id="outputFormat" class="file-input" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px;">
-                            <option value="docx">Word Document (.docx)</option>
-                            <option value="xlsx">Excel Spreadsheet (.xlsx)</option>
                             <option value="jpg">JPG Image (.jpg)</option>
                             <option value="png">PNG Image (.png)</option>
                             <option value="txt">Plain Text (.txt)</option>
                         </select>
                     </div>
+                    
+                    <button class="btn btn-convert" id="fromPdfConvertBtn" style="display: none;">
+                        <i class="fas fa-exchange-alt"></i> Convert PDF
+                    </button>
                     
                     <div class="progress-container" id="fromPdfProgress">
                         <div class="progress-bar">
@@ -337,7 +368,7 @@
                     </div>
                     
                     <div class="supported-formats">
-                        <strong>Supported outputs:</strong> Word, Excel, Images (JPG, PNG), Text
+                        <strong>Supported outputs:</strong> Images (JPG, PNG), Text
                     </div>
                 </div>
             </div>
@@ -363,7 +394,7 @@
             <div class="instructions">
                 <h3>How to use the PDF Converter:</h3>
                 <ul>
-                    <li><strong>To convert to PDF:</strong> Upload your file and the conversion will start automatically</li>
+                    <li><strong>To convert to PDF:</strong> Upload your file and click the convert button</li>
                     <li><strong>To convert from PDF:</strong> Upload a PDF file, select your desired output format, then click convert</li>
                     <li>Files are processed in your browser - we never upload your documents to any server</li>
                     <li>For large files or batch processing, consider our desktop application</li>
@@ -385,11 +416,15 @@
     <script src="https://it-tools.nepexo.com/js/script.js"></script>
     
     <script>
+        // Set PDF.js worker path
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+        
         // DOM elements
         const toPdfDropArea = document.getElementById('toPdfDropArea');
         const toPdfInput = document.getElementById('toPdfInput');
         const toPdfFileInfo = document.getElementById('toPdfFileInfo');
         const toPdfPreview = document.getElementById('toPdfPreview');
+        const toPdfConvertBtn = document.getElementById('toPdfConvertBtn');
         const toPdfProgress = document.getElementById('toPdfProgress');
         const toPdfProgressBar = document.getElementById('toPdfProgressBar');
         const toPdfProgressText = document.getElementById('toPdfProgressText');
@@ -399,13 +434,19 @@
         const fromPdfDropArea = document.getElementById('fromPdfDropArea');
         const fromPdfInput = document.getElementById('fromPdfInput');
         const fromPdfFileInfo = document.getElementById('fromPdfFileInfo');
-        const fromPdfPreview = document.getElementById('fromPdfPreview');
+        const pdfPreviewContainer = document.getElementById('pdf-preview-container');
+        const fromPdfConvertBtn = document.getElementById('fromPdfConvertBtn');
         const fromPdfProgress = document.getElementById('fromPdfProgress');
         const fromPdfProgressBar = document.getElementById('fromPdfProgressBar');
         const fromPdfProgressText = document.getElementById('fromPdfProgressText');
         const fromPdfResult = document.getElementById('fromPdfResult');
         const fromPdfDownload = document.getElementById('fromPdfDownload');
         const outputFormat = document.getElementById('outputFormat');
+        
+        // Variables to store conversion results
+        let toPdfConversionResult = null;
+        let fromPdfConversionResult = null;
+        let currentPdfDoc = null;
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -427,6 +468,8 @@
                 }
             });
             toPdfInput.addEventListener('change', handleToPdfFileSelect);
+            toPdfConvertBtn.addEventListener('click', convertToPdf);
+            toPdfDownload.addEventListener('click', downloadToPdfResult);
             
             // Set up event listeners for "Convert from PDF"
             fromPdfDropArea.addEventListener('click', () => fromPdfInput.click());
@@ -446,9 +489,7 @@
                 }
             });
             fromPdfInput.addEventListener('change', handleFromPdfFileSelect);
-            
-            // Set up download buttons
-            toPdfDownload.addEventListener('click', downloadToPdfResult);
+            fromPdfConvertBtn.addEventListener('click', convertFromPdf);
             fromPdfDownload.addEventListener('click', downloadFromPdfResult);
         });
         
@@ -459,44 +500,236 @@
             // Display file info
             toPdfFileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
             
-            // Show preview if it's an image
+            // Show preview based on file type
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     toPdfPreview.innerHTML = `<img src="${e.target.result}" class="file-preview" alt="File preview">`;
                 };
                 reader.readAsDataURL(file);
+            } else if (file.type === 'application/pdf') {
+                toPdfPreview.innerHTML = `<div class="file-preview" style="display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                    <i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>
+                </div>`;
+            } else if (file.type.includes('text')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result.length > 100 ? 
+                        e.target.result.substring(0, 100) + '...' : e.target.result;
+                    toPdfPreview.innerHTML = `<div class="file-preview" style="padding: 15px; background: #f3f4f6; font-family: monospace; white-space: pre-wrap;">${content}</div>`;
+                };
+                reader.readAsText(file);
             } else {
                 toPdfPreview.innerHTML = `<div class="file-preview" style="display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
                     <i class="fas fa-file" style="font-size: 3rem; color: #9ca3af;"></i>
                 </div>`;
             }
             
-            // Start conversion (simulated)
-            simulateConversion('toPdf');
+            // Show convert button
+            toPdfConvertBtn.style.display = 'block';
+            toPdfProgress.style.display = 'none';
+            toPdfResult.style.display = 'none';
         }
         
-        function handleFromPdfFileSelect() {
+        async function handleFromPdfFileSelect() {
             const file = fromPdfInput.files[0];
             if (!file) return;
             
             // Display file info
             fromPdfFileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
             
-            // Show PDF preview (simulated)
-            fromPdfPreview.innerHTML = `<div class="file-preview" style="display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
-                <i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>
-            </div>`;
+            // Clear previous preview
+            pdfPreviewContainer.innerHTML = '';
+            
+            try {
+                // Load the PDF file
+                const arrayBuffer = await file.arrayBuffer();
+                currentPdfDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
+                
+                // Render the first page as preview
+                const page = await currentPdfDoc.getPage(1);
+                const viewport = page.getViewport({ scale: 1.0 });
+                
+                // Create canvas for PDF rendering
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                
+                // Render PDF page to canvas
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+                
+                // Add canvas to preview container
+                const wrapper = document.createElement('div');
+                wrapper.className = 'canvas-wrapper';
+                wrapper.appendChild(canvas);
+                pdfPreviewContainer.appendChild(wrapper);
+                
+                // Show convert button
+                fromPdfConvertBtn.style.display = 'block';
+                fromPdfProgress.style.display = 'none';
+                fromPdfResult.style.display = 'none';
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                pdfPreviewContainer.innerHTML = '<div style="color: #ef4444; text-align: center; padding: 20px;">Could not load PDF preview</div>';
+            }
         }
         
-        function simulateConversion(type) {
+        async function convertToPdf() {
+            const file = toPdfInput.files[0];
+            if (!file) return;
+            
+            // Show progress
+            toPdfConvertBtn.style.display = 'none';
+            toPdfProgress.style.display = 'block';
+            simulateProgress('toPdf');
+            
+            try {
+                const { PDFDocument, rgb } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+                
+                if (file.type.startsWith('image/')) {
+                    // Convert image to PDF
+                    const imageBytes = await file.arrayBuffer();
+                    let image;
+                    
+                    if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+                        image = await pdfDoc.embedJpg(imageBytes);
+                    } else if (file.type === 'image/png') {
+                        image = await pdfDoc.embedPng(imageBytes);
+                    }
+                    
+                    const page = pdfDoc.addPage([image.width, image.height]);
+                    page.drawImage(image, {
+                        x: 0,
+                        y: 0,
+                        width: image.width,
+                        height: image.height,
+                    });
+                } else if (file.type.includes('text')) {
+                    // Convert text to PDF
+                    const text = await file.text();
+                    const page = pdfDoc.addPage([550, 750]);
+                    
+                    // Split text into lines that fit the page
+                    const lines = [];
+                    const maxLineLength = 80;
+                    let currentLine = '';
+                    
+                    for (const word of text.split(/\s+/)) {
+                        if (currentLine.length + word.length + 1 <= maxLineLength) {
+                            currentLine += (currentLine ? ' ' : '') + word;
+                        } else {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        }
+                    }
+                    if (currentLine) lines.push(currentLine);
+                    
+                    // Draw text on page
+                    let y = 700;
+                    const fontSize = 12;
+                    for (const line of lines) {
+                        if (y < 50) {
+                            y = 700;
+                            page = pdfDoc.addPage([550, 750]);
+                        }
+                        page.drawText(line, {
+                            x: 50,
+                            y: y,
+                            size: fontSize,
+                            color: rgb(0, 0, 0),
+                        });
+                        y -= (fontSize + 5);
+                    }
+                } else {
+                    // For other file types, create a PDF with file info
+                    const page = pdfDoc.addPage([550, 750]);
+                    page.drawText(`File: ${file.name}\nType: ${file.type || 'Unknown'}\nSize: ${formatFileSize(file.size)}`, {
+                        x: 50,
+                        y: 650,
+                        size: 20,
+                        color: rgb(0, 0, 0),
+                    });
+                }
+                
+                const pdfBytes = await pdfDoc.save();
+                toPdfConversionResult = new Blob([pdfBytes], { type: 'application/pdf' });
+                
+                // Show download button
+                toPdfProgress.style.display = 'none';
+                toPdfResult.style.display = 'block';
+            } catch (error) {
+                console.error('Conversion error:', error);
+                toPdfProgressText.textContent = 'Conversion failed. Please try another file.';
+            }
+        }
+        
+        async function convertFromPdf() {
+            const file = fromPdfInput.files[0];
+            if (!file || !currentPdfDoc) return;
+            
+            const format = outputFormat.value;
+            
+            // Show progress
+            fromPdfConvertBtn.style.display = 'none';
+            fromPdfProgress.style.display = 'block';
+            simulateProgress('fromPdf');
+            
+            try {
+                if (format === 'txt') {
+                    // Extract text from PDF
+                    let fullText = '';
+                    
+                    for (let i = 1; i <= currentPdfDoc.numPages; i++) {
+                        const page = await currentPdfDoc.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        fullText += pageText + '\n\n';
+                        
+                        // Update progress
+                        fromPdfProgressText.textContent = `Processing page ${i} of ${currentPdfDoc.numPages}`;
+                    }
+                    
+                    fromPdfConversionResult = new Blob([fullText], { type: 'text/plain' });
+                } else if (format === 'jpg' || format === 'png') {
+                    // Convert first page to image
+                    const page = await currentPdfDoc.getPage(1);
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    await page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    }).promise;
+                    
+                    // Convert canvas to blob
+                    const blob = await new Promise(resolve => {
+                        canvas.toBlob(resolve, format === 'jpg' ? 'image/jpeg' : 'image/png', 0.9);
+                    });
+                    
+                    fromPdfConversionResult = blob;
+                }
+                
+                // Show download button
+                fromPdfProgress.style.display = 'none';
+                fromPdfResult.style.display = 'block';
+            } catch (error) {
+                console.error('Conversion error:', error);
+                fromPdfProgressText.textContent = 'Conversion failed. Please try another file.';
+            }
+        }
+        
+        function simulateProgress(type) {
             const progressBar = type === 'toPdf' ? toPdfProgressBar : fromPdfProgressBar;
             const progressText = type === 'toPdf' ? toPdfProgressText : fromPdfProgressText;
-            const progressContainer = type === 'toPdf' ? toPdfProgress : fromPdfProgress;
-            const resultContainer = type === 'toPdf' ? toPdfResult : fromPdfResult;
-            
-            progressContainer.style.display = 'block';
-            resultContainer.style.display = 'none';
             
             let progress = 0;
             const interval = setInterval(() => {
@@ -504,29 +737,38 @@
                 if (progress > 100) progress = 100;
                 
                 progressBar.style.width = `${progress}%`;
-                progressText.textContent = progress < 100 ? 
-                    `Processing... ${Math.round(progress)}%` : 
-                    'Conversion complete!';
+                if (type === 'fromPdf' && currentPdfDoc) {
+                    // For PDF conversion, show page progress if available
+                    progressText.textContent = progress < 100 ? 
+                        `Processing... ${Math.round(progress)}%` : 
+                        'Conversion complete!';
+                } else {
+                    progressText.textContent = progress < 100 ? 
+                        `Processing... ${Math.round(progress)}%` : 
+                        'Conversion complete!';
+                }
                 
                 if (progress === 100) {
                     clearInterval(interval);
-                    setTimeout(() => {
-                        progressContainer.style.display = 'none';
-                        resultContainer.style.display = 'block';
-                    }, 500);
                 }
             }, 200);
         }
         
         function downloadToPdfResult() {
-            // In a real implementation, this would download the converted PDF
-            alert('In a real implementation, this would download the converted PDF file.');
+            if (!toPdfConversionResult) return;
+            
+            const file = toPdfInput.files[0];
+            const fileName = file.name.replace(/\.[^/.]+$/, "") + '.pdf';
+            saveAs(toPdfConversionResult, fileName);
         }
         
         function downloadFromPdfResult() {
+            if (!fromPdfConversionResult) return;
+            
+            const file = fromPdfInput.files[0];
             const format = outputFormat.value;
-            // In a real implementation, this would download the converted file
-            alert(`In a real implementation, this would download the PDF converted to ${format.toUpperCase()}.`);
+            const fileName = file.name.replace(/\.[^/.]+$/, "") + '.' + format;
+            saveAs(fromPdfConversionResult, fileName);
         }
         
         function formatFileSize(bytes) {
