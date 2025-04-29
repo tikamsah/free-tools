@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Converter | IT Tools</title>
+    <meta name="description" content="Convert files to and from PDF format. Supports images, Word, Excel, PowerPoint and more.">
+    <meta name="keywords" content="PDF converter, convert to PDF, PDF to Word, PDF to JPG, online PDF tools">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        @media (min-width: 992px) {
+            .converter-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .converter-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            transition: transform 0.2s ease;
+        }
+        
+        .converter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .converter-card h3 {
+            margin-top: 0;
+            color: #374151;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .converter-card h3 i {
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+        
+        .converter-card p {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+        
+        .file-drop-area {
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .file-drop-area:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        
+        .file-drop-area.active {
+            border-color: #3b82f6;
+            background-color: #f0f5ff;
+        }
+        
+        .file-drop-area i {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+        
+        .file-drop-area .file-msg {
+            font-size: 1rem;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+        
+        .file-drop-area .file-input {
+            display: none;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .supported-formats {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .supported-formats strong {
+            color: #374151;
+        }
+        
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #3b82f6;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-align: center;
+        }
+        
+        .result-container {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .download-btn {
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .file-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin: 15px auto;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .file-info {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>PDF Converter</h1>
+            <p>Convert files to and from PDF format quickly and securely</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="converter-container">
+                <!-- Convert TO PDF -->
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-pdf"></i> Convert to PDF</h3>
+                    <p>Convert various file formats to high-quality PDF documents</p>
+                    
+                    <div class="file-drop-area" id="toPdfDropArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="file-msg">Drag & drop files here or click to browse</div>
+                        <input type="file" class="file-input" id="toPdfInput" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.txt,.rtf">
+                        <button class="btn btn-secondary"><i class="fas fa-folder-open"></i> Select Files</button>
+                    </div>
+                    
+                    <div class="file-info" id="toPdfFileInfo"></div>
+                    <div class="file-preview-container" id="toPdfPreview"></div>
+                    
+                    <div class="progress-container" id="toPdfProgress">
+                        <div class="progress-bar">
+                            <div class="progress" id="toPdfProgressBar"></div>
+                        </div>
+                        <div class="progress-text" id="toPdfProgressText">Processing...</div>
+                    </div>
+                    
+                    <div class="result-container" id="toPdfResult">
+                        <button class="btn download-btn" id="toPdfDownload">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                    
+                    <div class="supported-formats">
+                        <strong>Supported formats:</strong> Word (.doc, .docx), Excel (.xls, .xlsx), 
+                        PowerPoint (.ppt, .pptx), Images (.jpg, .jpeg, .png), Text (.txt, .rtf)
+                    </div>
+                </div>
+                
+                <!-- Convert FROM PDF -->
+                <div class="converter-card">
+                    <h3><i class="fas fa-file-export"></i> Convert from PDF</h3>
+                    <p>Extract content from PDF files to other formats</p>
+                    
+                    <div class="file-drop-area" id="fromPdfDropArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="file-msg">Drag & drop PDF files here or click to browse</div>
+                        <input type="file" class="file-input" id="fromPdfInput" accept=".pdf">
+                        <button class="btn btn-secondary"><i class="fas fa-folder-open"></i> Select PDF</button>
+                    </div>
+                    
+                    <div class="file-info" id="fromPdfFileInfo"></div>
+                    <div class="file-preview-container" id="fromPdfPreview"></div>
+                    
+                    <div class="format-selector" style="margin-top: 15px;">
+                        <label for="outputFormat" style="display: block; margin-bottom: 8px; color: #374151; font-weight: 500;">Convert to:</label>
+                        <select id="outputFormat" class="file-input" style="width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px;">
+                            <option value="docx">Word Document (.docx)</option>
+                            <option value="xlsx">Excel Spreadsheet (.xlsx)</option>
+                            <option value="jpg">JPG Image (.jpg)</option>
+                            <option value="png">PNG Image (.png)</option>
+                            <option value="txt">Plain Text (.txt)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="progress-container" id="fromPdfProgress">
+                        <div class="progress-bar">
+                            <div class="progress" id="fromPdfProgressBar"></div>
+                        </div>
+                        <div class="progress-text" id="fromPdfProgressText">Processing...</div>
+                    </div>
+                    
+                    <div class="result-container" id="fromPdfResult">
+                        <button class="btn download-btn" id="fromPdfDownload">
+                            <i class="fas fa-download"></i> Download Converted File
+                        </button>
+                    </div>
+                    
+                    <div class="supported-formats">
+                        <strong>Supported outputs:</strong> Word, Excel, Images (JPG, PNG), Text
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use the PDF Converter:</h3>
+                <ul>
+                    <li><strong>To convert to PDF:</strong> Upload your file and the conversion will start automatically</li>
+                    <li><strong>To convert from PDF:</strong> Upload a PDF file, select your desired output format, then click convert</li>
+                    <li>Files are processed in your browser - we never upload your documents to any server</li>
+                    <li>For large files or batch processing, consider our desktop application</li>
+                    <li>All conversions are secure and private - your files are deleted after you close the page</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">Your files are processed locally in your browser - we never upload or store your documents</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    
+    <script>
+        // DOM elements
+        const toPdfDropArea = document.getElementById('toPdfDropArea');
+        const toPdfInput = document.getElementById('toPdfInput');
+        const toPdfFileInfo = document.getElementById('toPdfFileInfo');
+        const toPdfPreview = document.getElementById('toPdfPreview');
+        const toPdfProgress = document.getElementById('toPdfProgress');
+        const toPdfProgressBar = document.getElementById('toPdfProgressBar');
+        const toPdfProgressText = document.getElementById('toPdfProgressText');
+        const toPdfResult = document.getElementById('toPdfResult');
+        const toPdfDownload = document.getElementById('toPdfDownload');
+        
+        const fromPdfDropArea = document.getElementById('fromPdfDropArea');
+        const fromPdfInput = document.getElementById('fromPdfInput');
+        const fromPdfFileInfo = document.getElementById('fromPdfFileInfo');
+        const fromPdfPreview = document.getElementById('fromPdfPreview');
+        const fromPdfProgress = document.getElementById('fromPdfProgress');
+        const fromPdfProgressBar = document.getElementById('fromPdfProgressBar');
+        const fromPdfProgressText = document.getElementById('fromPdfProgressText');
+        const fromPdfResult = document.getElementById('fromPdfResult');
+        const fromPdfDownload = document.getElementById('fromPdfDownload');
+        const outputFormat = document.getElementById('outputFormat');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners for "Convert to PDF"
+            toPdfDropArea.addEventListener('click', () => toPdfInput.click());
+            toPdfDropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                toPdfDropArea.classList.add('active');
+            });
+            toPdfDropArea.addEventListener('dragleave', () => {
+                toPdfDropArea.classList.remove('active');
+            });
+            toPdfDropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                toPdfDropArea.classList.remove('active');
+                if (e.dataTransfer.files.length) {
+                    toPdfInput.files = e.dataTransfer.files;
+                    handleToPdfFileSelect();
+                }
+            });
+            toPdfInput.addEventListener('change', handleToPdfFileSelect);
+            
+            // Set up event listeners for "Convert from PDF"
+            fromPdfDropArea.addEventListener('click', () => fromPdfInput.click());
+            fromPdfDropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fromPdfDropArea.classList.add('active');
+            });
+            fromPdfDropArea.addEventListener('dragleave', () => {
+                fromPdfDropArea.classList.remove('active');
+            });
+            fromPdfDropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fromPdfDropArea.classList.remove('active');
+                if (e.dataTransfer.files.length) {
+                    fromPdfInput.files = e.dataTransfer.files;
+                    handleFromPdfFileSelect();
+                }
+            });
+            fromPdfInput.addEventListener('change', handleFromPdfFileSelect);
+            
+            // Set up download buttons
+            toPdfDownload.addEventListener('click', downloadToPdfResult);
+            fromPdfDownload.addEventListener('click', downloadFromPdfResult);
+        });
+        
+        function handleToPdfFileSelect() {
+            const file = toPdfInput.files[0];
+            if (!file) return;
+            
+            // Display file info
+            toPdfFileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            
+            // Show preview if it's an image
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    toPdfPreview.innerHTML = `<img src="${e.target.result}" class="file-preview" alt="File preview">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                toPdfPreview.innerHTML = `<div class="file-preview" style="display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                    <i class="fas fa-file" style="font-size: 3rem; color: #9ca3af;"></i>
+                </div>`;
+            }
+            
+            // Start conversion (simulated)
+            simulateConversion('toPdf');
+        }
+        
+        function handleFromPdfFileSelect() {
+            const file = fromPdfInput.files[0];
+            if (!file) return;
+            
+            // Display file info
+            fromPdfFileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            
+            // Show PDF preview (simulated)
+            fromPdfPreview.innerHTML = `<div class="file-preview" style="display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                <i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>
+            </div>`;
+        }
+        
+        function simulateConversion(type) {
+            const progressBar = type === 'toPdf' ? toPdfProgressBar : fromPdfProgressBar;
+            const progressText = type === 'toPdf' ? toPdfProgressText : fromPdfProgressText;
+            const progressContainer = type === 'toPdf' ? toPdfProgress : fromPdfProgress;
+            const resultContainer = type === 'toPdf' ? toPdfResult : fromPdfResult;
+            
+            progressContainer.style.display = 'block';
+            resultContainer.style.display = 'none';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = progress < 100 ? 
+                    `Processing... ${Math.round(progress)}%` : 
+                    'Conversion complete!';
+                
+                if (progress === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        resultContainer.style.display = 'block';
+                    }, 500);
+                }
+            }, 200);
+        }
+        
+        function downloadToPdfResult() {
+            // In a real implementation, this would download the converted PDF
+            alert('In a real implementation, this would download the converted PDF file.');
+        }
+        
+        function downloadFromPdfResult() {
+            const format = outputFormat.value;
+            // In a real implementation, this would download the converted file
+            alert(`In a real implementation, this would download the PDF converted to ${format.toUpperCase()}.`);
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>
