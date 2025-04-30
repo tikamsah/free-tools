@@ -485,6 +485,16 @@
     <!-- JavaScript -->
     <script src="https://it-tools.nepexo.com/js/footer.js"></script>
     <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+      <!-- Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+      <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-61PG9HQVB4');
+      </script>
+      
     
     <script>
         // DOM elements
@@ -539,39 +549,114 @@
             // This is a comprehensive list of IANA timezones with country codes
             // In a production app, you might want to get this from an API
             allTimezones = [
+                // North America
                 { name: 'New York', value: 'America/New_York', country: 'us' },
                 { name: 'Los Angeles', value: 'America/Los_Angeles', country: 'us' },
                 { name: 'Chicago', value: 'America/Chicago', country: 'us' },
                 { name: 'Denver', value: 'America/Denver', country: 'us' },
                 { name: 'Phoenix', value: 'America/Phoenix', country: 'us' },
+                { name: 'Anchorage', value: 'America/Anchorage', country: 'us' },
+                { name: 'Honolulu', value: 'Pacific/Honolulu', country: 'us' },
+                { name: 'Toronto', value: 'America/Toronto', country: 'ca' },
+                { name: 'Vancouver', value: 'America/Vancouver', country: 'ca' },
+                { name: 'Montreal', value: 'America/Montreal', country: 'ca' },
+                { name: 'Mexico City', value: 'America/Mexico_City', country: 'mx' },
+                { name: 'Cancun', value: 'America/Cancun', country: 'mx' },
+                { name: 'Guatemala', value: 'America/Guatemala', country: 'gt' },
+
+                // South America
+                { name: 'Bogota', value: 'America/Bogota', country: 'co' },
+                { name: 'Lima', value: 'America/Lima', country: 'pe' },
+                { name: 'Santiago', value: 'America/Santiago', country: 'cl' },
+                { name: 'Sao Paulo', value: 'America/Sao_Paulo', country: 'br' },
+                { name: 'Rio de Janeiro', value: 'America/Sao_Paulo', country: 'br' }, // Same as Sao Paulo
+                { name: 'Buenos Aires', value: 'America/Argentina/Buenos_Aires', country: 'ar' },
+                { name: 'Caracas', value: 'America/Caracas', country: 've' },
+
+                // Europe
                 { name: 'London', value: 'Europe/London', country: 'gb' },
                 { name: 'Paris', value: 'Europe/Paris', country: 'fr' },
                 { name: 'Berlin', value: 'Europe/Berlin', country: 'de' },
                 { name: 'Rome', value: 'Europe/Rome', country: 'it' },
                 { name: 'Madrid', value: 'Europe/Madrid', country: 'es' },
+                { name: 'Barcelona', value: 'Europe/Madrid', country: 'es' }, // Same as Madrid
+                { name: 'Lisbon', value: 'Europe/Lisbon', country: 'pt' },
+                { name: 'Amsterdam', value: 'Europe/Amsterdam', country: 'nl' },
+                { name: 'Brussels', value: 'Europe/Brussels', country: 'be' },
+                { name: 'Vienna', value: 'Europe/Vienna', country: 'at' },
+                { name: 'Zurich', value: 'Europe/Zurich', country: 'ch' },
+                { name: 'Stockholm', value: 'Europe/Stockholm', country: 'se' },
+                { name: 'Oslo', value: 'Europe/Oslo', country: 'no' },
+                { name: 'Helsinki', value: 'Europe/Helsinki', country: 'fi' },
+                { name: 'Copenhagen', value: 'Europe/Copenhagen', country: 'dk' },
+                { name: 'Warsaw', value: 'Europe/Warsaw', country: 'pl' },
+                { name: 'Prague', value: 'Europe/Prague', country: 'cz' },
+                { name: 'Budapest', value: 'Europe/Budapest', country: 'hu' },
+                { name: 'Athens', value: 'Europe/Athens', country: 'gr' },
                 { name: 'Moscow', value: 'Europe/Moscow', country: 'ru' },
                 { name: 'Istanbul', value: 'Europe/Istanbul', country: 'tr' },
+                { name: 'Kiev', value: 'Europe/Kiev', country: 'ua' },
+
+                // Africa
+                { name: 'Cairo', value: 'Africa/Cairo', country: 'eg' },
+                { name: 'Johannesburg', value: 'Africa/Johannesburg', country: 'za' },
+                { name: 'Cape Town', value: 'Africa/Johannesburg', country: 'za' }, // Same as Johannesburg
+                { name: 'Nairobi', value: 'Africa/Nairobi', country: 'ke' },
+                { name: 'Casablanca', value: 'Africa/Casablanca', country: 'ma' },
+                { name: 'Lagos', value: 'Africa/Lagos', country: 'ng' },
+                { name: 'Tunis', value: 'Africa/Tunis', country: 'tn' },
+                { name: 'Algiers', value: 'Africa/Algiers', country: 'dz' },
+                { name: 'Accra', value: 'Africa/Accra', country: 'gh' },
+
+                // Middle East
                 { name: 'Dubai', value: 'Asia/Dubai', country: 'ae' },
+                { name: 'Abu Dhabi', value: 'Asia/Dubai', country: 'ae' }, // Same as Dubai
+                { name: 'Riyadh', value: 'Asia/Riyadh', country: 'sa' },
+                { name: 'Doha', value: 'Asia/Qatar', country: 'qa' },
+                { name: 'Tehran', value: 'Asia/Tehran', country: 'ir' },
+                { name: 'Baghdad', value: 'Asia/Baghdad', country: 'iq' },
+                { name: 'Jerusalem', value: 'Asia/Jerusalem', country: 'il' },
+                { name: 'Amman', value: 'Asia/Amman', country: 'jo' },
+                { name: 'Beirut', value: 'Asia/Beirut', country: 'lb' },
+
+                // Asia
                 { name: 'Tokyo', value: 'Asia/Tokyo', country: 'jp' },
+                { name: 'Osaka', value: 'Asia/Tokyo', country: 'jp' }, // Same as Tokyo
                 { name: 'Shanghai', value: 'Asia/Shanghai', country: 'cn' },
+                { name: 'Beijing', value: 'Asia/Shanghai', country: 'cn' }, // Same as Shanghai
                 { name: 'Hong Kong', value: 'Asia/Hong_Kong', country: 'hk' },
-                { name: 'Singapore', value: 'Asia/Singapore', country: 'sg' },
+                { name: 'Taipei', value: 'Asia/Taipei', country: 'tw' },
                 { name: 'Seoul', value: 'Asia/Seoul', country: 'kr' },
+                { name: 'Singapore', value: 'Asia/Singapore', country: 'sg' },
+                { name: 'Kuala Lumpur', value: 'Asia/Kuala_Lumpur', country: 'my' },
+                { name: 'Bangkok', value: 'Asia/Bangkok', country: 'th' },
+                { name: 'Jakarta', value: 'Asia/Jakarta', country: 'id' },
+                { name: 'Manila', value: 'Asia/Manila', country: 'ph' },
+                { name: 'Hanoi', value: 'Asia/Hanoi', country: 'vn' },
                 { name: 'Delhi', value: 'Asia/Kolkata', country: 'in' },
+                { name: 'Mumbai', value: 'Asia/Kolkata', country: 'in' }, // Same as Kolkata
+                { name: 'Bangalore', value: 'Asia/Kolkata', country: 'in' }, // Same as Kolkata
+                { name: 'Islamabad', value: 'Asia/Karachi', country: 'pk' },
+                { name: 'Dhaka', value: 'Asia/Dhaka', country: 'bd' },
+                { name: 'Kathmandu', value: 'Asia/Kathmandu', country: 'np' },
+                { name: 'Colombo', value: 'Asia/Colombo', country: 'lk' },
+
+                // Australia/Oceania
                 { name: 'Sydney', value: 'Australia/Sydney', country: 'au' },
                 { name: 'Melbourne', value: 'Australia/Melbourne', country: 'au' },
+                { name: 'Brisbane', value: 'Australia/Brisbane', country: 'au' },
+                { name: 'Perth', value: 'Australia/Perth', country: 'au' },
+                { name: 'Adelaide', value: 'Australia/Adelaide', country: 'au' },
                 { name: 'Auckland', value: 'Pacific/Auckland', country: 'nz' },
+                { name: 'Wellington', value: 'Pacific/Auckland', country: 'nz' }, // Same as Auckland
+                { name: 'Fiji', value: 'Pacific/Fiji', country: 'fj' },
                 { name: 'Honolulu', value: 'Pacific/Honolulu', country: 'us' },
-                { name: 'Anchorage', value: 'America/Anchorage', country: 'us' },
-                { name: 'Toronto', value: 'America/Toronto', country: 'ca' },
-                { name: 'Vancouver', value: 'America/Vancouver', country: 'ca' },
-                { name: 'Mexico City', value: 'America/Mexico_City', country: 'mx' },
-                { name: 'Sao Paulo', value: 'America/Sao_Paulo', country: 'br' },
-                { name: 'Buenos Aires', value: 'America/Argentina/Buenos_Aires', country: 'ar' },
-                { name: 'Cape Town', value: 'Africa/Johannesburg', country: 'za' },
-                { name: 'Cairo', value: 'Africa/Cairo', country: 'eg' },
-                { name: 'Nairobi', value: 'Africa/Nairobi', country: 'ke' },
-                { name: 'UTC', value: 'UTC', country: 'un' }
+
+                // UTC and others
+                { name: 'UTC', value: 'UTC', country: 'un' },
+                { name: 'GMT', value: 'GMT', country: 'un' },
+                { name: 'Azores', value: 'Atlantic/Azores', country: 'pt' },
+                { name: 'Reykjavik', value: 'Atlantic/Reykjavik', country: 'is' }
             ];
             
             // Sort timezones by name
