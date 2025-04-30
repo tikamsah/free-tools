@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD5 Generator | IT Tools</title>
+    <meta name="description" content="Generate MD5 hashes from your text input or files. Fast cryptographic hash generator.">
+    <meta name="keywords" content="MD5 generator, MD5 hash, hash generator, cryptographic hash">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            color: #111827;
+            line-height: 1.6;
+        }
+        
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .generator-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+        }
+        
+        .input-section {
+            margin-bottom: 25px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Fira Code', monospace;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .results-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .hash-result {
+            padding: 15px;
+        }
+        
+        .hash-type {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hash-value {
+            font-family: 'Fira Code', monospace;
+            word-break: break-all;
+            color: #111827;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 5px;
+        }
+        
+        .copy-btn:hover {
+            color: #3b82f6;
+        }
+        
+        .file-input-container {
+            margin-top: 15px;
+        }
+        
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background-color: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .file-input-label:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+     <!-- Header -->
+     <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>MD5 Generator</h1>
+            <p>Generate MD5 hashes from your text or files</p>
+        </div>
+        
+        <div class="generator-container">
+            <div class="input-section">
+                <label for="textInput" class="input-label">Input Text</label>
+                <textarea id="textInput" class="text-input" placeholder="Enter text to generate MD5 hash..."></textarea>
+                
+                <div class="file-input-container">
+                    <label class="file-input-label">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Or select a file</span>
+                        <input type="file" id="fileInput" class="file-input">
+                    </label>
+                    <div id="fileInfo" class="file-info"></div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="generateBtn" class="btn">
+                    <i class="fas fa-key"></i> Generate MD5
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+            </div>
+            
+            <div class="results-container" id="resultsContainer">
+                <div class="hash-result">
+                    <div class="hash-type">
+                        <i class="fas fa-hashtag"></i> MD5 Hash
+                        <button class="copy-btn" onclick="copyHash('md5')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="hash-value" id="md5Hash">Enter text and click "Generate MD5"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to use the MD5 Generator:</h3>
+            <ul>
+                <li>Enter text in the input box or select a file to generate MD5 hash</li>
+                <li>Click "Generate MD5" to create the cryptographic hash</li>
+                <li>Click the copy button next to the hash to copy it to your clipboard</li>
+                <li>All processing happens in your browser - your data never leaves your computer</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>About MD5 Hashes:</h3>
+            <ul>
+                <li><strong>MD5</strong>: 128-bit cryptographic hash function</li>
+                <li>Produces a 32-character hexadecimal number (128 bits)</li>
+                <li>Commonly used to verify data integrity</li>
+                <li>Not recommended for security purposes as it's vulnerable to collision attacks</li>
+                <li>Still widely used for checksums and non-cryptographic purposes</li>
+            </ul>
+        </div>
+        
+        <p class="privacy-note">All hash generation happens in your browser - we never store or transmit your input data</p>
+    </main>
+
+      <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+        <!-- JavaScript -->
+        <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+        <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-61PG9HQVB4');
+        </script>
+
+    <!-- JavaScript -->
+    <script>
+        // DOM elements
+        const textInput = document.getElementById('textInput');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const md5Hash = document.getElementById('md5Hash');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            generateBtn.addEventListener('click', generateHash);
+            clearBtn.addEventListener('click', clearAll);
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Generate hash when text changes (with debounce)
+            let debounceTimer;
+            textInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(generateHash, 500);
+            });
+        });
+        
+        async function generateHash() {
+            const input = textInput.value;
+            const file = fileInput.files[0];
+            
+            if (!input && !file) {
+                showNotification('Please enter text or select a file', 'error');
+                return;
+            }
+            
+            try {
+                if (file) {
+                    await generateFileHash(file);
+                } else {
+                    await generateTextHash(input);
+                }
+            } catch (error) {
+                console.error('Error generating hash:', error);
+                showNotification('Error generating MD5 hash', 'error');
+            }
+        }
+        
+        async function generateTextHash(text) {
+            const hash = await md5(text);
+            md5Hash.textContent = hash;
+            showNotification('MD5 hash generated successfully!', 'success');
+        }
+        
+        async function generateFileHash(file) {
+            const fileBuffer = await readFileAsArrayBuffer(file);
+            const hash = await md5File(fileBuffer);
+            md5Hash.textContent = hash;
+            showNotification('File MD5 hash generated successfully!', 'success');
+        }
+        
+        function clearAll() {
+            textInput.value = '';
+            fileInput.value = '';
+            fileInfo.textContent = '';
+            md5Hash.textContent = 'Enter text and click "Generate MD5"';
+        }
+        
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                fileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+                textInput.value = '';
+                generateHash();
+            }
+        }
+        
+        // MD5 implementation using Web Crypto API
+        async function md5(text) {
+            // Note: MD5 is not supported in Web Crypto API, so we use a fallback
+            return await md5Fallback(text);
+        }
+        
+        async function md5File(buffer) {
+            return await md5Fallback(buffer);
+        }
+        
+        // Fallback MD5 implementation
+        async function md5Fallback(data) {
+            if (typeof data === 'string') {
+                const encoder = new TextEncoder();
+                data = encoder.encode(data);
+            }
+            
+            // Use a simple MD5 implementation for browsers that don't support it in Web Crypto
+            return await hashWithWorker(data, 'MD5');
+        }
+        
+        // Web Worker for hashing
+        async function hashWithWorker(data, algorithm) {
+            return new Promise((resolve, reject) => {
+                const workerCode = `
+                    self.onmessage = function(e) {
+                        const data = e.data.data;
+                        const algorithm = e.data.algorithm;
+                        
+                        if (algorithm === 'MD5') {
+                            importScripts('https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js');
+                            const hash = self.md5(data);
+                            postMessage({hash});
+                        } else {
+                            postMessage({error: 'Unsupported algorithm'});
+                        }
+                    };
+                `;
+                
+                const blob = new Blob([workerCode], {type: 'application/javascript'});
+                const workerUrl = URL.createObjectURL(blob);
+                const worker = new Worker(workerUrl);
+                
+                worker.onmessage = function(e) {
+                    if (e.data.error) {
+                        reject(e.data.error);
+                    } else {
+                        resolve(e.data.hash);
+                    }
+                    worker.terminate();
+                    URL.revokeObjectURL(workerUrl);
+                };
+                
+                worker.onerror = function(error) {
+                    reject(error);
+                    worker.terminate();
+                    URL.revokeObjectURL(workerUrl);
+                };
+                
+                if (data instanceof ArrayBuffer) {
+                    // Convert ArrayBuffer to string for the MD5 library
+                    const view = new Uint8Array(data);
+                    const stringData = Array.from(view).map(b => String.fromCharCode(b)).join('');
+                    worker.postMessage({data: stringData, algorithm});
+                } else {
+                    worker.postMessage({data, algorithm});
+                }
+            });
+        }
+        
+        // Helper functions
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function copyHash(hashType) {
+            const hashElement = document.getElementById(`${hashType}Hash`);
+            navigator.clipboard.writeText(hashElement.textContent)
+                .then(() => showNotification('Hash copied to clipboard!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy hash: ', err);
+                    showNotification('Failed to copy hash', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
