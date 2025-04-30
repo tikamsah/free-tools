@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHA Generator | IT Tools</title>
+    <meta name="description" content="Generate SHA-1, SHA-256, SHA-384, and SHA-512 hashes from your text input. Secure cryptographic hash generator.">
+    <meta name="keywords" content="SHA generator, SHA-256, SHA-1, SHA-512, hash generator, cryptographic hash">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .generator-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+        }
+        
+        .input-section {
+            margin-bottom: 25px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Fira Code', monospace;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .options-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .hash-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hash-option input {
+            margin: 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .results-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .hash-result {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .hash-result:last-child {
+            border-bottom: none;
+        }
+        
+        .hash-type {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hash-value {
+            font-family: 'Fira Code', monospace;
+            word-break: break-all;
+            color: #111827;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 5px;
+        }
+        
+        .copy-btn:hover {
+            color: #3b82f6;
+        }
+        
+        .file-input-container {
+            margin-top: 15px;
+        }
+        
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background-color: #f3f4f6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .file-input-label:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>SHA Generator</h1>
+            <p>Generate SHA-1, SHA-256, SHA-384, and SHA-512 hashes from your text or files</p>
+        </div>
+        
+        <div class="generator-container">
+            <div class="input-section">
+                <label for="textInput" class="input-label">Input Text</label>
+                <textarea id="textInput" class="text-input" placeholder="Enter text to generate hash..."></textarea>
+                
+                <div class="file-input-container">
+                    <label class="file-input-label">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Or select a file</span>
+                        <input type="file" id="fileInput" class="file-input">
+                    </label>
+                    <div id="fileInfo" class="file-info"></div>
+                </div>
+            </div>
+            
+            <div class="options-row">
+                <div class="hash-option">
+                    <input type="checkbox" id="sha1Option" checked>
+                    <label for="sha1Option">SHA-1</label>
+                </div>
+                <div class="hash-option">
+                    <input type="checkbox" id="sha256Option" checked>
+                    <label for="sha256Option">SHA-256</label>
+                </div>
+                <div class="hash-option">
+                    <input type="checkbox" id="sha384Option">
+                    <label for="sha384Option">SHA-384</label>
+                </div>
+                <div class="hash-option">
+                    <input type="checkbox" id="sha512Option">
+                    <label for="sha512Option">SHA-512</label>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="generateBtn" class="btn">
+                    <i class="fas fa-key"></i> Generate Hashes
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+            </div>
+            
+            <div class="results-container" id="resultsContainer">
+                <div class="hash-result">
+                    <div class="hash-type">
+                        <i class="fas fa-hashtag"></i> SHA-1
+                        <button class="copy-btn" onclick="copyHash('sha1')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="hash-value" id="sha1Hash">Enter text and click "Generate Hashes"</div>
+                </div>
+                <div class="hash-result">
+                    <div class="hash-type">
+                        <i class="fas fa-hashtag"></i> SHA-256
+                        <button class="copy-btn" onclick="copyHash('sha256')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="hash-value" id="sha256Hash">Enter text and click "Generate Hashes"</div>
+                </div>
+                <div class="hash-result">
+                    <div class="hash-type">
+                        <i class="fas fa-hashtag"></i> SHA-384
+                        <button class="copy-btn" onclick="copyHash('sha384')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="hash-value" id="sha384Hash">Enter text and click "Generate Hashes"</div>
+                </div>
+                <div class="hash-result">
+                    <div class="hash-type">
+                        <i class="fas fa-hashtag"></i> SHA-512
+                        <button class="copy-btn" onclick="copyHash('sha512')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="hash-value" id="sha512Hash">Enter text and click "Generate Hashes"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to use the SHA Generator:</h3>
+            <ul>
+                <li>Enter text in the input box or select a file to generate hashes</li>
+                <li>Select which hash algorithms you want to generate (SHA-1, SHA-256, SHA-384, SHA-512)</li>
+                <li>Click "Generate Hashes" to create the cryptographic hashes</li>
+                <li>Click the copy button next to any hash to copy it to your clipboard</li>
+                <li>All processing happens in your browser - your data never leaves your computer</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>About SHA Hashes:</h3>
+            <ul>
+                <li><strong>SHA-1</strong>: 160-bit hash function. Fast but considered insecure for cryptographic purposes.</li>
+                <li><strong>SHA-256</strong>: 256-bit hash from the SHA-2 family. Currently secure and widely used.</li>
+                <li><strong>SHA-384</strong>: 384-bit hash from the SHA-2 family. More secure than SHA-256.</li>
+                <li><strong>SHA-512</strong>: 512-bit hash from the SHA-2 family. Most secure option in this tool.</li>
+                <li>Note: For new applications, SHA-256 or higher is recommended over SHA-1.</li>
+            </ul>
+        </div>
+        
+        <p class="privacy-note">All hash generation happens in your browser - we never store or transmit your input data</p>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         gtag('config', 'G-61PG9HQVB4');
+     </script>
+    
+    <script>
+        // DOM elements
+        const textInput = document.getElementById('textInput');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const sha1Option = document.getElementById('sha1Option');
+        const sha256Option = document.getElementById('sha256Option');
+        const sha384Option = document.getElementById('sha384Option');
+        const sha512Option = document.getElementById('sha512Option');
+        const sha1Hash = document.getElementById('sha1Hash');
+        const sha256Hash = document.getElementById('sha256Hash');
+        const sha384Hash = document.getElementById('sha384Hash');
+        const sha512Hash = document.getElementById('sha512Hash');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            generateBtn.addEventListener('click', generateHashes);
+            clearBtn.addEventListener('click', clearAll);
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Generate hashes when text changes (with debounce)
+            let debounceTimer;
+            textInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(generateHashes, 500);
+            });
+        });
+        
+        async function generateHashes() {
+            const input = textInput.value;
+            const file = fileInput.files[0];
+            
+            if (!input && !file) {
+                showNotification('Please enter text or select a file', 'error');
+                return;
+            }
+            
+            if (file) {
+                await generateFileHashes(file);
+            } else {
+                await generateTextHashes(input);
+            }
+        }
+        
+        async function generateTextHashes(text) {
+            // Check if at least one algorithm is selected
+            if (!sha1Option.checked && !sha256Option.checked && !sha384Option.checked && !sha512Option.checked) {
+                showNotification('Please select at least one hash algorithm', 'error');
+                return;
+            }
+            
+            try {
+                // Generate hashes based on selected algorithms
+                if (sha1Option.checked) {
+                    const hash = await sha1(text);
+                    sha1Hash.textContent = hash;
+                    sha1Hash.parentElement.style.display = 'block';
+                } else {
+                    sha1Hash.parentElement.style.display = 'none';
+                }
+                
+                if (sha256Option.checked) {
+                    const hash = await sha256(text);
+                    sha256Hash.textContent = hash;
+                    sha256Hash.parentElement.style.display = 'block';
+                } else {
+                    sha256Hash.parentElement.style.display = 'none';
+                }
+                
+                if (sha384Option.checked) {
+                    const hash = await sha384(text);
+                    sha384Hash.textContent = hash;
+                    sha384Hash.parentElement.style.display = 'block';
+                } else {
+                    sha384Hash.parentElement.style.display = 'none';
+                }
+                
+                if (sha512Option.checked) {
+                    const hash = await sha512(text);
+                    sha512Hash.textContent = hash;
+                    sha512Hash.parentElement.style.display = 'block';
+                } else {
+                    sha512Hash.parentElement.style.display = 'none';
+                }
+                
+                showNotification('Hashes generated successfully!', 'success');
+            } catch (error) {
+                console.error('Hash generation error:', error);
+                showNotification('Error generating hashes', 'error');
+            }
+        }
+        
+        async function generateFileHashes(file) {
+            // Check if at least one algorithm is selected
+            if (!sha1Option.checked && !sha256Option.checked && !sha384Option.checked && !sha512Option.checked) {
+                showNotification('Please select at least one hash algorithm', 'error');
+                return;
+            }
+            
+            try {
+                const fileBuffer = await readFileAsArrayBuffer(file);
+                
+                // Generate hashes based on selected algorithms
+                if (sha1Option.checked) {
+                    const hash = await sha1File(fileBuffer);
+                    sha1Hash.textContent = hash;
+                    sha1Hash.parentElement.style.display = 'block';
+                } else {
+                    sha1Hash.parentElement.style.display = 'none';
+                }
+                
+                if (sha256Option.checked) {
+                    const hash = await sha256File(fileBuffer);
+                    sha256Hash.textContent = hash;
+                    sha256Hash.parentElement.style.display = 'block';
+                } else {
+                    sha256Hash.parentElement.style.display = 'none';
+                }
+                
+                if (sha384Option.checked) {
+                    const hash = await sha384File(fileBuffer);
+                    sha384Hash.textContent = hash;
+                    sha384Hash.parentElement.style.display = 'block';
+                } else {
+                    sha384Hash.parentElement.style.display = 'none';
+                }
+                
+                if (sha512Option.checked) {
+                    const hash = await sha512File(fileBuffer);
+                    sha512Hash.textContent = hash;
+                    sha512Hash.parentElement.style.display = 'block';
+                } else {
+                    sha512Hash.parentElement.style.display = 'none';
+                }
+                
+                showNotification('File hashes generated successfully!', 'success');
+            } catch (error) {
+                console.error('File hash generation error:', error);
+                showNotification('Error generating file hashes', 'error');
+            }
+        }
+        
+        function clearAll() {
+            textInput.value = '';
+            fileInput.value = '';
+            fileInfo.textContent = '';
+            sha1Hash.textContent = 'Enter text and click "Generate Hashes"';
+            sha256Hash.textContent = 'Enter text and click "Generate Hashes"';
+            sha384Hash.textContent = 'Enter text and click "Generate Hashes"';
+            sha512Hash.textContent = 'Enter text and click "Generate Hashes"';
+            
+            // Show all result boxes
+            document.querySelectorAll('.hash-result').forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            // Reset checkboxes
+            sha1Option.checked = true;
+            sha256Option.checked = true;
+            sha384Option.checked = false;
+            sha512Option.checked = false;
+        }
+        
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                fileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+                textInput.value = '';
+                generateHashes();
+            }
+        }
+        
+        // Hash functions for text
+        async function sha1(text) {
+            // Using the Web Crypto API
+            return await hashText('SHA-1', text);
+        }
+        
+        async function sha256(text) {
+            return await hashText('SHA-256', text);
+        }
+        
+        async function sha384(text) {
+            return await hashText('SHA-384', text);
+        }
+        
+        async function sha512(text) {
+            return await hashText('SHA-512', text);
+        }
+        
+        async function hashText(algorithm, text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest(algorithm, data);
+            return bufferToHex(hashBuffer);
+        }
+        
+        // Hash functions for files
+        async function sha1File(buffer) {
+            return await hashFile('SHA-1', buffer);
+        }
+        
+        async function sha256File(buffer) {
+            return await hashFile('SHA-256', buffer);
+        }
+        
+        async function sha384File(buffer) {
+            return await hashFile('SHA-384', buffer);
+        }
+        
+        async function sha512File(buffer) {
+            return await hashFile('SHA-512', buffer);
+        }
+        
+        async function hashFile(algorithm, buffer) {
+            const hashBuffer = await crypto.subtle.digest(algorithm, buffer);
+            return bufferToHex(hashBuffer);
+        }
+        
+        // Helper functions
+        function bufferToHex(buffer) {
+            return Array.from(new Uint8Array(buffer))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+        
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function copyHash(hashType) {
+            const hashElement = document.getElementById(`${hashType}Hash`);
+            navigator.clipboard.writeText(hashElement.textContent)
+                .then(() => showNotification('Hash copied to clipboard!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy hash: ', err);
+                    showNotification('Failed to copy hash', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+    
+    <style>
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</body>
+</html>
