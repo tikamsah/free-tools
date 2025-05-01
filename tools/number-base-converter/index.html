@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Base Converter | IT Tools</title>
+    <meta name="description" content="Convert numbers between different bases like binary, decimal, hexadecimal, octal and more.">
+    <meta name="keywords" content="number converter, base converter, binary converter, hexadecimal converter, decimal converter">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .converter-section {
+            margin-bottom: 20px;
+        }
+        
+        .converter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .converter-title {
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .base-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .base-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+            background-color: white;
+        }
+        
+        .number-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .result-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #f9fafb;
+            font-family: 'Fira Code', monospace;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+        
+        .result-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .base-info {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Number Base Converter</h1>
+            <p>Convert numbers between binary, decimal, hexadecimal, octal and other bases</p>
+        </div>
+        
+        <div class="converter-container">
+            <div class="converter-grid">
+                <div class="converter-section">
+                    <div class="converter-header">
+                        <div class="converter-title">
+                            <i class="fas fa-arrow-right-to-bracket"></i>
+                            <span>Input Number</span>
+                        </div>
+                        <div class="base-selector">
+                            <label for="inputBase">Base:</label>
+                            <select id="inputBase" class="base-select">
+                                <option value="2">Binary (Base 2)</option>
+                                <option value="8">Octal (Base 8)</option>
+                                <option value="10" selected>Decimal (Base 10)</option>
+                                <option value="16">Hexadecimal (Base 16)</option>
+                                <option value="32">Base32</option>
+                                <option value="36">Base36</option>
+                                <option value="64">Base64</option>
+                            </select>
+                        </div>
+                    </div>
+                    <textarea id="inputNumber" class="number-input" placeholder="Enter number to convert..."></textarea>
+                    <div class="base-info" id="inputBaseInfo">
+                        Enter a decimal number (e.g., 1234)
+                    </div>
+                </div>
+                
+                <div class="converter-section">
+                    <div class="converter-header">
+                        <div class="converter-title">
+                            <i class="fas fa-arrow-right-from-bracket"></i>
+                            <span>Output Base</span>
+                        </div>
+                        <div class="base-selector">
+                            <label for="outputBase">Base:</label>
+                            <select id="outputBase" class="base-select">
+                                <option value="2">Binary (Base 2)</option>
+                                <option value="8">Octal (Base 8)</option>
+                                <option value="10">Decimal (Base 10)</option>
+                                <option value="16" selected>Hexadecimal (Base 16)</option>
+                                <option value="32">Base32</option>
+                                <option value="36">Base36</option>
+                                <option value="64">Base64</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="result-container">
+                        <div class="result-content" id="outputResult">
+                            Conversion results will appear here...
+                        </div>
+                    </div>
+                    <div class="base-info" id="outputBaseInfo">
+                        Will convert to hexadecimal (Base 16)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="btn btn-success">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+                <button id="copyBtn" class="btn">
+                    <i class="fas fa-copy"></i> Copy Result
+                </button>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to use the Number Base Converter:</h3>
+            <ul>
+                <li>Enter your number in the input field</li>
+                <li>Select the base of your input number</li>
+                <li>Select the base you want to convert to</li>
+                <li>Click "Convert" to see the result</li>
+                <li>Use "Copy Result" to copy the converted number</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>Supported Number Bases:</h3>
+            <ul>
+                <li><strong>Binary (Base 2)</strong> - Uses digits 0-1 (e.g., 101010)</li>
+                <li><strong>Octal (Base 8)</strong> - Uses digits 0-7 (e.g., 755)</li>
+                <li><strong>Decimal (Base 10)</strong> - Standard numbering system (e.g., 1234)</li>
+                <li><strong>Hexadecimal (Base 16)</strong> - Uses digits 0-9 and A-F (e.g., 1A3F)</li>
+                <li><strong>Base32</strong> - Uses A-Z and 2-7 (e.g., JBSWY3DP)</li>
+                <li><strong>Base36</strong> - Uses 0-9 and A-Z (e.g., 21I3V)</li>
+                <li><strong>Base64</strong> - Uses A-Z, a-z, 0-9, +, / (e.g., Zm9vYmFy)</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const inputNumber = document.getElementById('inputNumber');
+        const inputBase = document.getElementById('inputBase');
+        const outputBase = document.getElementById('outputBase');
+        const outputResult = document.getElementById('outputResult');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const inputBaseInfo = document.getElementById('inputBaseInfo');
+        const outputBaseInfo = document.getElementById('outputBaseInfo');
+        
+        // Base information
+        const baseDescriptions = {
+            '2': 'binary (digits 0-1)',
+            '8': 'octal (digits 0-7)',
+            '10': 'decimal (digits 0-9)',
+            '16': 'hexadecimal (digits 0-9, A-F)',
+            '32': 'Base32 (A-Z, 2-7)',
+            '36': 'Base36 (0-9, A-Z)',
+            '64': 'Base64 (A-Z, a-z, 0-9, +, /)'
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            inputBase.addEventListener('change', updateBaseInfo);
+            outputBase.addEventListener('change', updateBaseInfo);
+            convertBtn.addEventListener('click', convertNumber);
+            clearBtn.addEventListener('click', clearAll);
+            copyBtn.addEventListener('click', copyResult);
+            inputNumber.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    convertNumber();
+                }
+            });
+            
+            // Update base info initially
+            updateBaseInfo();
+        });
+        
+        function updateBaseInfo() {
+            const inputBaseValue = inputBase.value;
+            const outputBaseValue = outputBase.value;
+            
+            inputBaseInfo.textContent = `Enter a ${baseDescriptions[inputBaseValue]} number (e.g., ${getExampleNumber(inputBaseValue)})`;
+            outputBaseInfo.textContent = `Will convert to ${baseDescriptions[outputBaseValue]}`;
+        }
+        
+        function getExampleNumber(base) {
+            const examples = {
+                '2': '1010',
+                '8': '755',
+                '10': '1234',
+                '16': '1A3F',
+                '32': 'JBSWY3DP',
+                '36': '21I3V',
+                '64': 'Zm9vYmFy'
+            };
+            return examples[base];
+        }
+        
+        function convertNumber() {
+            const number = inputNumber.value.trim();
+            const fromBase = parseInt(inputBase.value);
+            const toBase = parseInt(outputBase.value);
+            
+            if (!number) {
+                showNotification('Please enter a number to convert', 'error');
+                return;
+            }
+            
+            try {
+                // First convert the input to decimal
+                let decimalValue;
+                if (fromBase === 10) {
+                    decimalValue = BigInt(number);
+                } else if (fromBase === 16) {
+                    decimalValue = BigInt(`0x${number}`);
+                } else if (fromBase === 8) {
+                    decimalValue = BigInt(`0o${number}`);
+                } else if (fromBase === 2) {
+                    decimalValue = BigInt(`0b${number}`);
+                } else {
+                    decimalValue = parseInt(number, fromBase);
+                    if (isNaN(decimalValue)) {
+                        throw new Error('Invalid number for selected base');
+                    }
+                    decimalValue = BigInt(decimalValue);
+                }
+                
+                // Then convert from decimal to the target base
+                let result;
+                if (toBase === 10) {
+                    result = decimalValue.toString();
+                } else if (toBase === 16) {
+                    result = decimalValue.toString(16).toUpperCase();
+                } else if (toBase === 8) {
+                    result = decimalValue.toString(8);
+                } else if (toBase === 2) {
+                    result = decimalValue.toString(2);
+                } else if (toBase === 32) {
+                    result = toBase32(number, fromBase);
+                } else if (toBase === 36) {
+                    result = decimalValue.toString(36).toUpperCase();
+                } else if (toBase === 64) {
+                    result = btoa(number);
+                } else {
+                    result = decimalValue.toString(toBase).toUpperCase();
+                }
+                
+                outputResult.textContent = result;
+                showNotification('Conversion successful', 'success');
+                
+            } catch (error) {
+                outputResult.textContent = `Error: ${error.message}`;
+                showNotification('Conversion failed', 'error');
+            }
+        }
+        
+        function toBase32(number, fromBase) {
+            // Simplified Base32 conversion - for a complete implementation you'd need a proper library
+            const base32Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            let decimalValue;
+            
+            if (fromBase === 10) {
+                decimalValue = parseInt(number, 10);
+            } else {
+                decimalValue = parseInt(number, fromBase);
+            }
+            
+            if (isNaN(decimalValue)) {
+                throw new Error('Invalid number for selected base');
+            }
+            
+            let result = '';
+            while (decimalValue > 0) {
+                const remainder = decimalValue % 32;
+                result = base32Chars[remainder] + result;
+                decimalValue = Math.floor(decimalValue / 32);
+            }
+            
+            return result || '0';
+        }
+        
+        function clearAll() {
+            inputNumber.value = '';
+            outputResult.textContent = 'Conversion results will appear here...';
+        }
+        
+        function copyResult() {
+            const result = outputResult.textContent;
+            if (!result || result.includes('Conversion results will appear here')) {
+                showNotification('No result to copy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(result)
+                .then(() => showNotification('Result copied to clipboard!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy result', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
