@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RGB to Hex Converter | IT Tools</title>
+    <meta name="description" content="Convert between RGB and HEX color codes instantly. Perfect for web designers and developers.">
+    <meta name="keywords" content="RGB to HEX, color converter, hex color, rgb color, web design tools">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .converter-section {
+            margin-bottom: 20px;
+        }
+        
+        .converter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .converter-title {
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .color-preview {
+            width: 100%;
+            height: 80px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #e5e7eb;
+            transition: background-color 0.3s ease;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .color-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .color-slider {
+            width: 100%;
+            margin-top: 5px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .result-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #f9fafb;
+            font-family: 'Fira Code', monospace;
+            min-height: 60px;
+            overflow-y: auto;
+        }
+        
+        .result-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .color-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>RGB to Hex Color Converter</h1>
+            <p>Convert between RGB and HEX color codes with real-time preview</p>
+        </div>
+        
+        <div class="converter-container">
+            <div class="converter-grid">
+                <div class="converter-section">
+                    <div class="converter-header">
+                        <div class="converter-title">
+                            <i class="fas fa-palette"></i>
+                            <span>RGB Color</span>
+                        </div>
+                    </div>
+                    
+                    <div class="color-preview" id="rgbPreview" style="background-color: rgb(255, 0, 0)"></div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Red (0-255)</label>
+                        <div class="input-row">
+                            <input type="range" id="redSlider" class="color-slider" min="0" max="255" value="255">
+                            <input type="number" id="redInput" class="color-input" min="0" max="255" value="255">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Green (0-255)</label>
+                        <div class="input-row">
+                            <input type="range" id="greenSlider" class="color-slider" min="0" max="255" value="0">
+                            <input type="number" id="greenInput" class="color-input" min="0" max="255" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Blue (0-255)</label>
+                        <div class="input-row">
+                            <input type="range" id="blueSlider" class="color-slider" min="0" max="255" value="0">
+                            <input type="number" id="blueInput" class="color-input" min="0" max="255" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">RGB Value</label>
+                        <div class="result-container">
+                            <div class="result-content" id="rgbValue">rgb(255, 0, 0)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="converter-section">
+                    <div class="converter-header">
+                        <div class="converter-title">
+                            <i class="fas fa-palette"></i>
+                            <span>HEX Color</span>
+                        </div>
+                    </div>
+                    
+                    <div class="color-preview" id="hexPreview" style="background-color: #ff0000"></div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">HEX Color Code</label>
+                        <div class="input-row">
+                            <input type="text" id="hexInput" class="color-input" value="#ff0000" placeholder="#RRGGBB">
+                            <span class="color-value">(e.g. #ff0000)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Converted RGB</label>
+                        <div class="result-container">
+                            <div class="result-content" id="hexToRgbValue">rgb(255, 0, 0)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="btn btn-success">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+                <button id="copyHexBtn" class="btn">
+                    <i class="fas fa-copy"></i> Copy HEX
+                </button>
+                <button id="copyRgbBtn" class="btn">
+                    <i class="fas fa-copy"></i> Copy RGB
+                </button>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to use the RGB to Hex Converter:</h3>
+            <ul>
+                <li>Adjust the RGB sliders or enter values directly (0-255)</li>
+                <li>The HEX color will update automatically</li>
+                <li>Alternatively, enter a HEX color code to see its RGB equivalent</li>
+                <li>Use the preview boxes to see the actual color</li>
+                <li>Copy either format to your clipboard with the buttons</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>About Color Formats:</h3>
+            <ul>
+                <li><strong>RGB</strong> - Specifies colors using Red, Green, and Blue values (0-255 each)</li>
+                <li><strong>HEX</strong> - A hexadecimal representation of RGB (e.g., #RRGGBB)</li>
+                <li>Both formats are widely used in web design and development</li>
+                <li>HEX is more compact while RGB is more human-readable</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const redSlider = document.getElementById('redSlider');
+        const greenSlider = document.getElementById('greenSlider');
+        const blueSlider = document.getElementById('blueSlider');
+        const redInput = document.getElementById('redInput');
+        const greenInput = document.getElementById('greenInput');
+        const blueInput = document.getElementById('blueInput');
+        const hexInput = document.getElementById('hexInput');
+        const rgbPreview = document.getElementById('rgbPreview');
+        const hexPreview = document.getElementById('hexPreview');
+        const rgbValue = document.getElementById('rgbValue');
+        const hexToRgbValue = document.getElementById('hexToRgbValue');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyHexBtn = document.getElementById('copyHexBtn');
+        const copyRgbBtn = document.getElementById('copyRgbBtn');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            redSlider.addEventListener('input', updateFromRgbSliders);
+            greenSlider.addEventListener('input', updateFromRgbSliders);
+            blueSlider.addEventListener('input', updateFromRgbSliders);
+            
+            redInput.addEventListener('input', updateFromRgbInputs);
+            greenInput.addEventListener('input', updateFromRgbInputs);
+            blueInput.addEventListener('input', updateFromRgbInputs);
+            
+            hexInput.addEventListener('input', updateFromHex);
+            
+            convertBtn.addEventListener('click', convertColors);
+            clearBtn.addEventListener('click', clearAll);
+            copyHexBtn.addEventListener('click', copyHex);
+            copyRgbBtn.addEventListener('click', copyRgb);
+            
+            // Initial update
+            updateFromRgbSliders();
+        });
+        
+        function updateFromRgbSliders() {
+            // Sync inputs with sliders
+            redInput.value = redSlider.value;
+            greenInput.value = greenSlider.value;
+            blueInput.value = blueSlider.value;
+            
+            updateRgbDisplay();
+        }
+        
+        function updateFromRgbInputs() {
+            // Validate inputs
+            redInput.value = clampValue(redInput.value, 0, 255);
+            greenInput.value = clampValue(greenInput.value, 0, 255);
+            blueInput.value = clampValue(blueInput.value, 0, 255);
+            
+            // Sync sliders with inputs
+            redSlider.value = redInput.value;
+            greenSlider.value = greenInput.value;
+            blueSlider.value = blueInput.value;
+            
+            updateRgbDisplay();
+        }
+        
+        function clampValue(value, min, max) {
+            const num = parseInt(value) || 0;
+            return Math.min(Math.max(num, min), max);
+        }
+        
+        function updateRgbDisplay() {
+            const r = redInput.value;
+            const g = greenInput.value;
+            const b = blueInput.value;
+            
+            // Update RGB preview and value
+            const rgbString = `rgb(${r}, ${g}, ${b})`;
+            rgbPreview.style.backgroundColor = rgbString;
+            rgbValue.textContent = rgbString;
+            
+            // Convert to HEX
+            const hexString = rgbToHex(parseInt(r), parseInt(g), parseInt(b));
+            hexInput.value = hexString;
+            hexPreview.style.backgroundColor = hexString;
+            hexToRgbValue.textContent = rgbString;
+        }
+        
+        function updateFromHex() {
+            let hex = hexInput.value.trim();
+            
+            // Add # if missing
+            if (hex && !hex.startsWith('#')) {
+                hex = `#${hex}`;
+                hexInput.value = hex;
+            }
+            
+            // Validate HEX format
+            if (/^#([0-9A-F]{3}){1,2}$/i.test(hex)) {
+                const rgb = hexToRgb(hex);
+                if (rgb) {
+                    redInput.value = rgb.r;
+                    greenInput.value = rgb.g;
+                    blueInput.value = rgb.b;
+                    
+                    redSlider.value = rgb.r;
+                    greenSlider.value = rgb.g;
+                    blueSlider.value = rgb.b;
+                    
+                    // Update displays
+                    const rgbString = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+                    rgbPreview.style.backgroundColor = rgbString;
+                    rgbValue.textContent = rgbString;
+                    hexPreview.style.backgroundColor = hex;
+                    hexToRgbValue.textContent = rgbString;
+                }
+            }
+        }
+        
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+        }
+        
+        function hexToRgb(hex) {
+            // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+            const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+            
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+        
+        function convertColors() {
+            updateFromHex(); // Force conversion from current HEX value
+            showNotification('Colors converted', 'success');
+        }
+        
+        function clearAll() {
+            redSlider.value = 255;
+            greenSlider.value = 0;
+            blueSlider.value = 0;
+            hexInput.value = '#ff0000';
+            updateFromRgbSliders();
+            showNotification('All values reset', 'success');
+        }
+        
+        function copyHex() {
+            navigator.clipboard.writeText(hexInput.value)
+                .then(() => showNotification('HEX code copied!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy HEX', 'error');
+                });
+        }
+        
+        function copyRgb() {
+            navigator.clipboard.writeText(rgbValue.textContent)
+                .then(() => showNotification('RGB value copied!', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy RGB', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
