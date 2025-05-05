@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query String Parser | IT Tools</title>
+    <meta name="description" content="Parse and analyze URL query strings. Extract parameters and values from URLs easily.">
+    <meta name="keywords" content="query string parser, URL parameters, URL query analyzer, web developer tools">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .parser-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            margin-bottom: 25px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .url-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .results-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #f9fafb;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .results-title {
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .results-content {
+            overflow-x: auto;
+        }
+        
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .param-table th, .param-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .param-table th {
+            background-color: #f3f4f6;
+            font-weight: 500;
+        }
+        
+        .param-table tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Query String Parser</h1>
+            <p>Parse and analyze URL query parameters with ease</p>
+        </div>
+        
+        <div class="parser-container">
+            <div class="input-section">
+                <label for="urlInput" class="input-label">
+                    <i class="fas fa-link"></i> URL with Query String
+                </label>
+                <input type="text" id="urlInput" class="url-input" placeholder="https://example.com/page?param1=value1&param2=value2">
+            </div>
+            
+            <div class="action-buttons">
+                <button id="parseBtn" class="btn btn-success">
+                    <i class="fas fa-search"></i> Parse Query
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+                <button id="testBtn" class="btn">
+                    <i class="fas fa-vial"></i> Load Test URL
+                </button>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-header">
+                    <div class="results-title">
+                        <i class="fas fa-list-ul"></i>
+                        <span>Query Parameters</span>
+                    </div>
+                    <button id="copyAllBtn" class="btn-secondary" style="padding: 5px 10px; font-size: 0.8rem; display: none;">
+                        <i class="fas fa-copy"></i> Copy All
+                    </button>
+                </div>
+                <div class="results-content">
+                    <div id="emptyState" class="empty-state">
+                        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Parsed parameters will appear here</p>
+                    </div>
+                    <table id="paramTable" class="param-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paramTableBody">
+                            <!-- Parameters will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to use the Query String Parser:</h3>
+            <ul>
+                <li>Enter a URL containing query parameters (after the ? character)</li>
+                <li>Click "Parse Query" to extract all parameters</li>
+                <li>Copy individual values or all parameters at once</li>
+                <li>Use "Load Test URL" to see an example</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>About Query Strings:</h3>
+            <ul>
+                <li>Query strings appear after the <code>?</code> in a URL</li>
+                <li>Parameters are separated by <code>&</code> characters</li>
+                <li>Format: <code>parameter=value</code></li>
+                <li>Special characters are URL-encoded (e.g., spaces become <code>%20</code>)</li>
+                <li>Commonly used for tracking, filtering, and passing data between pages</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const urlInput = document.getElementById('urlInput');
+        const parseBtn = document.getElementById('parseBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const testBtn = document.getElementById('testBtn');
+        const copyAllBtn = document.getElementById('copyAllBtn');
+        const paramTable = document.getElementById('paramTable');
+        const paramTableBody = document.getElementById('paramTableBody');
+        const emptyState = document.getElementById('emptyState');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for URL in hash
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                if (hash.startsWith('url=')) {
+                    urlInput.value = decodeURIComponent(hash.substring(4));
+                    parseQueryString();
+                }
+            }
+            
+            // Set up event listeners
+            parseBtn.addEventListener('click', parseQueryString);
+            clearBtn.addEventListener('click', clearAll);
+            testBtn.addEventListener('click', loadTestUrl);
+            copyAllBtn.addEventListener('click', copyAllParams);
+            urlInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    parseQueryString();
+                }
+            });
+        });
+        
+        function parseQueryString() {
+            const url = urlInput.value.trim();
+            if (!url) {
+                showNotification('Please enter a URL', 'error');
+                return;
+            }
+            
+            try {
+                // Extract query string
+                let queryString = '';
+                const questionMarkIndex = url.indexOf('?');
+                
+                if (questionMarkIndex === -1) {
+                    showNotification('No query parameters found in URL', 'error');
+                    return;
+                }
+                
+                queryString = url.substring(questionMarkIndex + 1);
+                
+                // Parse parameters
+                const params = new URLSearchParams(queryString);
+                const paramEntries = Array.from(params.entries());
+                
+                if (paramEntries.length === 0) {
+                    showNotification('No valid parameters found', 'error');
+                    return;
+                }
+                
+                // Clear previous results
+                paramTableBody.innerHTML = '';
+                
+                // Add parameters to table
+                paramEntries.forEach(([key, value]) => {
+                    const row = document.createElement('tr');
+                    
+                    const keyCell = document.createElement('td');
+                    keyCell.textContent = key;
+                    row.appendChild(keyCell);
+                    
+                    const valueCell = document.createElement('td');
+                    valueCell.textContent = value;
+                    row.appendChild(valueCell);
+                    
+                    const actionCell = document.createElement('td');
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    copyBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(value)
+                            .then(() => showNotification('Value copied to clipboard', 'success'))
+                            .catch(err => {
+                                console.error('Failed to copy: ', err);
+                                showNotification('Failed to copy value', 'error');
+                            });
+                    });
+                    actionCell.appendChild(copyBtn);
+                    row.appendChild(actionCell);
+                    
+                    paramTableBody.appendChild(row);
+                });
+                
+                // Show results
+                emptyState.style.display = 'none';
+                paramTable.style.display = 'table';
+                copyAllBtn.style.display = 'block';
+                
+                showNotification(`Found ${paramEntries.length} parameters`, 'success');
+                
+            } catch (error) {
+                console.error('Error parsing query string:', error);
+                showNotification('Error parsing URL. Please check the format.', 'error');
+            }
+        }
+        
+        function clearAll() {
+            urlInput.value = '';
+            emptyState.style.display = 'block';
+            paramTable.style.display = 'none';
+            copyAllBtn.style.display = 'none';
+        }
+        
+        function loadTestUrl() {
+            urlInput.value = 'https://example.com/search?q=query+string+parser&category=tools&page=2&sort=recent&filter=all';
+            showNotification('Test URL loaded', 'success');
+        }
+        
+        function copyAllParams() {
+            const rows = paramTableBody.querySelectorAll('tr');
+            if (rows.length === 0) return;
+            
+            let paramsText = '';
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                paramsText += `${cells[0].textContent}=${cells[1].textContent}\n`;
+            });
+            
+            navigator.clipboard.writeText(paramsText.trim())
+                .then(() => showNotification('All parameters copied to clipboard', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy parameters', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
