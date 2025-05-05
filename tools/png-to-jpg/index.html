@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNG to JPG Converter | IT Tools</title>
+    <meta name="description" content="Convert PNG images to JPG format online. Simple, fast, and free image conversion tool.">
+    <meta name="keywords" content="PNG to JPG, image converter, PNG converter, JPG converter, online image conversion">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .converter-section {
+            margin-bottom: 20px;
+        }
+        
+        .converter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .converter-title {
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .image-upload-area {
+            border: 2px dashed #e5e7eb;
+            border-radius: 6px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .image-upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        
+        .image-upload-area i {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+        
+        .image-upload-area p {
+            color: #6b7280;
+            margin: 0;
+        }
+        
+        .image-preview-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #f9fafb;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin-bottom: 15px;
+        }
+        
+        .quality-control {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .quality-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .file-info {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>PNG to JPG Converter</h1>
+            <p>Convert PNG images to JPG format with adjustable quality settings</p>
+        </div>
+        
+        <div class="converter-container">
+            <div class="converter-grid">
+                <div class="converter-section">
+                    <div class="converter-header">
+                        <div class="converter-title">
+                            <i class="fas fa-file-image"></i>
+                            <span>Input PNG</span>
+                        </div>
+                    </div>
+                    
+                    <div class="image-upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Drag & Drop PNG File</h3>
+                        <p>or click to browse</p>
+                        <input type="file" id="fileInput" accept=".png,image/png" style="display: none;">
+                    </div>
+                    
+                    <div class="image-preview-container">
+                        <img id="inputPreview" class="image-preview" style="display: none;">
+                        <div id="inputPlaceholder">
+                            <i class="fas fa-image" style="font-size: 3rem; color: #e5e7eb;"></i>
+                            <p>PNG preview will appear here</p>
+                        </div>
+                        <div id="fileInfo" class="file-info" style="display: none;"></div>
+                    </div>
+                </div>
+                
+                <div class="converter-section">
+                    <div class="converter-header">
+                        <div class="converter-title">
+                            <i class="fas fa-file-image"></i>
+                            <span>Output JPG</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quality-control">
+                        <div class="quality-label">
+                            <span>Quality:</span>
+                            <span id="qualityValue">80%</span>
+                        </div>
+                        <input type="range" id="qualitySlider" min="1" max="100" value="80" class="slider">
+                    </div>
+                    
+                    <div class="image-preview-container">
+                        <img id="outputPreview" class="image-preview" style="display: none;">
+                        <div id="outputPlaceholder">
+                            <i class="fas fa-image" style="font-size: 3rem; color: #e5e7eb;"></i>
+                            <p>JPG preview will appear here</p>
+                        </div>
+                        <div id="outputInfo" class="file-info" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="btn btn-success" disabled>
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearBtn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+                <button id="downloadBtn" class="btn" disabled>
+                    <i class="fas fa-download"></i> Download JPG
+                </button>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to convert PNG to JPG:</h3>
+            <ul>
+                <li>Drag and drop a PNG file or click to browse</li>
+                <li>Adjust the quality slider (1-100%)</li>
+                <li>Click "Convert" to generate JPG version</li>
+                <li>Download the converted JPG file</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>About PNG and JPG:</h3>
+            <ul>
+                <li><strong>PNG</strong> - Lossless format with transparency support</li>
+                <li><strong>JPG</strong> - Lossy format with smaller file size</li>
+                <li>Higher quality = larger file size</li>
+                <li>JPG doesn't support transparency (background becomes white)</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+     <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         gtag('config', 'G-61PG9HQVB4');
+     </script>
+    
+    <script>
+        // DOM elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const inputPreview = document.getElementById('inputPreview');
+        const inputPlaceholder = document.getElementById('inputPlaceholder');
+        const outputPreview = document.getElementById('outputPreview');
+        const outputPlaceholder = document.getElementById('outputPlaceholder');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const qualitySlider = document.getElementById('qualitySlider');
+        const qualityValue = document.getElementById('qualityValue');
+        const fileInfo = document.getElementById('fileInfo');
+        const outputInfo = document.getElementById('outputInfo');
+        
+        // Variables
+        let currentFile = null;
+        let convertedBlob = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('drop', handleDrop);
+            fileInput.addEventListener('change', handleFileSelect);
+            qualitySlider.addEventListener('input', updateQualityValue);
+            convertBtn.addEventListener('click', convertToJpg);
+            clearBtn.addEventListener('click', clearAll);
+            downloadBtn.addEventListener('click', downloadJpg);
+        });
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.style.borderColor = '#3b82f6';
+            uploadArea.style.backgroundColor = '#f0f7ff';
+        }
+        
+        function handleDragLeave() {
+            uploadArea.style.borderColor = '#e5e7eb';
+            uploadArea.style.backgroundColor = 'transparent';
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.style.borderColor = '#e5e7eb';
+            uploadArea.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect({ target: fileInput });
+            }
+        }
+        
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.match('image/png')) {
+                showNotification('Please select a PNG file', 'error');
+                return;
+            }
+            
+            currentFile = file;
+            
+            // Display file info
+            fileInfo.style.display = 'block';
+            fileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+            
+            // Display preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                inputPreview.src = e.target.result;
+                inputPreview.style.display = 'block';
+                inputPlaceholder.style.display = 'none';
+                
+                // Enable buttons
+                convertBtn.disabled = false;
+                clearBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function updateQualityValue() {
+            qualityValue.textContent = `${qualitySlider.value}%`;
+        }
+        
+        function convertToJpg() {
+            if (!currentFile) return;
+            
+            convertBtn.disabled = true;
+            convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
+            
+            // Simulate conversion delay (in a real app, you'd do actual conversion here)
+            setTimeout(() => {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    
+                    // Draw image on canvas with white background (JPG doesn't support transparency)
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                    
+                    // Convert to JPG with specified quality
+                    const quality = parseInt(qualitySlider.value) / 100;
+                    canvas.toBlob(function(blob) {
+                        convertedBlob = blob;
+                        
+                        // Display output preview
+                        outputPreview.src = URL.createObjectURL(blob);
+                        outputPreview.style.display = 'block';
+                        outputPlaceholder.style.display = 'none';
+                        
+                        // Display output info
+                        outputInfo.style.display = 'block';
+                        outputInfo.textContent = `JPG (${formatFileSize(blob.size)})`;
+                        
+                        // Enable download button
+                        downloadBtn.disabled = false;
+                        
+                        convertBtn.disabled = false;
+                        convertBtn.innerHTML = '<i class="fas fa-exchange-alt"></i> Convert';
+                        
+                        showNotification('Conversion complete!', 'success');
+                    }, 'image/jpeg', quality);
+                };
+                img.src = URL.createObjectURL(currentFile);
+            }, 500); // Simulate processing delay
+        }
+        
+        function downloadJpg() {
+            if (!convertedBlob) return;
+            
+            const url = URL.createObjectURL(convertedBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentFile.name.replace('.png', '.jpg') || 'converted.jpg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Download started', 'success');
+        }
+        
+        function clearAll() {
+            // Reset input
+            fileInput.value = '';
+            inputPreview.src = '';
+            inputPreview.style.display = 'none';
+            inputPlaceholder.style.display = 'flex';
+            fileInfo.style.display = 'none';
+            
+            // Reset output
+            outputPreview.src = '';
+            outputPreview.style.display = 'none';
+            outputPlaceholder.style.display = 'flex';
+            outputInfo.style.display = 'none';
+            
+            // Reset variables
+            currentFile = null;
+            convertedBlob = null;
+            
+            // Reset buttons
+            convertBtn.disabled = true;
+            clearBtn.disabled = true;
+            downloadBtn.disabled = true;
+            
+            // Reset quality display
+            qualitySlider.value = 80;
+            qualityValue.textContent = '80%';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
