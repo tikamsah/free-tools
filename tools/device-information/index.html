@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Information Tool | IT Tools</title>
-    <meta name="description" content="Get detailed information about your device including browser, OS, screen resolution, hardware specs and more.">
-    <meta name="keywords" content="device information, browser details, system specs, hardware info, device detector">
+    <title>Advanced Device Information Tool | IT Tools</title>
+    <meta name="description" content="Get comprehensive technical specifications about your device including detailed hardware, software, browser, and network information.">
+    <meta name="keywords" content="device information, system specs, hardware details, browser information, network diagnostics, device detector">
     
     <!-- CSS -->
     <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+       <script src="https://it-tools.nepexo.com/js/header.js"></script>
     
     <style>
         .tool-container {
@@ -47,6 +47,35 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             padding: 25px;
             margin-bottom: 30px;
+        }
+        
+        .info-tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        
+        .info-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        
+        .info-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         .info-grid {
@@ -149,6 +178,14 @@
             background-color: #d1d5db;
         }
         
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
         .hash-notification {
             position: fixed;
             bottom: 20px;
@@ -181,30 +218,6 @@
             }
         }
         
-        .instructions {
-            background-color: #f8fafc;
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            margin: 30px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        
-        .instructions h3 {
-            margin-top: 0;
-            color: #1e293b;
-            font-size: 1.1rem;
-        }
-        
-        .instructions ul {
-            padding-left: 20px;
-            margin-bottom: 0;
-        }
-        
-        .instructions li {
-            margin-bottom: 8px;
-            color: #475569;
-        }
-        
         .battery-section {
             display: flex;
             align-items: center;
@@ -230,6 +243,44 @@
             font-size: 0.9rem;
             color: #374151;
         }
+        
+        .sensor-value {
+            font-family: 'Fira Code', monospace;
+            color: #3b82f6;
+        }
+        
+        .gpu-info {
+            word-break: break-all;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .not-supported {
+            color: #6b7280;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -241,163 +292,536 @@
     <!-- Tool Content -->
     <main class="tool-container">
         <div class="tool-header">
-            <h1><i class="fas fa-laptop"></i> Device Information</h1>
-            <p>Get detailed technical specifications about your current device and browser</p>
+            <h1><i class="fas fa-laptop"></i> Advanced Device Information</h1>
+            <p>Get comprehensive technical specifications about your device, browser, and network</p>
         </div>
         
         <div class="info-container">
-            <div class="info-grid">
-                <!-- Browser Information -->
-                <div class="info-section">
-                    <div class="info-header">
-                        <div class="info-title">
-                            <i class="fas fa-globe"></i>
-                            <span>Browser Information</span>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Browser:</span>
-                        <span class="info-value" id="browserName">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Version:</span>
-                        <span class="info-value" id="browserVersion">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">User Agent:</span>
-                        <span class="info-value" id="userAgent">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Cookies Enabled:</span>
-                        <span class="info-value" id="cookiesEnabled">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">JavaScript Enabled:</span>
-                        <span class="info-value" id="javascriptEnabled">Detecting...</span>
-                    </div>
-                </div>
-                
-                <!-- System Information -->
-                <div class="info-section">
-                    <div class="info-header">
-                        <div class="info-title">
-                            <i class="fas fa-desktop"></i>
-                            <span>System Information</span>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Operating System:</span>
-                        <span class="info-value" id="operatingSystem">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Device Type:</span>
-                        <span class="info-value" id="deviceType">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">CPU Cores:</span>
-                        <span class="info-value" id="cpuCores">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Memory:</span>
-                        <span class="info-value" id="deviceMemory">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Battery:</span>
-                        <span class="info-value">
-                            <div class="battery-section" id="batteryInfo">
-                                <div class="battery-level">
-                                    <div class="battery-fill" id="batteryFill"></div>
-                                </div>
-                                <span class="battery-percent" id="batteryPercent">Detecting...</span>
+            <div class="info-tabs">
+                <div class="info-tab active" data-tab="browser">Browser</div>
+                <div class="info-tab" data-tab="system">System</div>
+                <div class="info-tab" data-tab="display">Display</div>
+                <div class="info-tab" data-tab="network">Network</div>
+                <div class="info-tab" data-tab="storage">Storage</div>
+                <div class="info-tab" data-tab="sensors">Sensors</div>
+                <div class="info-tab" data-tab="media">Media</div>
+                <div class="info-tab" data-tab="performance">Performance</div>
+            </div>
+            
+            <!-- Browser Tab -->
+            <div id="browserTab" class="tab-content active">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-globe"></i>
+                                <span>Browser Identification</span>
                             </div>
-                        </span>
-                    </div>
-                </div>
-                
-                <!-- Display Information -->
-                <div class="info-section">
-                    <div class="info-header">
-                        <div class="info-title">
-                            <i class="fas fa-tv"></i>
-                            <span>Display Information</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Browser:</span>
+                            <span class="info-value" id="browserName">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Version:</span>
+                            <span class="info-value" id="browserVersion">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Engine:</span>
+                            <span class="info-value" id="browserEngine">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">User Agent:</span>
+                            <span class="info-value" id="userAgent">Detecting...</span>
                         </div>
                     </div>
                     
-                    <div class="info-item">
-                        <span class="info-label">Screen Resolution:</span>
-                        <span class="info-value" id="screenResolution">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Viewport Size:</span>
-                        <span class="info-value" id="viewportSize">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Color Depth:</span>
-                        <span class="info-value" id="colorDepth">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Pixel Ratio:</span>
-                        <span class="info-value" id="pixelRatio">Detecting...</span>
-                    </div>
-                    
-                    <div class="info-item">
-                        <span class="info-label">Orientation:</span>
-                        <span class="info-value" id="orientation">Detecting...</span>
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-cog"></i>
+                                <span>Browser Capabilities</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Cookies:</span>
+                            <span class="info-value" id="cookiesEnabled">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">JavaScript:</span>
+                            <span class="info-value" id="javascriptEnabled">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">WebAssembly:</span>
+                            <span class="info-value" id="webAssemblySupported">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">WebGL:</span>
+                            <span class="info-value" id="webGLSupported">Detecting...</span>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Network Information -->
-                <div class="info-section">
-                    <div class="info-header">
-                        <div class="info-title">
-                            <i class="fas fa-wifi"></i>
-                            <span>Network Information</span>
+            </div>
+            
+            <!-- System Tab -->
+            <div id="systemTab" class="tab-content">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-desktop"></i>
+                                <span>Operating System</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Platform:</span>
+                            <span class="info-value" id="platform">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">OS:</span>
+                            <span class="info-value" id="operatingSystem">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">OS Version:</span>
+                            <span class="info-value" id="osVersion">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Device Type:</span>
+                            <span class="info-value" id="deviceType">Detecting...</span>
                         </div>
                     </div>
                     
-                    <div class="info-item">
-                        <span class="info-label">Online Status:</span>
-                        <span class="info-value" id="onlineStatus">Detecting...</span>
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-microchip"></i>
+                                <span>Hardware</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">CPU Cores:</span>
+                            <span class="info-value" id="cpuCores">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Memory:</span>
+                            <span class="info-value" id="deviceMemory">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">GPU:</span>
+                            <span class="info-value gpu-info" id="gpuInfo">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Battery:</span>
+                            <span class="info-value">
+                                <div class="battery-section" id="batteryInfo">
+                                    <div class="battery-level">
+                                        <div class="battery-fill" id="batteryFill"></div>
+                                    </div>
+                                    <span class="battery-percent" id="batteryPercent">Detecting...</span>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Display Tab -->
+            <div id="displayTab" class="tab-content">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-tv"></i>
+                                <span>Screen Information</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Resolution:</span>
+                            <span class="info-value" id="screenResolution">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Available Size:</span>
+                            <span class="info-value" id="screenAvailSize">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Color Depth:</span>
+                            <span class="info-value" id="colorDepth">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Pixel Ratio:</span>
+                            <span class="info-value" id="pixelRatio">Detecting...</span>
+                        </div>
                     </div>
                     
-                    <div class="info-item">
-                        <span class="info-label">Connection Type:</span>
-                        <span class="info-value" id="connectionType">Detecting...</span>
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Viewport Information</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Viewport Size:</span>
+                            <span class="info-value" id="viewportSize">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Orientation:</span>
+                            <span class="info-value" id="orientation">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Touch Support:</span>
+                            <span class="info-value" id="touchSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Pointer Support:</span>
+                            <span class="info-value" id="pointerSupport">Detecting...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Network Tab -->
+            <div id="networkTab" class="tab-content">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-wifi"></i>
+                                <span>Connection Information</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Online Status:</span>
+                            <span class="info-value" id="onlineStatus">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Connection Type:</span>
+                            <span class="info-value" id="connectionType">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Effective Type:</span>
+                            <span class="info-value" id="effectiveType">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">IP Address:</span>
+                            <span class="info-value" id="ipAddress">Detecting...</span>
+                        </div>
                     </div>
                     
-                    <div class="info-item">
-                        <span class="info-label">Effective Type:</span>
-                        <span class="info-value" id="effectiveType">Detecting...</span>
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Performance Metrics</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Downlink Speed:</span>
+                            <span class="info-value" id="downlinkSpeed">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">RTT:</span>
+                            <span class="info-value" id="rtt">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Save Data Mode:</span>
+                            <span class="info-value" id="saveData">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Network Events:</span>
+                            <span class="info-value" id="networkEvents">Detecting...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Storage Tab -->
+            <div id="storageTab" class="tab-content">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-database"></i>
+                                <span>Web Storage</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Local Storage:</span>
+                            <span class="info-value" id="localStorage">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Session Storage:</span>
+                            <span class="info-value" id="sessionStorage">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">IndexedDB:</span>
+                            <span class="info-value" id="indexedDBSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">WebSQL:</span>
+                            <span class="info-value" id="webSQLSupport">Detecting...</span>
+                        </div>
                     </div>
                     
-                    <div class="info-item">
-                        <span class="info-label">Downlink Speed:</span>
-                        <span class="info-value" id="downlinkSpeed">Detecting...</span>
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-hdd"></i>
+                                <span>Storage Quota</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Estimated Storage:</span>
+                            <span class="info-value" id="storageEstimate">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Usage Details:</span>
+                            <span class="info-value" id="storageUsage">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Persistent Storage:</span>
+                            <span class="info-value" id="persistentStorage">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Cache API:</span>
+                            <span class="info-value" id="cacheSupport">Detecting...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sensors Tab -->
+            <div id="sensorsTab" class="tab-content">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-compass"></i>
+                                <span>Motion Sensors</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Accelerometer:</span>
+                            <span class="info-value" id="accelerometerSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Gyroscope:</span>
+                            <span class="info-value" id="gyroscopeSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Magnetometer:</span>
+                            <span class="info-value" id="magnetometerSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Orientation:</span>
+                            <span class="info-value" id="deviceOrientation">Detecting...</span>
+                        </div>
                     </div>
                     
-                    <div class="info-item">
-                        <span class="info-label">RTT:</span>
-                        <span class="info-value" id="rtt">Detecting...</span>
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-thermometer-half"></i>
+                                <span>Environmental Sensors</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Ambient Light:</span>
+                            <span class="info-value" id="ambientLightSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Proximity:</span>
+                            <span class="info-value" id="proximitySupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Geolocation:</span>
+                            <span class="info-value" id="geolocationSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Vibration:</span>
+                            <span class="info-value" id="vibrationSupport">Detecting...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Media Tab -->
+            <div id="mediaTab" class="tab-content">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-camera"></i>
+                                <span>Media Capabilities</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Cameras:</span>
+                            <span class="info-value" id="cameraSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Microphones:</span>
+                            <span class="info-value" id="microphoneSupport">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Audio Outputs:</span>
+                            <span class="info-value" id="audioOutputs">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Media Devices:</span>
+                            <span class="info-value" id="mediaDevices">Detecting...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-film"></i>
+                                <span>Media Support</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Video Codecs:</span>
+                            <span class="info-value" id="videoCodecs">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Audio Codecs:</span>
+                            <span class="info-value" id="audioCodecs">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Media Session:</span>
+                            <span class="info-value" id="mediaSession">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Picture-in-Picture:</span>
+                            <span class="info-value" id="pictureInPicture">Detecting...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Tab -->
+            <div id="performanceTab" class="tab-content">
+                <div class="info-grid">
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Performance Metrics</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Memory Usage:</span>
+                            <span class="info-value" id="memoryUsage">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Device Class:</span>
+                            <span class="info-value" id="deviceClass">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Time Origin:</span>
+                            <span class="info-value" id="timeOrigin">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Navigation Timing:</span>
+                            <span class="info-value" id="navigationTiming">Detecting...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <div class="info-header">
+                            <div class="info-title">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Resource Timing</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Entries Count:</span>
+                            <span class="info-value" id="performanceEntries">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Now Precision:</span>
+                            <span class="info-value" id="nowPrecision">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Memory Info:</span>
+                            <span class="info-value" id="memoryInfo">Detecting...</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Hardware Concurrency:</span>
+                            <span class="info-value" id="hardwareConcurrency">Detecting...</span>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="action-buttons">
                 <button id="refreshBtn" class="btn btn-success">
-                    <i class="fas fa-sync-alt"></i> Refresh Information
+                    <i class="fas fa-sync-alt"></i> Refresh All Information
                 </button>
                 <button id="copyBtn" class="btn">
                     <i class="fas fa-copy"></i> Copy All Data
@@ -424,30 +848,35 @@
         </section>
         
         <div class="instructions">
-            <h3>About This Device Information Tool</h3>
-            <p>This tool provides comprehensive technical details about your current device, browser, and network connection. The information can be useful for:</p>
+            <h3>About This Advanced Device Information Tool</h3>
+            <p>This comprehensive tool provides detailed technical specifications about your device, browser, and network environment. It's useful for:</p>
             <ul>
-                <li><strong>Web developers</strong> testing responsive designs</li>
-                <li><strong>IT professionals</strong> troubleshooting device issues</li>
-                <li><strong>Users</strong> curious about their device capabilities</li>
-                <li><strong>QA testers</strong> verifying browser compatibility</li>
+                <li><strong>Developers</strong> testing cross-browser compatibility</li>
+                <li><strong>Designers</strong> creating responsive layouts</li>
+                <li><strong>IT Professionals</strong> troubleshooting device issues</li>
+                <li><strong>Tech Enthusiasts</strong> curious about their device capabilities</li>
+                <li><strong>QA Engineers</strong> verifying feature support</li>
             </ul>
         </div>
         
         <div class="instructions">
             <h3>Understanding the Information</h3>
+            <p>The tool organizes information into several categories:</p>
             <ul>
-                <li><strong>Browser Information</strong> - Details about your web browser and its capabilities</li>
-                <li><strong>System Information</strong> - Hardware specifications of your device</li>
-                <li><strong>Display Information</strong> - Screen characteristics and dimensions</li>
-                <li><strong>Network Information</strong> - Connection type and performance metrics</li>
-                <li><strong>Battery Status</strong> - Current charge level and charging state (if supported)</li>
+                <li><strong>Browser</strong> - Details about your web browser and its capabilities</li>
+                <li><strong>System</strong> - Hardware specifications and operating system details</li>
+                <li><strong>Display</strong> - Screen characteristics and viewport information</li>
+                <li><strong>Network</strong> - Connection type and performance metrics</li>
+                <li><strong>Storage</strong> - Web storage capabilities and quotas</li>
+                <li><strong>Sensors</strong> - Available motion and environmental sensors</li>
+                <li><strong>Media</strong> - Camera, microphone, and media playback support</li>
+                <li><strong>Performance</strong> - Device performance characteristics</li>
             </ul>
         </div>
         
         <div class="instructions">
             <h3>Privacy Information</h3>
-            <p>This tool only accesses information that is already available to any website through standard browser APIs. No personal data is collected or stored. All processing happens locally in your browser.</p>
+            <p>This tool only accesses information that is already available to websites through standard browser APIs. No personal data is collected or stored. All processing happens locally in your browser. Some features may require permission prompts to access sensitive information like precise geolocation or camera devices.</p>
         </div>
     </main>
 
@@ -459,48 +888,49 @@
     <!-- JavaScript -->
     <script src="https://it-tools.nepexo.com/js/footer.js"></script>
     <script src="https://it-tools.nepexo.com/js/script.js"></script>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-61PG9HQVB4');
-    </script>
     
     <script>
         // DOM elements
+        const tabs = document.querySelectorAll('.info-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
         const refreshBtn = document.getElementById('refreshBtn');
         const copyBtn = document.getElementById('copyBtn');
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            // Set up tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tab.dataset.tab}Tab`).classList.add('active');
+                });
+            });
+            
             // Set up event listeners
-            refreshBtn.addEventListener('click', detectDeviceInfo);
+            refreshBtn.addEventListener('click', detectAllInfo);
             copyBtn.addEventListener('click', copyAllData);
             
             // Run detection immediately
-            detectDeviceInfo();
+            detectAllInfo();
+            
+            // Set up resize observer for viewport changes
+            window.addEventListener('resize', updateViewportInfo);
         });
         
-        function detectDeviceInfo() {
-            // Browser Information
+        function detectAllInfo() {
             detectBrowserInfo();
-            
-            // System Information
             detectSystemInfo();
-            
-            // Display Information
             detectDisplayInfo();
-            
-            // Network Information
             detectNetworkInfo();
+            detectStorageInfo();
+            detectSensorInfo();
+            detectMediaInfo();
+            detectPerformanceInfo();
             
-            // Battery Information (if supported)
-            detectBatteryInfo();
-            
-            showNotification('Device information refreshed', 'success');
+            showNotification('All device information refreshed', 'success');
         }
         
         function detectBrowserInfo() {
@@ -508,49 +938,83 @@
             document.getElementById('userAgent').textContent = userAgent;
             
             // Detect browser name and version
-            let browserName, browserVersion;
+            let browserName = 'Unknown', browserVersion = 'Unknown', browserEngine = 'Unknown';
             
             if (userAgent.includes('Firefox')) {
                 browserName = 'Firefox';
-                browserVersion = userAgent.match(/Firefox\/(\d+\.\d+)/)[1];
+                browserVersion = userAgent.match(/Firefox\/(\d+\.\d+)/)?.[1] || 'Unknown';
+                browserEngine = 'Gecko';
             } else if (userAgent.includes('Edg')) {
                 browserName = 'Microsoft Edge';
-                browserVersion = userAgent.match(/Edg\/(\d+\.\d+\.\d+\.\d+)/)[1];
+                browserVersion = userAgent.match(/Edg\/(\d+\.\d+\.\d+\.\d+)/)?.[1] || 'Unknown';
+                browserEngine = 'Blink';
             } else if (userAgent.includes('Chrome')) {
                 browserName = 'Chrome';
-                browserVersion = userAgent.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/)[1];
+                browserVersion = userAgent.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/)?.[1] || 'Unknown';
+                browserEngine = 'Blink';
             } else if (userAgent.includes('Safari')) {
                 browserName = 'Safari';
-                browserVersion = userAgent.match(/Version\/(\d+\.\d+)/)[1];
-            } else {
-                browserName = 'Unknown Browser';
-                browserVersion = 'Unknown';
+                browserVersion = userAgent.match(/Version\/(\d+\.\d+)/)?.[1] || 'Unknown';
+                browserEngine = 'WebKit';
+            } else if (userAgent.includes('OPR')) {
+                browserName = 'Opera';
+                browserVersion = userAgent.match(/OPR\/(\d+\.\d+\.\d+\.\d+)/)?.[1] || 'Unknown';
+                browserEngine = 'Blink';
             }
             
             document.getElementById('browserName').textContent = browserName;
             document.getElementById('browserVersion').textContent = browserVersion;
-            document.getElementById('cookiesEnabled').textContent = navigator.cookieEnabled ? 'Yes' : 'No';
-            document.getElementById('javascriptEnabled').textContent = 'Yes';
+            document.getElementById('browserEngine').textContent = browserEngine;
+            document.getElementById('cookiesEnabled').textContent = navigator.cookieEnabled ? 'Enabled' : 'Disabled';
+            document.getElementById('javascriptEnabled').textContent = 'Enabled';
+            document.getElementById('webAssemblySupported').textContent = typeof WebAssembly !== 'undefined' ? 'Supported' : 'Not supported';
+            document.getElementById('webGLSupported').textContent = detectWebGLSupport() ? 'Supported' : 'Not supported';
+        }
+        
+        function detectWebGLSupport() {
+            try {
+                const canvas = document.createElement('canvas');
+                return !!window.WebGLRenderingContext && 
+                      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+            } catch (e) {
+                return false;
+            }
         }
         
         function detectSystemInfo() {
-            // Detect OS
-            let os = 'Unknown OS';
+            // Detect OS and platform
+            const platform = navigator.platform;
+            let os = 'Unknown OS', osVersion = 'Unknown';
             const userAgent = navigator.userAgent;
             
             if (userAgent.includes('Windows')) {
                 os = 'Windows';
+                if (userAgent.includes('Windows NT 10.0')) osVersion = '10/11';
+                else if (userAgent.includes('Windows NT 6.3')) osVersion = '8.1';
+                else if (userAgent.includes('Windows NT 6.2')) osVersion = '8';
+                else if (userAgent.includes('Windows NT 6.1')) osVersion = '7';
             } else if (userAgent.includes('Mac')) {
                 os = 'MacOS';
+                const match = userAgent.match(/Mac OS X (\d+[._]\d+)/);
+                if (match) osVersion = match[1].replace('_', '.');
             } else if (userAgent.includes('Linux')) {
                 os = 'Linux';
-            } else if (userAgent.includes('Android')) {
-                os = 'Android';
+                if (userAgent.includes('Android')) {
+                    os = 'Android';
+                    const match = userAgent.match(/Android (\d+\.\d+)/);
+                    if (match) osVersion = match[1];
+                } else if (userAgent.includes('CrOS')) {
+                    os = 'Chrome OS';
+                }
             } else if (userAgent.includes('iOS') || userAgent.includes('iPhone') || userAgent.includes('iPad')) {
                 os = 'iOS';
+                const match = userAgent.match(/OS (\d+(_\d+)+)/);
+                if (match) osVersion = match[1].replace(/_/g, '.');
             }
             
+            document.getElementById('platform').textContent = platform;
             document.getElementById('operatingSystem').textContent = os;
+            document.getElementById('osVersion').textContent = osVersion;
             
             // Detect device type
             let deviceType = 'Desktop';
@@ -565,52 +1029,34 @@
             // CPU cores
             const cores = navigator.hardwareConcurrency || 'Unknown';
             document.getElementById('cpuCores').textContent = cores;
+            document.getElementById('hardwareConcurrency').textContent = cores;
             
             // Device memory (only available in some browsers)
             const memory = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown';
             document.getElementById('deviceMemory').textContent = memory;
+            
+            // GPU info
+            detectGPUInfo();
+            
+            // Battery info
+            detectBatteryInfo();
         }
         
-        function detectDisplayInfo() {
-            // Screen resolution
-            const screenRes = `${window.screen.width} × ${window.screen.height}`;
-            document.getElementById('screenResolution').textContent = screenRes;
+        function detectGPUInfo() {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
             
-            // Viewport size
-            const viewportSize = `${window.innerWidth} × ${window.innerHeight}`;
-            document.getElementById('viewportSize').textContent = viewportSize;
-            
-            // Color depth
-            document.getElementById('colorDepth').textContent = `${window.screen.colorDepth} bit`;
-            
-            // Pixel ratio
-            const pixelRatio = window.devicePixelRatio || 1;
-            document.getElementById('pixelRatio').textContent = pixelRatio;
-            
-            // Orientation
-            let orientation = 'Portrait';
-            if (window.innerWidth > window.innerHeight) {
-                orientation = 'Landscape';
-            }
-            document.getElementById('orientation').textContent = orientation;
-        }
-        
-        function detectNetworkInfo() {
-            // Online status
-            document.getElementById('onlineStatus').textContent = navigator.onLine ? 'Online' : 'Offline';
-            
-            // Connection info (if supported)
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            if (connection) {
-                document.getElementById('connectionType').textContent = connection.type || 'Unknown';
-                document.getElementById('effectiveType').textContent = connection.effectiveType || 'Unknown';
-                document.getElementById('downlinkSpeed').textContent = connection.downlink ? `${connection.downlink} Mbps` : 'Unknown';
-                document.getElementById('rtt').textContent = connection.rtt ? `${connection.rtt} ms` : 'Unknown';
+            if (gl) {
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+                    const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    document.getElementById('gpuInfo').textContent = `${vendor} - ${renderer}`;
+                } else {
+                    document.getElementById('gpuInfo').textContent = 'WebGL supported (details unavailable)';
+                }
             } else {
-                document.getElementById('connectionType').textContent = 'Not supported';
-                document.getElementById('effectiveType').textContent = 'Not supported';
-                document.getElementById('downlinkSpeed').textContent = 'Not supported';
-                document.getElementById('rtt').textContent = 'Not supported';
+                document.getElementById('gpuInfo').textContent = 'WebGL not supported';
             }
         }
         
@@ -650,25 +1096,310 @@
             }
         }
         
-        function copyAllData() {
-            const sections = document.querySelectorAll('.info-section');
-            let allData = 'DEVICE INFORMATION REPORT\n\n';
+        function detectDisplayInfo() {
+            // Screen resolution
+            const screenRes = `${window.screen.width} × ${window.screen.height}`;
+            document.getElementById('screenResolution').textContent = screenRes;
             
-            sections.forEach(section => {
-                const title = section.querySelector('.info-title span').textContent;
-                allData += `=== ${title} ===\n`;
+            // Available screen size
+            const availRes = `${window.screen.availWidth} × ${window.screen.availHeight}`;
+            document.getElementById('screenAvailSize').textContent = availRes;
+            
+            // Color depth
+            document.getElementById('colorDepth').textContent = `${window.screen.colorDepth} bit`;
+            
+            // Pixel ratio
+            const pixelRatio = window.devicePixelRatio || 1;
+            document.getElementById('pixelRatio').textContent = pixelRatio;
+            
+            // Update viewport info
+            updateViewportInfo();
+            
+            // Touch support
+            const touchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            document.getElementById('touchSupport').textContent = touchSupport ? 'Supported' : 'Not supported';
+            
+            // Pointer support
+            const pointerSupport = window.PointerEvent ? 'Supported' : 'Not supported';
+            document.getElementById('pointerSupport').textContent = pointerSupport;
+        }
+        
+        function updateViewportInfo() {
+            // Viewport size
+            const viewportSize = `${window.innerWidth} × ${window.innerHeight}`;
+            document.getElementById('viewportSize').textContent = viewportSize;
+            
+            // Orientation
+            let orientation = 'Portrait';
+            if (window.innerWidth > window.innerHeight) {
+                orientation = 'Landscape';
+            }
+            document.getElementById('orientation').textContent = orientation;
+        }
+        
+        function detectNetworkInfo() {
+            // Online status
+            document.getElementById('onlineStatus').textContent = navigator.onLine ? 'Online' : 'Offline';
+            
+            // Connection info (if supported)
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                document.getElementById('connectionType').textContent = connection.type || 'Unknown';
+                document.getElementById('effectiveType').textContent = connection.effectiveType || 'Unknown';
+                document.getElementById('downlinkSpeed').textContent = connection.downlink ? `${connection.downlink} Mbps` : 'Unknown';
+                document.getElementById('rtt').textContent = connection.rtt ? `${connection.rtt} ms` : 'Unknown';
+                document.getElementById('saveData').textContent = connection.saveData ? 'Enabled' : 'Disabled';
                 
-                const items = section.querySelectorAll('.info-item');
-                items.forEach(item => {
-                    const label = item.querySelector('.info-label').textContent;
-                    let value = item.querySelector('.info-value').textContent;
+                // Listen for network changes
+                connection.addEventListener('change', updateNetworkInfo);
+            } else {
+                document.getElementById('connectionType').textContent = 'Not supported';
+                document.getElementById('effectiveType').textContent = 'Not supported';
+                document.getElementById('downlinkSpeed').textContent = 'Not supported';
+                document.getElementById('rtt').textContent = 'Not supported';
+                document.getElementById('saveData').textContent = 'Not supported';
+            }
+            
+            // Get IP address (this requires a third-party service)
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ipAddress').textContent = data.ip;
+                })
+                .catch(() => {
+                    document.getElementById('ipAddress').textContent = 'Could not determine';
+                });
+        }
+        
+        function updateNetworkInfo() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                document.getElementById('connectionType').textContent = connection.type || 'Unknown';
+                document.getElementById('effectiveType').textContent = connection.effectiveType || 'Unknown';
+                document.getElementById('downlinkSpeed').textContent = connection.downlink ? `${connection.downlink} Mbps` : 'Unknown';
+                document.getElementById('rtt').textContent = connection.rtt ? `${connection.rtt} ms` : 'Unknown';
+                document.getElementById('saveData').textContent = connection.saveData ? 'Enabled' : 'Disabled';
+            }
+        }
+        
+        function detectStorageInfo() {
+            // Web Storage
+            document.getElementById('localStorage').textContent = 
+                window.localStorage ? 'Supported' : 'Not supported';
+            document.getElementById('sessionStorage').textContent = 
+                window.sessionStorage ? 'Supported' : 'Not supported';
+            document.getElementById('indexedDBSupport').textContent = 
+                window.indexedDB ? 'Supported' : 'Not supported';
+            document.getElementById('webSQLSupport').textContent = 
+                window.openDatabase ? 'Supported' : 'Not supported';
+            document.getElementById('cacheSupport').textContent = 
+                'caches' in window ? 'Supported' : 'Not supported';
+            
+            // Storage estimate
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                navigator.storage.estimate().then(estimate => {
+                    const used = formatBytes(estimate.usage);
+                    const quota = formatBytes(estimate.quota);
+                    document.getElementById('storageEstimate').textContent = `${used} / ${quota}`;
+                    document.getElementById('storageUsage').textContent = 
+                        `Usage: ${used}, Quota: ${quota}`;
+                }).catch(() => {
+                    document.getElementById('storageEstimate').textContent = 'Could not estimate';
+                    document.getElementById('storageUsage').textContent = 'Could not estimate';
+                });
+            } else {
+                document.getElementById('storageEstimate').textContent = 'Not supported';
+                document.getElementById('storageUsage').textContent = 'Not supported';
+            }
+            
+            // Persistent storage
+            if ('storage' in navigator && 'persisted' in navigator.storage) {
+                navigator.storage.persisted().then(persisted => {
+                    document.getElementById('persistentStorage').textContent = 
+                        persisted ? 'Persistent' : 'Not persistent';
+                }).catch(() => {
+                    document.getElementById('persistentStorage').textContent = 'Could not determine';
+                });
+            } else {
+                document.getElementById('persistentStorage').textContent = 'Not supported';
+            }
+        }
+        
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function detectSensorInfo() {
+            // Motion sensors
+            document.getElementById('accelerometerSupport').textContent = 
+                'Accelerometer' in window ? 'Supported' : 'Not supported';
+            document.getElementById('gyroscopeSupport').textContent = 
+                'Gyroscope' in window ? 'Supported' : 'Not supported';
+            document.getElementById('magnetometerSupport').textContent = 
+                'Magnetometer' in window ? 'Supported' : 'Not supported';
+            document.getElementById('deviceOrientation').textContent = 
+                'ondeviceorientation' in window ? 'Supported' : 'Not supported';
+            
+            // Environmental sensors
+            document.getElementById('ambientLightSupport').textContent = 
+                'AmbientLightSensor' in window ? 'Supported' : 'Not supported';
+            document.getElementById('proximitySupport').textContent = 
+                'ProximitySensor' in window ? 'Supported' : 'Not supported';
+            document.getElementById('geolocationSupport').textContent = 
+                'geolocation' in navigator ? 'Supported' : 'Not supported';
+            document.getElementById('vibrationSupport').textContent = 
+                'vibrate' in navigator ? 'Supported' : 'Not supported';
+        }
+        
+        function detectMediaInfo() {
+            // Media devices
+            if ('mediaDevices' in navigator && 'enumerateDevices' in navigator.mediaDevices) {
+                navigator.mediaDevices.enumerateDevices()
+                    .then(devices => {
+                        const cameras = devices.filter(d => d.kind === 'videoinput').length;
+                        const mics = devices.filter(d => d.kind === 'audioinput').length;
+                        const speakers = devices.filter(d => d.kind === 'audiooutput').length;
+                        
+                        document.getElementById('cameraSupport').textContent = cameras > 0 ? `${cameras} camera(s)` : 'None';
+                        document.getElementById('microphoneSupport').textContent = mics > 0 ? `${mics} microphone(s)` : 'None';
+                        document.getElementById('audioOutputs').textContent = speakers > 0 ? `${speakers} output(s)` : 'None';
+                        document.getElementById('mediaDevices').textContent = `${devices.length} device(s)`;
+                    })
+                    .catch(() => {
+                        document.getElementById('cameraSupport').textContent = 'Could not access';
+                        document.getElementById('microphoneSupport').textContent = 'Could not access';
+                        document.getElementById('audioOutputs').textContent = 'Could not access';
+                        document.getElementById('mediaDevices').textContent = 'Could not access';
+                    });
+            } else {
+                document.getElementById('cameraSupport').textContent = 'Not supported';
+                document.getElementById('microphoneSupport').textContent = 'Not supported';
+                document.getElementById('audioOutputs').textContent = 'Not supported';
+                document.getElementById('mediaDevices').textContent = 'Not supported';
+            }
+            
+            // Media support
+            document.getElementById('mediaSession').textContent = 
+                'mediaSession' in navigator ? 'Supported' : 'Not supported';
+            document.getElementById('pictureInPicture').textContent = 
+                document.pictureInPictureEnabled ? 'Supported' : 'Not supported';
+            
+            // Codec support (simplified)
+            const videoCodecs = [];
+            const audioCodecs = [];
+            
+            if (document.createElement('video').canPlayType('video/mp4; codecs="avc1.42E01E"')) {
+                videoCodecs.push('H.264');
+            }
+            if (document.createElement('video').canPlayType('video/webm; codecs="vp9"')) {
+                videoCodecs.push('VP9');
+            }
+            if (document.createElement('video').canPlayType('video/webm; codecs="vp8"')) {
+                videoCodecs.push('VP8');
+            }
+            
+            if (document.createElement('audio').canPlayType('audio/mpeg')) {
+                audioCodecs.push('MP3');
+            }
+            if (document.createElement('audio').canPlayType('audio/ogg; codecs="opus"')) {
+                audioCodecs.push('Opus');
+            }
+            if (document.createElement('audio').canPlayType('audio/ogg; codecs="vorbis"')) {
+                audioCodecs.push('Vorbis');
+            }
+            
+            document.getElementById('videoCodecs').textContent = videoCodecs.length > 0 ? videoCodecs.join(', ') : 'None detected';
+            document.getElementById('audioCodecs').textContent = audioCodecs.length > 0 ? audioCodecs.join(', ') : 'None detected';
+        }
+        
+        function detectPerformanceInfo() {
+            // Performance metrics
+            if ('performance' in window) {
+                const memory = performance.memory;
+                if (memory) {
+                    const used = formatBytes(memory.usedJSHeapSize);
+                    const total = formatBytes(memory.totalJSHeapSize);
+                    document.getElementById('memoryUsage').textContent = `${used} / ${total}`;
+                    document.getElementById('memoryInfo').textContent = 
+                        `Used: ${used}, Total: ${total}`;
+                } else {
+                    document.getElementById('memoryUsage').textContent = 'Details unavailable';
+                    document.getElementById('memoryInfo').textContent = 'Details unavailable';
+                }
+                
+                document.getElementById('timeOrigin').textContent = 
+                    new Date(performance.timeOrigin).toLocaleString();
+                
+                if (performance.timing) {
+                    const timing = performance.timing;
+                    const loadTime = timing.loadEventEnd - timing.navigationStart;
+                    document.getElementById('navigationTiming').textContent = `${loadTime} ms`;
+                } else {
+                    document.getElementById('navigationTiming').textContent = 'Not available';
+                }
+                
+                const entries = performance.getEntries();
+                document.getElementById('performanceEntries').textContent = `${entries.length} entries`;
+                
+                document.getElementById('nowPrecision').textContent = 
+                    performance.now() ? 'Supported' : 'Not supported';
+            } else {
+                document.getElementById('memoryUsage').textContent = 'Not supported';
+                document.getElementById('timeOrigin').textContent = 'Not supported';
+                document.getElementById('navigationTiming').textContent = 'Not supported';
+                document.getElementById('performanceEntries').textContent = 'Not supported';
+                document.getElementById('nowPrecision').textContent = 'Not supported';
+                document.getElementById('memoryInfo').textContent = 'Not supported';
+            }
+            
+            // Device class (very basic estimation)
+            let deviceClass = 'High-end';
+            const cores = navigator.hardwareConcurrency || 4;
+            const memory = navigator.deviceMemory || 4;
+            
+            if (cores <= 2 && memory <= 2) {
+                deviceClass = 'Low-end';
+            } else if (cores <= 4 && memory <= 4) {
+                deviceClass = 'Mid-range';
+            }
+            
+            document.getElementById('deviceClass').textContent = deviceClass;
+        }
+        
+        function copyAllData() {
+            const tabs = document.querySelectorAll('.info-tab');
+            let allData = 'ADVANCED DEVICE INFORMATION REPORT\n\n';
+            
+            tabs.forEach(tab => {
+                const tabId = tab.dataset.tab;
+                const tabContent = document.getElementById(`${tabId}Tab`);
+                const tabTitle = tab.textContent;
+                
+                allData += `=== ${tabTitle.toUpperCase()} ===\n`;
+                
+                const sections = tabContent.querySelectorAll('.info-section');
+                sections.forEach(section => {
+                    const sectionTitle = section.querySelector('.info-title span').textContent;
+                    allData += `--- ${sectionTitle} ---\n`;
                     
-                    // Handle battery info separately
-                    if (label === 'Battery:') {
-                        value = item.querySelector('.battery-percent').textContent;
-                    }
+                    const items = section.querySelectorAll('.info-item');
+                    items.forEach(item => {
+                        const label = item.querySelector('.info-label').textContent;
+                        let value = item.querySelector('.info-value').textContent;
+                        
+                        // Handle battery info separately
+                        if (label === 'Battery:') {
+                            value = item.querySelector('.battery-percent').textContent;
+                        }
+                        
+                        allData += `${label}: ${value}\n`;
+                    });
                     
-                    allData += `${label}: ${value}\n`;
+                    allData += '\n';
                 });
                 
                 allData += '\n';
