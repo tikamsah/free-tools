@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Hike Calculator | IT Tools</title>
+    <meta name="description" content="Calculate your salary increase, percentage hike, and new salary after appraisal. Free online salary hike calculator for employees and HR professionals.">
+    <meta name="keywords" content="salary calculator, hike calculator, salary increase calculator, percentage hike calculator, appraisal calculator, salary raise calculator">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .calculator-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .calculator-section {
+            margin-bottom: 20px;
+        }
+        
+        .calculator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .calculator-title {
+            font-weight: 500;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper input {
+            padding-left: 30px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .result-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #f9fafb;
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .result-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .highlight {
+            color: #10b981;
+            font-size: 1.2rem;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-percentage"></i> Salary Hike Calculator</h1>
+            <p>Calculate your salary increase, percentage hike, and new salary after appraisal</p>
+        </div>
+        
+        <div class="calculator-container">
+            <div class="tab-container">
+                <div class="tab active" id="hikeTab">Calculate New Salary</div>
+                <div class="tab" id="reverseTab">Calculate Hike Percentage</div>
+            </div>
+            
+            <!-- Calculate New Salary Tab -->
+            <div id="hikeContent" class="tab-content active">
+                <div class="calculator-grid">
+                    <div class="calculator-section">
+                        <div class="input-group">
+                            <label for="currentSalary" class="input-label">Current Salary</label>
+                            <div class="input-wrapper">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="currentSalary" class="input-field" placeholder="Enter your current salary">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="hikePercentage" class="input-label">Hike Percentage</label>
+                            <div class="input-wrapper">
+                                <span class="currency-symbol">%</span>
+                                <input type="number" id="hikePercentage" class="input-field" placeholder="Enter hike percentage">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="bonusAmount" class="input-label">Bonus Amount (optional)</label>
+                            <div class="input-wrapper">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="bonusAmount" class="input-field" placeholder="Enter bonus amount">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-section">
+                        <div class="result-container">
+                            <div class="result-item">
+                                <span class="result-label">New Salary:</span>
+                                <span class="result-value highlight" id="newSalaryResult">$0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Salary Increase:</span>
+                                <span class="result-value" id="salaryIncreaseResult">$0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Total Compensation:</span>
+                                <span class="result-value highlight" id="totalCompensationResult">$0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Monthly Salary:</span>
+                                <span class="result-value" id="monthlySalaryResult">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="calculateBtn" class="btn btn-success">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                    <button id="resetBtn" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                    <button id="copyResultsBtn" class="btn">
+                        <i class="fas fa-copy"></i> Copy Results
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Calculate Hike Percentage Tab -->
+            <div id="reverseContent" class="tab-content">
+                <div class="calculator-grid">
+                    <div class="calculator-section">
+                        <div class="input-group">
+                            <label for="oldSalary" class="input-label">Old Salary</label>
+                            <div class="input-wrapper">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="oldSalary" class="input-field" placeholder="Enter your old salary">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="newSalary" class="input-label">New Salary</label>
+                            <div class="input-wrapper">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="newSalary" class="input-field" placeholder="Enter your new salary">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-section">
+                        <div class="result-container">
+                            <div class="result-item">
+                                <span class="result-label">Hike Percentage:</span>
+                                <span class="result-value highlight" id="hikePercentageResult">0%</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Salary Increase:</span>
+                                <span class="result-value" id="reverseSalaryIncreaseResult">$0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Monthly Increase:</span>
+                                <span class="result-value" id="monthlyIncreaseResult">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="calculateReverseBtn" class="btn btn-success">
+                        <i class="fas fa-calculator"></i> Calculate
+                    </button>
+                    <button id="resetReverseBtn" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                    <button id="copyReverseResultsBtn" class="btn">
+                        <i class="fas fa-copy"></i> Copy Results
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to use the Salary Hike Calculator:</h3>
+            <ul>
+                <li><strong>Calculate New Salary:</strong> Enter your current salary and hike percentage to see your new salary</li>
+                <li><strong>Calculate Hike Percentage:</strong> Enter your old and new salary to calculate the percentage increase</li>
+                <li>Optionally include bonus amounts for total compensation calculation</li>
+                <li>Results show annual and monthly breakdowns</li>
+                <li>Copy results with one click for your records</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>Understanding Salary Increases:</h3>
+            <p>Salary hikes are typically expressed as a percentage increase over your current salary. Our calculator helps you:</p>
+            <ul>
+                <li><strong>Plan your finances</strong> - See exactly how much more you'll earn after a raise</li>
+                <li><strong>Negotiate better</strong> - Understand what different percentage increases mean in dollar terms</li>
+                <li><strong>Compare job offers</strong> - Calculate equivalent salaries when considering new positions</li>
+                <li><strong>Budget effectively</strong> - See your new monthly take-home amount</li>
+            </ul>
+            
+            <h3 style="margin-top: 20px;">Common Salary Hike Percentages:</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px;">
+                    <div style="font-weight: 500;">Standard Annual Raise</div>
+                    <div style="color: #3b82f6;">3-5%</div>
+                </div>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px;">
+                    <div style="font-weight: 500;">Promotion Increase</div>
+                    <div style="color: #3b82f6;">8-15%</div>
+                </div>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px;">
+                    <div style="font-weight: 500;">Job Change Increase</div>
+                    <div style="color: #3b82f6;">15-30%</div>
+                </div>
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px;">
+                    <div style="font-weight: 500;">Exceptional Performance</div>
+                    <div style="color: #3b82f6;">5-10%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Salary Negotiation Tips:</h3>
+            <ul>
+                <li>Research industry standards for your role and experience level</li>
+                <li>Consider total compensation (bonuses, benefits, stock options)</li>
+                <li>Time your negotiation appropriately (after strong performance or during review cycles)</li>
+                <li>Practice your talking points and be prepared with data</li>
+                <li>Be professional and positive throughout the process</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const hikeTab = document.getElementById('hikeTab');
+        const reverseTab = document.getElementById('reverseTab');
+        const hikeContent = document.getElementById('hikeContent');
+        const reverseContent = document.getElementById('reverseContent');
+        
+        // Calculate New Salary elements
+        const currentSalary = document.getElementById('currentSalary');
+        const hikePercentage = document.getElementById('hikePercentage');
+        const bonusAmount = document.getElementById('bonusAmount');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const copyResultsBtn = document.getElementById('copyResultsBtn');
+        const newSalaryResult = document.getElementById('newSalaryResult');
+        const salaryIncreaseResult = document.getElementById('salaryIncreaseResult');
+        const totalCompensationResult = document.getElementById('totalCompensationResult');
+        const monthlySalaryResult = document.getElementById('monthlySalaryResult');
+        
+        // Calculate Hike Percentage elements
+        const oldSalary = document.getElementById('oldSalary');
+        const newSalary = document.getElementById('newSalary');
+        const calculateReverseBtn = document.getElementById('calculateReverseBtn');
+        const resetReverseBtn = document.getElementById('resetReverseBtn');
+        const copyReverseResultsBtn = document.getElementById('copyReverseResultsBtn');
+        const hikePercentageResult = document.getElementById('hikePercentageResult');
+        const reverseSalaryIncreaseResult = document.getElementById('reverseSalaryIncreaseResult');
+        const monthlyIncreaseResult = document.getElementById('monthlyIncreaseResult');
+        
+        // Set up tab switching
+        hikeTab.addEventListener('click', () => switchTab('hike'));
+        reverseTab.addEventListener('click', () => switchTab('reverse'));
+        
+        // Calculate New Salary functions
+        calculateBtn.addEventListener('click', calculateHike);
+        resetBtn.addEventListener('click', resetHikeCalculator);
+        copyResultsBtn.addEventListener('click', copyHikeResults);
+        
+        // Calculate Hike Percentage functions
+        calculateReverseBtn.addEventListener('click', calculateReverseHike);
+        resetReverseBtn.addEventListener('click', resetReverseCalculator);
+        copyReverseResultsBtn.addEventListener('click', copyReverseResults);
+        
+        function switchTab(tab) {
+            if (tab === 'hike') {
+                hikeTab.classList.add('active');
+                reverseTab.classList.remove('active');
+                hikeContent.classList.add('active');
+                reverseContent.classList.remove('active');
+            } else {
+                hikeTab.classList.remove('active');
+                reverseTab.classList.add('active');
+                hikeContent.classList.remove('active');
+                reverseContent.classList.add('active');
+            }
+        }
+        
+        function calculateHike() {
+            const current = parseFloat(currentSalary.value);
+            const hike = parseFloat(hikePercentage.value);
+            const bonus = parseFloat(bonusAmount.value) || 0;
+            
+            if (isNaN(current) || isNaN(hike)) {
+                showNotification('Please enter valid numbers for salary and hike percentage', 'error');
+                return;
+            }
+            
+            const increase = (current * hike) / 100;
+            const newSalary = current + increase;
+            const totalCompensation = newSalary + bonus;
+            const monthlySalary = newSalary / 12;
+            
+            newSalaryResult.textContent = formatCurrency(newSalary);
+            salaryIncreaseResult.textContent = formatCurrency(increase);
+            totalCompensationResult.textContent = formatCurrency(totalCompensation);
+            monthlySalaryResult.textContent = formatCurrency(monthlySalary);
+            
+            showNotification('Salary calculation complete', 'success');
+        }
+        
+        function calculateReverseHike() {
+            const old = parseFloat(oldSalary.value);
+            const newSal = parseFloat(newSalary.value);
+            
+            if (isNaN(old) || isNaN(newSal)) {
+                showNotification('Please enter valid numbers for both salaries', 'error');
+                return;
+            }
+            
+            if (old <= 0) {
+                showNotification('Old salary must be greater than zero', 'error');
+                return;
+            }
+            
+            const increase = newSal - old;
+            const percentage = (increase / old) * 100;
+            const monthlyIncrease = increase / 12;
+            
+            hikePercentageResult.textContent = percentage.toFixed(2) + '%';
+            reverseSalaryIncreaseResult.textContent = formatCurrency(increase);
+            monthlyIncreaseResult.textContent = formatCurrency(monthlyIncrease);
+            
+            showNotification('Hike percentage calculated', 'success');
+        }
+        
+        function resetHikeCalculator() {
+            currentSalary.value = '';
+            hikePercentage.value = '';
+            bonusAmount.value = '';
+            newSalaryResult.textContent = '$0';
+            salaryIncreaseResult.textContent = '$0';
+            totalCompensationResult.textContent = '$0';
+            monthlySalaryResult.textContent = '$0';
+        }
+        
+        function resetReverseCalculator() {
+            oldSalary.value = '';
+            newSalary.value = '';
+            hikePercentageResult.textContent = '0%';
+            reverseSalaryIncreaseResult.textContent = '$0';
+            monthlyIncreaseResult.textContent = '$0';
+        }
+        
+        function formatCurrency(amount) {
+            return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+        
+        function copyHikeResults() {
+            const results = `New Salary: ${newSalaryResult.textContent}
+Salary Increase: ${salaryIncreaseResult.textContent}
+Total Compensation: ${totalCompensationResult.textContent}
+Monthly Salary: ${monthlySalaryResult.textContent}`;
+            
+            copyToClipboard(results);
+        }
+        
+        function copyReverseResults() {
+            const results = `Hike Percentage: ${hikePercentageResult.textContent}
+Salary Increase: ${reverseSalaryIncreaseResult.textContent}
+Monthly Increase: ${monthlyIncreaseResult.textContent}`;
+            
+            copyToClipboard(results);
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => showNotification('Results copied to clipboard', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy results', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
