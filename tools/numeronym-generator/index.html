@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numeronym Generator | IT Tools</title>
+    <meta name="description" content="Generate numeronyms from words or phrases. Convert long words into short, memorable abbreviations.">
+    <meta name="keywords" content="numeronym generator, word abbreviation, text shortener, acronym creator">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .generator-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-area {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .options-group {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+        }
+        
+        .option-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .option-label {
+            margin-left: 10px;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            background-color: #f9fafb;
+        }
+        
+        .result-title {
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+        
+        .numeronym-display {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            color: #3b82f6;
+            word-break: break-all;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .example-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+        }
+        
+        .example-original {
+            font-weight: 500;
+        }
+        
+        .example-result {
+            font-family: 'Fira Code', monospace;
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Numeronym Generator</h1>
+            <p>Convert words or phrases into short, memorable abbreviations</p>
+        </div>
+        
+        <div class="generator-container">
+            <div class="input-area">
+                <label for="inputText" class="input-label">Enter your text:</label>
+                <textarea id="inputText" class="text-input" placeholder="Type or paste your words here..."></textarea>
+            </div>
+            
+            <div class="options-group">
+                <h3 style="margin-top: 0; margin-bottom: 15px;">Conversion Options</h3>
+                
+                <div class="option-row">
+                    <input type="checkbox" id="preserveCase" checked>
+                    <label for="preserveCase" class="option-label">Preserve original case</label>
+                </div>
+                
+                <div class="option-row">
+                    <input type="checkbox" id="includeAllWords" checked>
+                    <label for="includeAllWords" class="option-label">Process all words in phrase</label>
+                </div>
+                
+                <div class="option-row">
+                    <input type="checkbox" id="skipShortWords" checked>
+                    <label for="skipShortWords" class="option-label">Skip words shorter than 4 letters</label>
+                </div>
+                
+                <div class="option-row">
+                    <input type="checkbox" id="addHyphens">
+                    <label for="addHyphens" class="option-label">Add hyphens between numeronyms</label>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="generateBtn" class="btn btn-success">
+                    <i class="fas fa-magic"></i> Generate Numeronyms
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+                <button id="copyBtn" class="btn">
+                    <i class="fas fa-copy"></i> Copy Results
+                </button>
+            </div>
+            
+            <div class="result-container" id="resultContainer" style="display: none;">
+                <div class="result-title">Generated Numeronyms:</div>
+                <div class="numeronym-display" id="numeronymResult"></div>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>How to use the Numeronym Generator:</h3>
+            <ul>
+                <li>Enter your text in the input box (can be single word or phrase)</li>
+                <li>Adjust the conversion options as needed</li>
+                <li>Click "Generate Numeronyms" to create abbreviations</li>
+                <li>Copy the results with one click</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>What are Numeronyms?</h3>
+            <p>Numeronyms are abbreviations where numbers are used to shorten words by replacing middle letters. 
+            They follow the pattern of first letter + number of middle letters + last letter.</p>
+            
+            <h3 style="margin-top: 20px;">Examples:</h3>
+            <div class="examples">
+                <div class="example-card">
+                    <div class="example-original">Internationalization</div>
+                    <div class="example-result">i18n</div>
+                </div>
+                <div class="example-card">
+                    <div class="example-original">Localization</div>
+                    <div class="example-result">l10n</div>
+                </div>
+                <div class="example-card">
+                    <div class="example-original">Accessibility</div>
+                    <div class="example-result">a11y</div>
+                </div>
+                <div class="example-card">
+                    <div class="example-original">Hello world</div>
+                    <div class="example-result">h3o w3d</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+       <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+
+    <script>
+        // DOM elements
+        const inputText = document.getElementById('inputText');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const numeronymResult = document.getElementById('numeronymResult');
+        
+        // Options elements
+        const preserveCase = document.getElementById('preserveCase');
+        const includeAllWords = document.getElementById('includeAllWords');
+        const skipShortWords = document.getElementById('skipShortWords');
+        const addHyphens = document.getElementById('addHyphens');
+        
+        // Event listeners
+        generateBtn.addEventListener('click', generateNumeronyms);
+        clearBtn.addEventListener('click', clearInput);
+        copyBtn.addEventListener('click', copyResults);
+        
+        // Functions
+        function generateNumeronyms() {
+            const text = inputText.value.trim();
+            if (!text) {
+                showNotification('Please enter some text to convert', 'error');
+                return;
+            }
+            
+            try {
+                let result;
+                if (includeAllWords.checked) {
+                    // Process all words in the phrase
+                    const words = text.split(/\s+/);
+                    result = words.map(word => convertToNumeronym(word)).join(addHyphens.checked ? '-' : ' ');
+                } else {
+                    // Process only the first word
+                    const firstWord = text.split(/\s+/)[0];
+                    result = convertToNumeronym(firstWord);
+                }
+                
+                numeronymResult.textContent = result;
+                resultContainer.style.display = 'block';
+                showNotification('Numeronyms generated successfully', 'success');
+                
+            } catch (error) {
+                console.error('Generation error:', error);
+                showNotification('Error generating numeronyms', 'error');
+            }
+        }
+        
+        function convertToNumeronym(word) {
+            // Clean the word (remove non-letters)
+            const cleanWord = word.replace(/[^a-zA-Z]/g, '');
+            
+            if (!cleanWord) return word; // Return original if no letters
+            
+            // Check if we should skip short words
+            if (skipShortWords.checked && cleanWord.length <= 3) {
+                return preserveCase.checked ? word : word.toLowerCase();
+            }
+            
+            const length = cleanWord.length;
+            if (length <= 3) {
+                // Too short to numeronymize
+                return preserveCase.checked ? cleanWord : cleanWord.toLowerCase();
+            }
+            
+            const firstChar = preserveCase.checked ? cleanWord[0] : cleanWord[0].toLowerCase();
+            const lastChar = preserveCase.checked ? cleanWord[length - 1] : cleanWord[length - 1].toLowerCase();
+            const middleCount = length - 2;
+            
+            return `${firstChar}${middleCount}${lastChar}`;
+        }
+        
+        function clearInput() {
+            inputText.value = '';
+            resultContainer.style.display = 'none';
+            showNotification('Input cleared', 'success');
+        }
+        
+        function copyResults() {
+            if (!numeronymResult.textContent) {
+                showNotification('No results to copy', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(numeronymResult.textContent)
+                .then(() => showNotification('Numeronyms copied to clipboard', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy results', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
