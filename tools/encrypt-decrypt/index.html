@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt/Decrypt Text Online | IT Tools</title>
+    <meta name="description" content="Securely encrypt and decrypt text using AES, TripleDES, Rabbit or RC4 algorithms. All processing happens in your browser.">
+    <meta name="keywords" content="text encryption, text decryption, AES, TripleDES, Rabbit, RC4, online crypto tool">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .crypto-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        @media (min-width: 992px) {
+            .crypto-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .input-panel, .output-panel {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-panel h3, .output-panel h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .radio-option input {
+            width: auto;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tool-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.outline {
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        
+        .tool-button.outline:hover {
+            background: #f9fafb;
+        }
+        
+        .tool-button:disabled {
+            background: #e5e7eb;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            color: #374151;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .copy-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1>Encrypt/Decrypt Text</h1>
+            <p>Secure your text with AES, TripleDES, Rabbit or RC4 encryption algorithms</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="crypto-container">
+                <div class="input-panel">
+                    <h3>Input</h3>
+                    
+                    <div class="form-group">
+                        <label for="operation">Operation:</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="operation" value="encrypt" checked> Encrypt
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="operation" value="decrypt"> Decrypt
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="algorithm">Algorithm:</label>
+                        <select id="algorithm">
+                            <option value="aes">AES (Advanced Encryption Standard)</option>
+                            <option value="tripledes">TripleDES</option>
+                            <option value="rabbit">Rabbit</option>
+                            <option value="rc4">RC4</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="key">Secret Key:</label>
+                        <input type="text" id="key" placeholder="Enter your secret key">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="input-text" id="input-label">Text to Encrypt:</label>
+                        <textarea id="input-text" placeholder="Enter text to encrypt"></textarea>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="process-btn" class="tool-button">
+                            <i class="fas fa-lock"></i> Process
+                        </button>
+                        <button id="clear-btn" class="tool-button outline">
+                            <i class="fas fa-redo"></i> Clear
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+                
+                <div class="output-panel">
+                    <h3>Output</h3>
+                    
+                    <div class="form-group">
+                        <label for="output-text">Result:</label>
+                        <textarea id="output-text" readonly placeholder="Result will appear here"></textarea>
+                    </div>
+                    
+                    <button class="copy-btn" id="copy-btn">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this tool:</h3>
+                <ul>
+                    <li>Select whether you want to <strong>encrypt</strong> or <strong>decrypt</strong> your text</li>
+                    <li>Choose an encryption algorithm (AES is recommended for most cases)</li>
+                    <li>Enter a strong secret key (remember this for decryption!)</li>
+                    <li>Enter your text in the input field</li>
+                    <li>Click <strong>Process</strong> to encrypt/decrypt</li>
+                    <li>Copy the result from the output field</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About the Algorithms:</h3>
+                <ul>
+                    <li><strong>AES</strong> - Industry standard, very secure (128/192/256-bit keys)</li>
+                    <li><strong>TripleDES</strong> - Older standard, applies DES three times (168-bit key)</li>
+                    <li><strong>Rabbit</strong> - Fast stream cipher (128-bit key)</li>
+                    <li><strong>RC4</strong> - Simple stream cipher (40-2048-bit keys, considered weak)</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>Security Notes:</h3>
+                <ul>
+                    <li>All encryption/decryption happens <strong>locally in your browser</strong></li>
+                    <li>We never send your data to our servers</li>
+                    <li>Use strong, random keys for best security</li>
+                    <li>For AES, keys should be 16, 24, or 32 characters long</li>
+                    <li>Without the correct key, decryption is impossible</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">Your data never leaves your browser - all processing happens locally for maximum security</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+     <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const operationRadios = document.querySelectorAll('input[name="operation"]');
+        const algorithmSelect = document.getElementById('algorithm');
+        const keyInput = document.getElementById('key');
+        const inputText = document.getElementById('input-text');
+        const inputLabel = document.getElementById('input-label');
+        const outputText = document.getElementById('output-text');
+        const processBtn = document.getElementById('process-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update input label based on operation
+            operationRadios.forEach(radio => {
+                radio.addEventListener('change', updateInputLabel);
+            });
+            
+            // Process button click
+            processBtn.addEventListener('click', processText);
+            
+            // Clear button click
+            clearBtn.addEventListener('click', clearForm);
+            
+            // Copy button click
+            copyBtn.addEventListener('click', copyOutput);
+            
+            // Initialize label
+            updateInputLabel();
+        });
+        
+        function updateInputLabel() {
+            const operation = document.querySelector('input[name="operation"]:checked').value;
+            inputLabel.textContent = operation === 'encrypt' 
+                ? 'Text to Encrypt:' 
+                : 'Ciphertext to Decrypt:';
+        }
+        
+        function processText() {
+            const operation = document.querySelector('input[name="operation"]:checked').value;
+            const algorithm = algorithmSelect.value;
+            const key = keyInput.value.trim();
+            const text = inputText.value.trim();
+            
+            if (!key) {
+                showStatus('Error: Please enter a secret key', 'error');
+                return;
+            }
+            
+            if (!text) {
+                showStatus(`Error: Please enter text to ${operation}`, 'error');
+                return;
+            }
+            
+            try {
+                processBtn.disabled = true;
+                showStatus('Processing...', 'success');
+                
+                let result;
+                if (operation === 'encrypt') {
+                    result = encryptText(text, key, algorithm);
+                } else {
+                    result = decryptText(text, key, algorithm);
+                }
+                
+                outputText.value = result;
+                showStatus(`${operation === 'encrypt' ? 'Encryption' : 'Decryption'} successful!`, 'success');
+            } catch (error) {
+                console.error(error);
+                outputText.value = `Error: ${error.message}`;
+                showStatus(`Error: ${error.message}`, 'error');
+            } finally {
+                processBtn.disabled = false;
+            }
+        }
+        
+        function encryptText(text, key, algorithm) {
+            switch(algorithm) {
+                case 'aes':
+                    return CryptoJS.AES.encrypt(text, key).toString();
+                case 'tripledes':
+                    return CryptoJS.TripleDES.encrypt(text, key).toString();
+                case 'rabbit':
+                    return CryptoJS.Rabbit.encrypt(text, key).toString();
+                case 'rc4':
+                    return CryptoJS.RC4.encrypt(text, key).toString();
+                default:
+                    throw new Error('Unsupported algorithm');
+            }
+        }
+        
+        function decryptText(ciphertext, key, algorithm) {
+            try {
+                let bytes;
+                switch(algorithm) {
+                    case 'aes':
+                        bytes = CryptoJS.AES.decrypt(ciphertext, key);
+                        break;
+                    case 'tripledes':
+                        bytes = CryptoJS.TripleDES.decrypt(ciphertext, key);
+                        break;
+                    case 'rabbit':
+                        bytes = CryptoJS.Rabbit.decrypt(ciphertext, key);
+                        break;
+                    case 'rc4':
+                        bytes = CryptoJS.RC4.decrypt(ciphertext, key);
+                        break;
+                    default:
+                        throw new Error('Unsupported algorithm');
+                }
+                
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                
+                if (!decrypted) {
+                    throw new Error('Decryption failed. Wrong key or corrupted data.');
+                }
+                
+                return decrypted;
+            } catch (error) {
+                throw new Error('Decryption failed. Wrong key or corrupted data.');
+            }
+        }
+        
+        function clearForm() {
+            keyInput.value = '';
+            inputText.value = '';
+            outputText.value = '';
+            showStatus('Form cleared!', 'success');
+        }
+        
+        async function copyOutput() {
+            try {
+                await navigator.clipboard.writeText(outputText.value);
+                showStatus('Copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('Failed to copy text', 'error');
+                console.error(error);
+            }
+        }
+        
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message ' + type;
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusMessage.textContent = '';
+                statusMessage.className = 'status-message';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
