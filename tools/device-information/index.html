@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Information Tool | IT Tools</title>
+    <meta name="description" content="Get detailed information about your device including browser, OS, screen resolution, hardware specs and more.">
+    <meta name="keywords" content="device information, browser details, system specs, hardware info, device detector">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .info-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .info-section {
+            margin-bottom: 20px;
+        }
+        
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .info-value {
+            font-weight: 400;
+            color: #111827;
+            text-align: right;
+            font-family: 'Fira Code', monospace;
+            max-width: 60%;
+            word-break: break-word;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .hash-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .hash-notification.success {
+            background-color: #10b981;
+        }
+        
+        .hash-notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .battery-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .battery-level {
+            height: 20px;
+            border-radius: 3px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+        
+        .battery-fill {
+            height: 100%;
+            background-color: #10b981;
+            transition: width 0.3s ease;
+        }
+        
+        .battery-percent {
+            font-size: 0.9rem;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-laptop"></i> Device Information</h1>
+            <p>Get detailed technical specifications about your current device and browser</p>
+        </div>
+        
+        <div class="info-container">
+            <div class="info-grid">
+                <!-- Browser Information -->
+                <div class="info-section">
+                    <div class="info-header">
+                        <div class="info-title">
+                            <i class="fas fa-globe"></i>
+                            <span>Browser Information</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Browser:</span>
+                        <span class="info-value" id="browserName">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Version:</span>
+                        <span class="info-value" id="browserVersion">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">User Agent:</span>
+                        <span class="info-value" id="userAgent">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Cookies Enabled:</span>
+                        <span class="info-value" id="cookiesEnabled">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">JavaScript Enabled:</span>
+                        <span class="info-value" id="javascriptEnabled">Detecting...</span>
+                    </div>
+                </div>
+                
+                <!-- System Information -->
+                <div class="info-section">
+                    <div class="info-header">
+                        <div class="info-title">
+                            <i class="fas fa-desktop"></i>
+                            <span>System Information</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Operating System:</span>
+                        <span class="info-value" id="operatingSystem">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Device Type:</span>
+                        <span class="info-value" id="deviceType">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">CPU Cores:</span>
+                        <span class="info-value" id="cpuCores">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Memory:</span>
+                        <span class="info-value" id="deviceMemory">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Battery:</span>
+                        <span class="info-value">
+                            <div class="battery-section" id="batteryInfo">
+                                <div class="battery-level">
+                                    <div class="battery-fill" id="batteryFill"></div>
+                                </div>
+                                <span class="battery-percent" id="batteryPercent">Detecting...</span>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Display Information -->
+                <div class="info-section">
+                    <div class="info-header">
+                        <div class="info-title">
+                            <i class="fas fa-tv"></i>
+                            <span>Display Information</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Screen Resolution:</span>
+                        <span class="info-value" id="screenResolution">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Viewport Size:</span>
+                        <span class="info-value" id="viewportSize">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Color Depth:</span>
+                        <span class="info-value" id="colorDepth">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Pixel Ratio:</span>
+                        <span class="info-value" id="pixelRatio">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Orientation:</span>
+                        <span class="info-value" id="orientation">Detecting...</span>
+                    </div>
+                </div>
+                
+                <!-- Network Information -->
+                <div class="info-section">
+                    <div class="info-header">
+                        <div class="info-title">
+                            <i class="fas fa-wifi"></i>
+                            <span>Network Information</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Online Status:</span>
+                        <span class="info-value" id="onlineStatus">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Connection Type:</span>
+                        <span class="info-value" id="connectionType">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Effective Type:</span>
+                        <span class="info-value" id="effectiveType">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">Downlink Speed:</span>
+                        <span class="info-value" id="downlinkSpeed">Detecting...</span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-label">RTT:</span>
+                        <span class="info-value" id="rtt">Detecting...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="refreshBtn" class="btn btn-success">
+                    <i class="fas fa-sync-alt"></i> Refresh Information
+                </button>
+                <button id="copyBtn" class="btn">
+                    <i class="fas fa-copy"></i> Copy All Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>About This Device Information Tool</h3>
+            <p>This tool provides comprehensive technical details about your current device, browser, and network connection. The information can be useful for:</p>
+            <ul>
+                <li><strong>Web developers</strong> testing responsive designs</li>
+                <li><strong>IT professionals</strong> troubleshooting device issues</li>
+                <li><strong>Users</strong> curious about their device capabilities</li>
+                <li><strong>QA testers</strong> verifying browser compatibility</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>Understanding the Information</h3>
+            <ul>
+                <li><strong>Browser Information</strong> - Details about your web browser and its capabilities</li>
+                <li><strong>System Information</strong> - Hardware specifications of your device</li>
+                <li><strong>Display Information</strong> - Screen characteristics and dimensions</li>
+                <li><strong>Network Information</strong> - Connection type and performance metrics</li>
+                <li><strong>Battery Status</strong> - Current charge level and charging state (if supported)</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>Privacy Information</h3>
+            <p>This tool only accesses information that is already available to any website through standard browser APIs. No personal data is collected or stored. All processing happens locally in your browser.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const refreshBtn = document.getElementById('refreshBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            refreshBtn.addEventListener('click', detectDeviceInfo);
+            copyBtn.addEventListener('click', copyAllData);
+            
+            // Run detection immediately
+            detectDeviceInfo();
+        });
+        
+        function detectDeviceInfo() {
+            // Browser Information
+            detectBrowserInfo();
+            
+            // System Information
+            detectSystemInfo();
+            
+            // Display Information
+            detectDisplayInfo();
+            
+            // Network Information
+            detectNetworkInfo();
+            
+            // Battery Information (if supported)
+            detectBatteryInfo();
+            
+            showNotification('Device information refreshed', 'success');
+        }
+        
+        function detectBrowserInfo() {
+            const userAgent = navigator.userAgent;
+            document.getElementById('userAgent').textContent = userAgent;
+            
+            // Detect browser name and version
+            let browserName, browserVersion;
+            
+            if (userAgent.includes('Firefox')) {
+                browserName = 'Firefox';
+                browserVersion = userAgent.match(/Firefox\/(\d+\.\d+)/)[1];
+            } else if (userAgent.includes('Edg')) {
+                browserName = 'Microsoft Edge';
+                browserVersion = userAgent.match(/Edg\/(\d+\.\d+\.\d+\.\d+)/)[1];
+            } else if (userAgent.includes('Chrome')) {
+                browserName = 'Chrome';
+                browserVersion = userAgent.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/)[1];
+            } else if (userAgent.includes('Safari')) {
+                browserName = 'Safari';
+                browserVersion = userAgent.match(/Version\/(\d+\.\d+)/)[1];
+            } else {
+                browserName = 'Unknown Browser';
+                browserVersion = 'Unknown';
+            }
+            
+            document.getElementById('browserName').textContent = browserName;
+            document.getElementById('browserVersion').textContent = browserVersion;
+            document.getElementById('cookiesEnabled').textContent = navigator.cookieEnabled ? 'Yes' : 'No';
+            document.getElementById('javascriptEnabled').textContent = 'Yes';
+        }
+        
+        function detectSystemInfo() {
+            // Detect OS
+            let os = 'Unknown OS';
+            const userAgent = navigator.userAgent;
+            
+            if (userAgent.includes('Windows')) {
+                os = 'Windows';
+            } else if (userAgent.includes('Mac')) {
+                os = 'MacOS';
+            } else if (userAgent.includes('Linux')) {
+                os = 'Linux';
+            } else if (userAgent.includes('Android')) {
+                os = 'Android';
+            } else if (userAgent.includes('iOS') || userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+                os = 'iOS';
+            }
+            
+            document.getElementById('operatingSystem').textContent = os;
+            
+            // Detect device type
+            let deviceType = 'Desktop';
+            if (/Mobi|Android|iPhone|iPad|iPod/i.test(userAgent)) {
+                deviceType = 'Mobile';
+                if (/iPad|tablet/i.test(userAgent)) {
+                    deviceType = 'Tablet';
+                }
+            }
+            document.getElementById('deviceType').textContent = deviceType;
+            
+            // CPU cores
+            const cores = navigator.hardwareConcurrency || 'Unknown';
+            document.getElementById('cpuCores').textContent = cores;
+            
+            // Device memory (only available in some browsers)
+            const memory = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown';
+            document.getElementById('deviceMemory').textContent = memory;
+        }
+        
+        function detectDisplayInfo() {
+            // Screen resolution
+            const screenRes = `${window.screen.width} × ${window.screen.height}`;
+            document.getElementById('screenResolution').textContent = screenRes;
+            
+            // Viewport size
+            const viewportSize = `${window.innerWidth} × ${window.innerHeight}`;
+            document.getElementById('viewportSize').textContent = viewportSize;
+            
+            // Color depth
+            document.getElementById('colorDepth').textContent = `${window.screen.colorDepth} bit`;
+            
+            // Pixel ratio
+            const pixelRatio = window.devicePixelRatio || 1;
+            document.getElementById('pixelRatio').textContent = pixelRatio;
+            
+            // Orientation
+            let orientation = 'Portrait';
+            if (window.innerWidth > window.innerHeight) {
+                orientation = 'Landscape';
+            }
+            document.getElementById('orientation').textContent = orientation;
+        }
+        
+        function detectNetworkInfo() {
+            // Online status
+            document.getElementById('onlineStatus').textContent = navigator.onLine ? 'Online' : 'Offline';
+            
+            // Connection info (if supported)
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                document.getElementById('connectionType').textContent = connection.type || 'Unknown';
+                document.getElementById('effectiveType').textContent = connection.effectiveType || 'Unknown';
+                document.getElementById('downlinkSpeed').textContent = connection.downlink ? `${connection.downlink} Mbps` : 'Unknown';
+                document.getElementById('rtt').textContent = connection.rtt ? `${connection.rtt} ms` : 'Unknown';
+            } else {
+                document.getElementById('connectionType').textContent = 'Not supported';
+                document.getElementById('effectiveType').textContent = 'Not supported';
+                document.getElementById('downlinkSpeed').textContent = 'Not supported';
+                document.getElementById('rtt').textContent = 'Not supported';
+            }
+        }
+        
+        function detectBatteryInfo() {
+            // Battery API (may not be supported in all browsers)
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(function(battery) {
+                    const level = battery.level * 100;
+                    const charging = battery.charging ? ' (Charging)' : ' (Discharging)';
+                    
+                    document.getElementById('batteryPercent').textContent = `${Math.round(level)}%${charging}`;
+                    document.getElementById('batteryFill').style.width = `${level}%`;
+                    
+                    if (level < 20) {
+                        document.getElementById('batteryFill').style.backgroundColor = '#ef4444';
+                    } else if (level < 50) {
+                        document.getElementById('batteryFill').style.backgroundColor = '#f59e0b';
+                    } else {
+                        document.getElementById('batteryFill').style.backgroundColor = '#10b981';
+                    }
+                    
+                    // Update on changes
+                    battery.addEventListener('levelchange', function() {
+                        const newLevel = battery.level * 100;
+                        document.getElementById('batteryPercent').textContent = `${Math.round(newLevel)}%${charging}`;
+                        document.getElementById('batteryFill').style.width = `${newLevel}%`;
+                    });
+                    
+                    battery.addEventListener('chargingchange', function() {
+                        const newCharging = battery.charging ? ' (Charging)' : ' (Discharging)';
+                        document.getElementById('batteryPercent').textContent = `${Math.round(level)}%${newCharging}`;
+                    });
+                });
+            } else {
+                document.getElementById('batteryPercent').textContent = 'Not supported';
+                document.getElementById('batteryFill').style.width = '0%';
+            }
+        }
+        
+        function copyAllData() {
+            const sections = document.querySelectorAll('.info-section');
+            let allData = 'DEVICE INFORMATION REPORT\n\n';
+            
+            sections.forEach(section => {
+                const title = section.querySelector('.info-title span').textContent;
+                allData += `=== ${title} ===\n`;
+                
+                const items = section.querySelectorAll('.info-item');
+                items.forEach(item => {
+                    const label = item.querySelector('.info-label').textContent;
+                    let value = item.querySelector('.info-value').textContent;
+                    
+                    // Handle battery info separately
+                    if (label === 'Battery:') {
+                        value = item.querySelector('.battery-percent').textContent;
+                    }
+                    
+                    allData += `${label}: ${value}\n`;
+                });
+                
+                allData += '\n';
+            });
+            
+            navigator.clipboard.writeText(allData)
+                .then(() => showNotification('All device information copied to clipboard', 'success'))
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showNotification('Failed to copy device information', 'error');
+                });
+        }
+        
+        function showNotification(message, type) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.hash-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `hash-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
