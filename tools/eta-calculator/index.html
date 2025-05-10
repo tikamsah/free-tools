@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETA Calculator | IT Tools</title>
+    <meta name="description" content="Calculate estimated time of arrival based on distance and speed. Useful for travel planning and logistics.">
+    <meta name="keywords" content="ETA calculator, travel time, distance calculator, speed calculator, arrival time">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .calculator-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .input-group input, 
+        .input-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .unit-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .unit-toggle button {
+            background: none;
+            border: 1px solid #e5e7eb;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .unit-toggle button.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .result-section {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .result-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-card p {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .result-card .subtext {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .notification.success {
+            background-color: #10b981;
+        }
+        
+        .notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        @media (max-width: 768px) {
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-clock"></i> ETA Calculator</h1>
+            <p>Calculate estimated time of arrival based on distance and speed</p>
+        </div>
+        
+        <div class="calculator-container">
+            <div class="unit-toggle">
+                <button id="metricBtn" class="active">Metric (km, km/h)</button>
+                <button id="imperialBtn">Imperial (miles, mph)</button>
+            </div>
+            
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="distance">Distance</label>
+                    <input type="number" id="distance" placeholder="Enter distance">
+                </div>
+                
+                <div class="input-group">
+                    <label for="speed">Average Speed</label>
+                    <input type="number" id="speed" placeholder="Enter average speed">
+                </div>
+                
+                <div class="input-group">
+                    <label for="departureTime">Departure Time</label>
+                    <input type="datetime-local" id="departureTime">
+                </div>
+                
+                <div class="input-group">
+                    <label for="stops">Number of Stops</label>
+                    <input type="number" id="stops" placeholder="0" min="0" value="0">
+                </div>
+                
+                <div class="input-group">
+                    <label for="stopDuration">Average Stop Duration (minutes)</label>
+                    <input type="number" id="stopDuration" placeholder="0" min="0" value="0">
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="calculateBtn" class="btn btn-success">
+                    <i class="fas fa-calculator"></i> Calculate ETA
+                </button>
+                <button id="resetBtn" class="btn btn-secondary">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            </div>
+            
+            <div id="resultSection" class="result-section" style="display: none;">
+                <h2>Estimated Time of Arrival</h2>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h3>Travel Time</h3>
+                        <p id="travelTime">--:--</p>
+                        <p class="subtext">(without stops)</p>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Total Stop Time</h3>
+                        <p id="stopTime">--:--</p>
+                        <p class="subtext" id="stopCount">0 stops</p>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Total Duration</h3>
+                        <p id="totalDuration">--:--</p>
+                        <p class="subtext">(travel + stops)</p>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>Estimated Arrival</h3>
+                        <p id="etaTime">--:--</p>
+                        <p class="subtext" id="etaDate"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>About the ETA Calculator</h3>
+            <p>This tool helps you calculate the estimated time of arrival based on:</p>
+            <ul>
+                <li><strong>Distance</strong> - The total distance to your destination</li>
+                <li><strong>Average speed</strong> - Your expected average travel speed</li>
+                <li><strong>Departure time</strong> - When you plan to start your journey</li>
+                <li><strong>Stops</strong> - Number of planned stops and their duration</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <h3>How to Use</h3>
+            <ol>
+                <li>Select your preferred unit system (Metric or Imperial)</li>
+                <li>Enter the distance to your destination</li>
+                <li>Enter your expected average speed</li>
+                <li>Set your departure date and time</li>
+                <li>Add any planned stops and their duration</li>
+                <li>Click "Calculate ETA" to see your estimated arrival time</li>
+            </ol>
+        </div>
+        
+        <div class="instructions">
+            <h3>Practical Applications</h3>
+            <p>This calculator is useful for:</p>
+            <ul>
+                <li><strong>Road trips</strong> - Plan your journey and arrival time</li>
+                <li><strong>Logistics</strong> - Estimate delivery times</li>
+                <li><strong>Commuting</strong> - Calculate when you'll arrive at work or home</li>
+                <li><strong>Event planning</strong> - Coordinate arrival times with others</li>
+                <li><strong>Fitness activities</strong> - Estimate running or cycling times</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const metricBtn = document.getElementById('metricBtn');
+            const imperialBtn = document.getElementById('imperialBtn');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const distanceInput = document.getElementById('distance');
+            const speedInput = document.getElementById('speed');
+            const departureInput = document.getElementById('departureTime');
+            const stopsInput = document.getElementById('stops');
+            const stopDurationInput = document.getElementById('stopDuration');
+            const resultSection = document.getElementById('resultSection');
+            
+            // Result elements
+            const travelTimeEl = document.getElementById('travelTime');
+            const stopTimeEl = document.getElementById('stopTime');
+            const stopCountEl = document.getElementById('stopCount');
+            const totalDurationEl = document.getElementById('totalDuration');
+            const etaTimeEl = document.getElementById('etaTime');
+            const etaDateEl = document.getElementById('etaDate');
+            
+            // Set default departure time to now
+            const now = new Date();
+            // Round to nearest 15 minutes
+            const roundedMinutes = Math.round(now.getMinutes() / 15) * 15;
+            now.setMinutes(roundedMinutes);
+            departureInput.valueAsDateTime = now.toISOString().slice(0, 16);
+            
+            // Unit toggle
+            metricBtn.addEventListener('click', function() {
+                metricBtn.classList.add('active');
+                imperialBtn.classList.remove('active');
+                updatePlaceholders('metric');
+            });
+            
+            imperialBtn.addEventListener('click', function() {
+                imperialBtn.classList.add('active');
+                metricBtn.classList.remove('active');
+                updatePlaceholders('imperial');
+            });
+            
+            // Calculate button
+            calculateBtn.addEventListener('click', calculateETA);
+            
+            // Reset button
+            resetBtn.addEventListener('click', resetCalculator);
+            
+            // Function to update input placeholders based on unit system
+            function updatePlaceholders(system) {
+                if (system === 'metric') {
+                    distanceInput.placeholder = 'Enter distance in kilometers';
+                    speedInput.placeholder = 'Enter speed in km/h';
+                } else {
+                    distanceInput.placeholder = 'Enter distance in miles';
+                    speedInput.placeholder = 'Enter speed in mph';
+                }
+            }
+            
+            // Main calculation function
+            function calculateETA() {
+                // Get input values
+                const distance = parseFloat(distanceInput.value);
+                const speed = parseFloat(speedInput.value);
+                const departureTime = departureInput.valueAsDateTime;
+                const stops = parseInt(stopsInput.value) || 0;
+                const stopDuration = parseInt(stopDurationInput.value) || 0;
+                
+                // Validate inputs
+                if (!distance || !speed || !departureTime) {
+                    showNotification('Please fill in all required fields', 'error');
+                    return;
+                }
+                
+                if (speed <= 0) {
+                    showNotification('Speed must be greater than 0', 'error');
+                    return;
+                }
+                
+                // Calculate travel time in hours
+                const isMetric = metricBtn.classList.contains('active');
+                const distanceInKm = isMetric ? distance : distance * 1.60934;
+                const speedInKph = isMetric ? speed : speed * 1.60934;
+                
+                const travelHours = distanceInKm / speedInKph;
+                const travelMinutes = travelHours * 60;
+                
+                // Calculate stop time in minutes
+                const totalStopMinutes = stops * stopDuration;
+                
+                // Calculate total duration in minutes
+                const totalMinutes = travelMinutes + totalStopMinutes;
+                
+                // Calculate arrival time
+                const departureDate = new Date(departureTime);
+                const arrivalDate = new Date(departureDate.getTime() + totalMinutes * 60000);
+                
+                // Format results
+                const formatTime = (minutes) => {
+                    const hours = Math.floor(minutes / 60);
+                    const mins = Math.round(minutes % 60);
+                    return `${hours}h ${mins}m`;
+                };
+                
+                const formatTimeShort = (minutes) => {
+                    const hours = Math.floor(minutes / 60);
+                    const mins = Math.round(minutes % 60);
+                    return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+                };
+                
+                // Update UI with results
+                travelTimeEl.textContent = formatTimeShort(travelMinutes);
+                stopTimeEl.textContent = formatTimeShort(totalStopMinutes);
+                stopCountEl.textContent = `${stops} stop${stops !== 1 ? 's' : ''}`;
+                totalDurationEl.textContent = formatTimeShort(totalMinutes);
+                
+                etaTimeEl.textContent = arrivalDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                etaDateEl.textContent = arrivalDate.toLocaleDateString();
+                
+                // Show results
+                resultSection.style.display = 'block';
+                
+                showNotification('ETA calculated successfully', 'success');
+            }
+            
+            // Reset function
+            function resetCalculator() {
+                distanceInput.value = '';
+                speedInput.value = '';
+                
+                // Reset departure time to now
+                const now = new Date();
+                // Round to nearest 15 minutes
+                const roundedMinutes = Math.round(now.getMinutes() / 15) * 15;
+                now.setMinutes(roundedMinutes);
+                departureInput.valueAsDateTime = now.toISOString().slice(0, 16);
+                
+                stopsInput.value = '0';
+                stopDurationInput.value = '0';
+                
+                // Hide results
+                resultSection.style.display = 'none';
+                
+                showNotification('Calculator reset', 'success');
+            }
+            
+            // Notification function
+            function showNotification(message, type) {
+                // Remove any existing notifications
+                const existing = document.querySelector('.notification');
+                if (existing) existing.remove();
+                
+                const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+                
+                document.body.appendChild(notification);
+                
+                // Auto-remove after 3 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
