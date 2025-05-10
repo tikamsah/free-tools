@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to NATO Alphabet | IT Tools</title>
+    <meta name="description" content="Convert text to NATO phonetic alphabet for clear communication. Perfect for spelling out words over phone or radio.">
+    <meta name="keywords" content="NATO alphabet, phonetic alphabet, spelling alphabet, military alphabet, radio alphabet">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            margin-bottom: 25px;
+        }
+        
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .input-section textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            font-size: 1rem;
+        }
+        
+        .options-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .option-group {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .option-group h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            color: #111827;
+        }
+        
+        .option-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .option-item input[type="checkbox"],
+        .option-item input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        .option-item label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        
+        .btn-success {
+            background-color: #10b981;
+        }
+        
+        .btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .result-tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        
+        .result-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        
+        .result-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .output-section {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .output-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #111827;
+        }
+        
+        .output-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            resize: vertical;
+            background-color: #f8fafc;
+            font-size: 1rem;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .copy-btn:hover {
+            background-color: #e0e7ff;
+            text-decoration: none;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .notification.success {
+            background-color: #10b981;
+        }
+        
+        .notification.error {
+            background-color: #ef4444;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .code-block {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .code-block code {
+            display: block;
+            white-space: pre;
+        }
+        
+        .alphabet-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .alphabet-table th, 
+        .alphabet-table td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .alphabet-table th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        
+        .alphabet-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        @media (max-width: 768px) {
+            .options-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .alphabet-table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-broadcast-tower"></i> Text to NATO Phonetic Alphabet</h1>
+            <p>Convert text to the NATO phonetic alphabet for clear communication over phone or radio</p>
+        </div>
+        
+        <div class="converter-container">
+            <div class="input-section">
+                <label for="inputText">Enter text to convert to NATO phonetic alphabet:</label>
+                <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+            </div>
+            
+            <div class="options-section">
+                <div class="option-group">
+                    <h3>Output Format</h3>
+                    <div class="option-item">
+                        <input type="radio" id="format-full" name="outputFormat" value="full" checked>
+                        <label for="format-full">Full words (Alpha, Bravo, Charlie)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="format-abbr" name="outputFormat" value="abbr">
+                        <label for="format-abbr">Abbreviations (A, B, C)</label>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3>Options</h3>
+                    <div class="option-item">
+                        <input type="checkbox" id="option-uppercase" checked>
+                        <label for="option-uppercase">Uppercase letters</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="option-punctuation">
+                        <label for="option-punctuation">Include punctuation</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="option-spaces" checked>
+                        <label for="option-spaces">Preserve spaces</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="convertBtn" class="btn btn-success">
+                    <i class="fas fa-exchange-alt"></i> Convert
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-trash-alt"></i> Clear
+                </button>
+                <button id="speakBtn" class="btn">
+                    <i class="fas fa-volume-up"></i> Speak
+                </button>
+            </div>
+            
+            <div class="result-tabs">
+                <div class="result-tab active" data-tab="result">Result</div>
+                <div class="result-tab" data-tab="alphabet">NATO Alphabet</div>
+                <div class="result-tab" data-tab="how-it-works">How It Works</div>
+            </div>
+            
+            <div id="resultTab" class="tab-content active">
+                <div class="output-section">
+                    <div class="output-header">
+                        <h3>Phonetic Alphabet Conversion</h3>
+                        <button id="copyResultBtn" class="copy-btn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <textarea id="outputText" class="output-textarea" readonly></textarea>
+                </div>
+            </div>
+            
+            <div id="alphabetTab" class="tab-content">
+                <h3>NATO Phonetic Alphabet Reference</h3>
+                <p>The NATO phonetic alphabet is used worldwide for clear communication of letters over radio or telephone.</p>
+                
+                <table class="alphabet-table">
+                    <thead>
+                        <tr>
+                            <th>Letter</th>
+                            <th>Code Word</th>
+                            <th>Pronunciation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A</td><td>Alpha</td><td>AL FAH</td></tr>
+                        <tr><td>B</td><td>Bravo</td><td>BRAH VOH</td></tr>
+                        <tr><td>C</td><td>Charlie</td><td>CHAR LEE</td></tr>
+                        <tr><td>D</td><td>Delta</td><td>DELL TAH</td></tr>
+                        <tr><td>E</td><td>Echo</td><td>ECK OH</td></tr>
+                        <tr><td>F</td><td>Foxtrot</td><td>FOKS TROT</td></tr>
+                        <tr><td>G</td><td>Golf</td><td>GOLF</td></tr>
+                        <tr><td>H</td><td>Hotel</td><td>HOH TELL</td></tr>
+                        <tr><td>I</td><td>India</td><td>IN DEE AH</td></tr>
+                        <tr><td>J</td><td>Juliett</td><td>JEW LEE ETT</td></tr>
+                        <tr><td>K</td><td>Kilo</td><td>KEY LOH</td></tr>
+                        <tr><td>L</td><td>Lima</td><td>LEE MAH</td></tr>
+                        <tr><td>M</td><td>Mike</td><td>MIKE</td></tr>
+                        <tr><td>N</td><td>November</td><td>NO VEM BER</td></tr>
+                        <tr><td>O</td><td>Oscar</td><td>OSS CAH</td></tr>
+                        <tr><td>P</td><td>Papa</td><td>PAH PAH</td></tr>
+                        <tr><td>Q</td><td>Quebec</td><td>KEH BECK</td></tr>
+                        <tr><td>R</td><td>Romeo</td><td>ROW ME OH</td></tr>
+                        <tr><td>S</td><td>Sierra</td><td>SEE AIR RAH</td></tr>
+                        <tr><td>T</td><td>Tango</td><td>TANG GO</td></tr>
+                        <tr><td>U</td><td>Uniform</td><td>YOU NEE FORM</td></tr>
+                        <tr><td>V</td><td>Victor</td><td>VIK TAH</td></tr>
+                        <tr><td>W</td><td>Whiskey</td><td>WISS KEY</td></tr>
+                        <tr><td>X</td><td>X-ray</td><td>ECKS RAY</td></tr>
+                        <tr><td>Y</td><td>Yankee</td><td>YANG KEY</td></tr>
+                        <tr><td>Z</td><td>Zulu</td><td>ZOO LOO</td></tr>
+                        <tr><td>0</td><td>Zero</td><td>ZE-RO</td></tr>
+                        <tr><td>1</td><td>One</td><td>WUN</td></tr>
+                        <tr><td>2</td><td>Two</td><td>TOO</td></tr>
+                        <tr><td>3</td><td>Three</td><td>TREE</td></tr>
+                        <tr><td>4</td><td>Four</td><td>FOW-ER</td></tr>
+                        <tr><td>5</td><td>Five</td><td>FIFE</td></tr>
+                        <tr><td>6</td><td>Six</td><td>SIX</td></tr>
+                        <tr><td>7</td><td>Seven</td><td>SEV-EN</td></tr>
+                        <tr><td>8</td><td>Eight</td><td>AIT</td></tr>
+                        <tr><td>9</td><td>Nine</td><td>NIN-ER</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="howItWorksTab" class="tab-content">
+                <h3>How the NATO Phonetic Alphabet Works</h3>
+                <p>The NATO phonetic alphabet is used to spell out letters clearly over radio or telephone communications where clarity is essential.</p>
+                
+                <div class="instructions">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li><strong>Standardized words</strong> for each letter of the alphabet</li>
+                        <li><strong>Distinct pronunciation</strong> to avoid confusion between similar-sounding letters</li>
+                        <li><strong>International recognition</strong> - used worldwide in aviation, military, and telecommunications</li>
+                        <li><strong>Numbers included</strong> with specific pronunciation rules</li>
+                    </ul>
+                </div>
+                
+                <div class="instructions">
+                    <h3>When to Use</h3>
+                    <ul>
+                        <li>Spelling names or words over the phone</li>
+                        <li>Radio communications where clarity is essential</li>
+                        <li>Customer service to confirm spelling</li>
+                        <li>Military and aviation communications</li>
+                        <li>Any situation where letters might be misheard</li>
+                    </ul>
+                </div>
+                
+                <h3>Example Usage</h3>
+                <div class="code-block">
+                    <code>Original: "Hello World"
+Conversion: "Hotel Echo Lima Lima Oscar | Whiskey Oscar Romeo Lima Delta"</code>
+                </div>
+                
+                <div class="code-block">
+                    <code>Original: "ABC123"
+Conversion: "Alpha Bravo Charlie One Two Three"</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Banner -->
+        <section>
+            <div class="container">
+                <div class="ad-banner horizontal">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '3b19ebe99590132546afa5dc20497a55',
+                        'format' : 'iframe',
+                        'height' : 60,
+                        'width' : 468,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+            </div>
+            </div>
+        </section>
+        
+        <div class="instructions">
+            <h3>About the NATO Phonetic Alphabet</h3>
+            <p>The NATO phonetic alphabet, officially called the International Radiotelephony Spelling Alphabet, was developed in the 1950s to be intelligible and pronounceable by all NATO allies in the heat of battle.</p>
+            <p>It replaced other phonetic alphabets that had been used for decades, standardizing communication across military and civilian organizations worldwide.</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>Tips for Effective Use</h3>
+            <ul>
+                <li>Speak clearly and at a moderate pace</li>
+                <li>Pause slightly between each word</li>
+                <li>For long strings, group letters (e.g., "Alpha Bravo, Charlie Delta")</li>
+                <li>Confirm important communications by repeating back</li>
+                <li>Practice with common words and names to build fluency</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+     <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const tabs = document.querySelectorAll('.result-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const convertBtn = document.getElementById('convertBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const speakBtn = document.getElementById('speakBtn');
+            const copyResultBtn = document.getElementById('copyResultBtn');
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            
+            // NATO phonetic alphabet mapping
+            const natoAlphabet = {
+                'A': 'Alpha', 'B': 'Bravo', 'C': 'Charlie', 'D': 'Delta', 
+                'E': 'Echo', 'F': 'Foxtrot', 'G': 'Golf', 'H': 'Hotel', 
+                'I': 'India', 'J': 'Juliett', 'K': 'Kilo', 'L': 'Lima', 
+                'M': 'Mike', 'N': 'November', 'O': 'Oscar', 'P': 'Papa', 
+                'Q': 'Quebec', 'R': 'Romeo', 'S': 'Sierra', 'T': 'Tango', 
+                'U': 'Uniform', 'V': 'Victor', 'W': 'Whiskey', 'X': 'X-ray', 
+                'Y': 'Yankee', 'Z': 'Zulu',
+                '0': 'Zero', '1': 'One', '2': 'Two', '3': 'Three', 
+                '4': 'Four', '5': 'Five', '6': 'Six', '7': 'Seven', 
+                '8': 'Eight', '9': 'Nine'
+            };
+            
+            // Set up tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    // Show the corresponding tab content
+                    const tabId = this.getAttribute('data-tab') + 'Tab';
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Set up button event listeners
+            convertBtn.addEventListener('click', convertToNato);
+            clearBtn.addEventListener('click', clearAll);
+            speakBtn.addEventListener('click', speakNato);
+            copyResultBtn.addEventListener('click', () => copyToClipboard(outputText));
+            
+            // Initialize with sample text if empty
+            if (!inputText.value.trim()) {
+                inputText.value = "Hello World";
+                convertToNato();
+            }
+            
+            // Main conversion function
+            function convertToNato() {
+                const text = inputText.value.trim();
+                if (!text) {
+                    showNotification('Please enter some text to convert', 'error');
+                    return;
+                }
+                
+                const format = document.querySelector('input[name="outputFormat"]:checked').value;
+                const uppercase = document.getElementById('option-uppercase').checked;
+                const punctuation = document.getElementById('option-punctuation').checked;
+                const spaces = document.getElementById('option-spaces').checked;
+                
+                let result = '';
+                
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    const upperChar = char.toUpperCase();
+                    
+                    // Handle letters
+                    if (natoAlphabet[upperChar]) {
+                        if (format === 'abbr') {
+                            result += uppercase ? upperChar : char;
+                        } else {
+                            result += natoAlphabet[upperChar];
+                        }
+                    } 
+                    // Handle numbers
+                    else if (char >= '0' && char <= '9') {
+                        if (format === 'abbr') {
+                            result += char;
+                        } else {
+                            result += natoAlphabet[char];
+                        }
+                    }
+                    // Handle spaces
+                    else if (char === ' ' && spaces) {
+                        result += ' | ';
+                        continue;
+                    }
+                    // Handle punctuation
+                    else if ((char === '.' || char === ',' || char === '!' || char === '?') && punctuation) {
+                        result += ` ${char} `;
+                        continue;
+                    }
+                    // Skip other characters
+                    else {
+                        continue;
+                    }
+                    
+                    // Add space between characters
+                    if (i < text.length - 1) {
+                        result += ' ';
+                    }
+                }
+                
+                outputText.value = result;
+                showNotification('Text converted to NATO alphabet', 'success');
+            }
+            
+            // Text-to-speech function
+            function speakNato() {
+                const text = outputText.value.trim();
+                if (!text) {
+                    showNotification('No converted text to speak', 'error');
+                    return;
+                }
+                
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1;
+                    speechSynthesis.speak(utterance);
+                    showNotification('Speaking NATO alphabet', 'success');
+                } else {
+                    showNotification('Text-to-speech not supported in your browser', 'error');
+                }
+            }
+            
+            // Clear function
+            function clearAll() {
+                inputText.value = '';
+                outputText.value = '';
+                showNotification('Cleared all inputs and outputs', 'success');
+            }
+            
+            // Copy to clipboard function
+            function copyToClipboard(element) {
+                const text = element.value;
+                
+                if (!text) {
+                    showNotification('Nothing to copy', 'error');
+                    return;
+                }
+                
+                navigator.clipboard.writeText(text)
+                    .then(() => showNotification('Copied to clipboard', 'success'))
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        showNotification('Failed to copy', 'error');
+                    });
+            }
+            
+            // Notification function
+            function showNotification(message, type) {
+                // Remove any existing notifications
+                const existing = document.querySelector('.notification');
+                if (existing) existing.remove();
+                
+                const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+                
+                document.body.appendChild(notification);
+                
+                // Auto-remove after 3 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
