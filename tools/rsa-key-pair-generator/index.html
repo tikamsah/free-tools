@@ -426,72 +426,76 @@
         });
         
         async function generateKeyPair() {
-        try {
-            // Get options
-            const keySize = parseInt(document.getElementById('key-size').value);
-            const outputFormat = document.getElementById('output-format').value;
-            
-            // Show loading state
-            generateBtn.disabled = true;
-            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
-            
-            // Generate key pair using JSEncrypt
-            const crypt = new JSEncrypt({default_key_size: keySize});
-            crypt.getKey();
-            
-            // Get keys in different formats
-            let publicKey, privateKey;
-            
-            if (outputFormat === 'pem') {
-                publicKey = crypt.getPublicKey();
-                privateKey = crypt.getPrivateKey();
-            } else { // JWK
-                // Extract components for JWK
-                const privateKeyB64 = crypt.getPrivateKey()
-                    .replace(/-----BEGIN RSA PRIVATE KEY-----/, '')
-                    .replace(/-----END RSA PRIVATE KEY-----/, '')
-                    .replace(/\n/g, '');
+            try {
+                // Get options
+                const keySize = parseInt(document.getElementById('key-size').value);
+                const outputFormat = document.getElementById('output-format').value;
                 
-                const publicKeyB64 = crypt.getPublicKey()
-                    .replace(/-----BEGIN PUBLIC KEY-----/, '')
-                    .replace(/-----END PUBLIC KEY-----/, '')
-                    .replace(/\n/g, '');
+                // Show loading state
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
                 
-                // Create simplified JWK representation
-                publicKey = JSON.stringify({
-                    kty: "RSA",
-                    alg: "RS256",
-                    use: "sig",
-                    n: base64ToBase64Url(publicKeyB64),
-                    e: "AQAB" // Standard exponent for RSA (65537)
-                }, null, 2);
+                // Generate key pair using JSEncrypt
+                const crypt = new JSEncrypt({default_key_size: keySize});
                 
-                privateKey = JSON.stringify({
-                    kty: "RSA",
-                    alg: "RS256",
-                    n: base64ToBase64Url(publicKeyB64),
-                    e: "AQAB",
-                    d: base64ToBase64Url(privateKeyB64),
-                    // Note: JSEncrypt doesn't expose all components needed for full JWK
-                    // These would normally be p, q, dp, dq, qi
-                    ext: true
-                }, null, 2);
+                // Add small delay to allow UI to update
+                await new Promise(resolve => setTimeout(resolve, 50));
+                
+                crypt.getKey();
+                
+                // Get keys in different formats
+                let publicKey, privateKey;
+                
+                if (outputFormat === 'pem') {
+                    publicKey = crypt.getPublicKey();
+                    privateKey = crypt.getPrivateKey();
+                } else { // JWK
+                    // For JWK output, we'll create a simplified representation
+                    const publicKeyObj = crypt.getKey().getPublic();
+                    const privateKeyObj = crypt.getKey().getPrivate();
+                    
+                    publicKey = JSON.stringify({
+                        kty: "RSA",
+                        n: publicKeyObj.n.toString(16),
+                        e: publicKeyObj.e.toString(16),
+                        alg: "RS256",
+                        ext: true
+                    }, null, 2);
+                    
+                    privateKey = JSON.stringify({
+                        kty: "RSA",
+                        n: privateKeyObj.n.toString(16),
+                        e: privateKeyObj.e.toString(16),
+                        d: privateKeyObj.d.toString(16),
+                        p: privateKeyObj.p.toString(16),
+                        q: privateKeyObj.q.toString(16),
+                        dp: privateKeyObj.dmp1.toString(16),
+                        dq: privateKeyObj.dmq1.toString(16),
+                        qi: privateKeyObj.coeff.toString(16),
+                        alg: "RS256",
+                        ext: true
+                    }, null, 2);
+                }
+                
+                // Display results
+                resultKeySize.textContent = `${keySize} bits`;
+                resultGenerationTime.textContent = new Date().toLocaleString();
+                publicKeyContent.textContent = publicKey;
+                privateKeyContent.textContent = privateKey;
+                
+                keyResults.style.display = 'block';
+                noKeysMessage.style.display = 'none';
+                
+                showStatus('Key pair generated successfully!', 'success');
+            } catch (error) {
+                console.error('Key generation error:', error);
+                showStatus('Error generating key pair: ' + error.message, 'error');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fas fa-key"></i> Generate Key Pair';
             }
-            
-            // ... rest of your code ...
-        } catch (error) {
-            console.error('Key generation error:', error);
-            showStatus('Error generating key pair: ' + error.message, 'error');
-        } finally {
-            generateBtn.disabled = false;
-            generateBtn.innerHTML = '<i class="fas fa-key"></i> Generate Key Pair';
         }
-    }
 
-        function base64ToBase64Url(base64) {
-            return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-        }
-                
         function clearResults() {
             keyResults.style.display = 'none';
             noKeysMessage.style.display = 'block';
