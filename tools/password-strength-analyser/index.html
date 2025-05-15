@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Analyzer | IT Tools</title>
+    <meta name="description" content="Analyze your password strength with our comprehensive tool. Get detailed feedback and improvement suggestions.">
+    <meta name="keywords" content="password strength, password checker, password analyzer, security tool, password security">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .analyzer-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group, .results-group, .suggestions-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3, .results-group h3, .suggestions-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .password-input-container {
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.2s ease;
+        }
+        
+        .password-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .toggle-visibility {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .strength-meter {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .strength-meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .strength-text {
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .strength-criteria {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .criterion {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .criterion i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .criterion.valid {
+            color: #10b981;
+        }
+        
+        .criterion.invalid {
+            color: #6b7280;
+        }
+        
+        .time-to-crack {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 20px 0;
+            color: #111827;
+        }
+        
+        .suggestions-list {
+            padding-left: 20px;
+        }
+        
+        .suggestions-list li {
+            margin-bottom: 10px;
+            color: #374151;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (min-width: 768px) {
+            .analyzer-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .input-group {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-lock"></i> Password Strength Analyzer</h1>
+            <p>Test your password strength and get improvement suggestions</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="analyzer-container">
+                <div class="input-group">
+                    <h3>Enter Your Password</h3>
+                    <div class="password-input-container">
+                        <input type="password" id="password-input" class="password-input" placeholder="Type or paste your password here">
+                        <button class="toggle-visibility" id="toggle-visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="strength-meter">
+                        <div class="strength-meter-fill" id="strength-meter-fill"></div>
+                    </div>
+                    <div class="strength-text" id="strength-text">Very Weak</div>
+                </div>
+                
+                <div class="results-group">
+                    <h3>Security Analysis</h3>
+                    <div class="strength-criteria">
+                        <div class="criterion invalid" id="length-criterion">
+                            <i class="fas fa-check-circle"></i>
+                            <span>At least 12 characters</span>
+                        </div>
+                        <div class="criterion invalid" id="uppercase-criterion">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Uppercase letters</span>
+                        </div>
+                        <div class="criterion invalid" id="lowercase-criterion">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Lowercase letters</span>
+                        </div>
+                        <div class="criterion invalid" id="numbers-criterion">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Numbers</span>
+                        </div>
+                        <div class="criterion invalid" id="symbols-criterion">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Special characters</span>
+                        </div>
+                        <div class="criterion invalid" id="common-criterion">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Not a common password</span>
+                        </div>
+                    </div>
+                    <div class="time-to-crack" id="time-to-crack">
+                        Can be cracked instantly
+                    </div>
+                </div>
+                
+                <div class="suggestions-group">
+                    <h3>Improvement Suggestions</h3>
+                    <ul class="suggestions-list" id="suggestions-list">
+                        <li>Use a longer password (at least 12 characters)</li>
+                        <li>Include a mix of uppercase and lowercase letters</li>
+                        <li>Add numbers and special characters</li>
+                        <li>Avoid common words and patterns</li>
+                        <li>Consider using a passphrase</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this Password Analyzer:</h3>
+                <ul>
+                    <li>Type or paste your password in the input field</li>
+                    <li>View the strength meter and security analysis</li>
+                    <li>Check which criteria your password meets</li>
+                    <li>See estimated time to crack your password</li>
+                    <li>Follow the improvement suggestions to strengthen your password</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Password Security:</h3>
+                <ul>
+                    <li><strong>Length matters most</strong>: Longer passwords are exponentially harder to crack</li>
+                    <li><strong>Complexity helps</strong>: Mix character types for better security</li>
+                    <li><strong>Uniqueness is key</strong>: Never reuse passwords across sites</li>
+                    <li><strong>Consider a manager</strong>: Password managers can generate and store strong passwords</li>
+                    <li><strong>Enable 2FA</strong>: Two-factor authentication adds an extra security layer</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">Your password is analyzed locally in your browser and is never sent to any server</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const passwordInput = document.getElementById('password-input');
+        const toggleVisibilityBtn = document.getElementById('toggle-visibility');
+        const strengthMeterFill = document.getElementById('strength-meter-fill');
+        const strengthText = document.getElementById('strength-text');
+        const timeToCrack = document.getElementById('time-to-crack');
+        
+        // Criteria elements
+        const lengthCriterion = document.getElementById('length-criterion');
+        const uppercaseCriterion = document.getElementById('uppercase-criterion');
+        const lowercaseCriterion = document.getElementById('lowercase-criterion');
+        const numbersCriterion = document.getElementById('numbers-criterion');
+        const symbolsCriterion = document.getElementById('symbols-criterion');
+        const commonCriterion = document.getElementById('common-criterion');
+        
+        // Suggestions list
+        const suggestionsList = document.getElementById('suggestions-list');
+        
+        // Common passwords list (truncated for example)
+        const commonPasswords = [
+            'password', '123456', '12345678', '123456789', '12345',
+            'qwerty', 'abc123', 'password1', '1234567', 'admin'
+        ];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            passwordInput.addEventListener('input', analyzePassword);
+            toggleVisibilityBtn.addEventListener('click', togglePasswordVisibility);
+        });
+        
+        function togglePasswordVisibility() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            const icon = toggleVisibilityBtn.querySelector('i');
+            icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        }
+        
+        function analyzePassword() {
+            const password = passwordInput.value;
+            const analysis = checkPasswordStrength(password);
+            
+            // Update strength meter
+            updateStrengthMeter(analysis.score);
+            
+            // Update criteria indicators
+            updateCriteriaIndicators(analysis);
+            
+            // Update time to crack
+            updateTimeToCrack(analysis);
+            
+            // Update suggestions
+            updateSuggestions(analysis);
+        }
+        
+        function checkPasswordStrength(password) {
+            const analysis = {
+                length: password.length,
+                hasUppercase: /[A-Z]/.test(password),
+                hasLowercase: /[a-z]/.test(password),
+                hasNumbers: /\d/.test(password),
+                hasSymbols: /[^A-Za-z0-9]/.test(password),
+                isCommon: commonPasswords.includes(password.toLowerCase()),
+                score: 0
+            };
+            
+            // Calculate score (0-100)
+            let score = 0;
+            
+            // Length (max 40 points)
+            score += Math.min(password.length * 2, 40);
+            
+            // Character variety (max 30 points)
+            let varietyScore = 0;
+            if (analysis.hasUppercase) varietyScore += 7.5;
+            if (analysis.hasLowercase) varietyScore += 7.5;
+            if (analysis.hasNumbers) varietyScore += 7.5;
+            if (analysis.hasSymbols) varietyScore += 7.5;
+            score += varietyScore;
+            
+            // Bonus for length > 12 (10 points)
+            if (password.length > 12) score += 10;
+            
+            // Bonus for no common words (20 points)
+            if (!analysis.isCommon) score += 20;
+            
+            // Penalty for common password
+            if (analysis.isCommon) score = Math.max(score - 30, 0);
+            
+            analysis.score = Math.min(score, 100);
+            
+            return analysis;
+        }
+        
+        function updateStrengthMeter(score) {
+            // Update meter fill
+            strengthMeterFill.style.width = `${score}%`;
+            
+            // Update meter color and text
+            let strength, color;
+            if (score === 0) {
+                strength = 'Empty';
+                color = '#e5e7eb';
+            } else if (score < 30) {
+                strength = 'Very Weak';
+                color = '#ef4444';
+            } else if (score < 50) {
+                strength = 'Weak';
+                color = '#f59e0b';
+            } else if (score < 70) {
+                strength = 'Moderate';
+                color = '#fbbf24';
+            } else if (score < 90) {
+                strength = 'Strong';
+                color = '#10b981';
+            } else {
+                strength = 'Very Strong';
+                color = '#059669';
+            }
+            
+            strengthMeterFill.style.backgroundColor = color;
+            strengthText.textContent = strength;
+            strengthText.style.color = color;
+        }
+        
+        function updateCriteriaIndicators(analysis) {
+            // Length
+            toggleCriterion(lengthCriterion, analysis.length >= 12);
+            
+            // Uppercase
+            toggleCriterion(uppercaseCriterion, analysis.hasUppercase);
+            
+            // Lowercase
+            toggleCriterion(lowercaseCriterion, analysis.hasLowercase);
+            
+            // Numbers
+            toggleCriterion(numbersCriterion, analysis.hasNumbers);
+            
+            // Symbols
+            toggleCriterion(symbolsCriterion, analysis.hasSymbols);
+            
+            // Common
+            toggleCriterion(commonCriterion, !analysis.isCommon);
+        }
+        
+        function toggleCriterion(element, isValid) {
+            if (isValid) {
+                element.classList.add('valid');
+                element.classList.remove('invalid');
+                element.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                element.classList.add('invalid');
+                element.classList.remove('valid');
+                element.querySelector('i').className = 'far fa-circle';
+            }
+        }
+        
+        function updateTimeToCrack(analysis) {
+            if (analysis.length === 0) {
+                timeToCrack.textContent = 'Enter a password to analyze';
+                return;
+            }
+            
+            if (analysis.isCommon) {
+                timeToCrack.textContent = 'Can be cracked instantly (common password)';
+                return;
+            }
+            
+            // Very simplified estimation (for demonstration)
+            let time;
+            const charsetSize = calculateCharsetSize(analysis);
+            const combinations = Math.pow(charsetSize, analysis.length);
+            const guessesPerSecond = 1e9; // 1 billion guesses per second
+            
+            const seconds = combinations / guessesPerSecond;
+            
+            if (seconds < 1) {
+                time = 'Less than a second';
+            } else if (seconds < 60) {
+                time = `${Math.round(seconds)} seconds`;
+            } else if (seconds < 3600) {
+                time = `${Math.round(seconds / 60)} minutes`;
+            } else if (seconds < 86400) {
+                time = `${Math.round(seconds / 3600)} hours`;
+            } else if (seconds < 31536000) {
+                time = `${Math.round(seconds / 86400)} days`;
+            } else if (seconds < 3153600000) {
+                time = `${Math.round(seconds / 31536000)} years`;
+            } else {
+                time = 'Centuries';
+            }
+            
+            timeToCrack.textContent = `Estimated time to crack: ${time}`;
+        }
+        
+        function calculateCharsetSize(analysis) {
+            let size = 0;
+            if (analysis.hasLowercase) size += 26;
+            if (analysis.hasUppercase) size += 26;
+            if (analysis.hasNumbers) size += 10;
+            if (analysis.hasSymbols) size += 32; // Common symbols
+            
+            return size;
+        }
+        
+        function updateSuggestions(analysis) {
+            suggestionsList.innerHTML = '';
+            
+            if (analysis.length === 0) {
+                suggestionsList.innerHTML = '<li>Enter a password to get specific suggestions</li>';
+                return;
+            }
+            
+            if (analysis.length < 12) {
+                suggestionsList.innerHTML += `<li>Increase length to at least 12 characters (currently ${analysis.length})</li>`;
+            }
+            
+            if (!analysis.hasUppercase) {
+                suggestionsList.innerHTML += '<li>Add uppercase letters (A-Z)</li>';
+            }
+            
+            if (!analysis.hasLowercase) {
+                suggestionsList.innerHTML += '<li>Add lowercase letters (a-z)</li>';
+            }
+            
+            if (!analysis.hasNumbers) {
+                suggestionsList.innerHTML += '<li>Add numbers (0-9)</li>';
+            }
+            
+            if (!analysis.hasSymbols) {
+                suggestionsList.innerHTML += '<li>Add special characters (!@#$%^&*, etc.)</li>';
+            }
+            
+            if (analysis.isCommon) {
+                suggestionsList.innerHTML += '<li>Avoid common words and dictionary terms</li>';
+            }
+            
+            if (analysis.score > 80) {
+                suggestionsList.innerHTML += '<li>Great job! Consider using a password manager to store this securely</li>';
+            }
+        }
+    </script>
+</body>
+</html>
