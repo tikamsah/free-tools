@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roman Numeral Converter | IT Tools</title>
+    <meta name="description" content="Convert between Roman numerals and Arabic numbers instantly. Supports values from 1 to 3,999,999.">
+    <meta name="keywords" content="roman numerals, numeral converter, roman numbers, arabic to roman, number converter">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group, .output-group, .examples-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3, .output-group h3, .examples-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .converter-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.2s ease;
+            margin-bottom: 15px;
+        }
+        
+        .converter-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .converter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .converter-button {
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .converter-button.primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .converter-button.primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .converter-button.secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .converter-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .result-display {
+            font-family: 'Fira Code', monospace;
+            font-size: 2rem;
+            text-align: center;
+            color: #111827;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            word-break: break-all;
+        }
+        
+        .error-message {
+            color: #dc2626;
+            text-align: center;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .examples-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .examples-table th {
+            text-align: left;
+            padding: 10px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .examples-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .examples-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .arabic-number {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .roman-number {
+            font-family: 'Fira Code', monospace;
+            color: #3b82f6;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (min-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .input-group {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-history"></i> Roman Numeral Converter</h1>
+            <p>Convert between Arabic numbers and Roman numerals instantly</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="converter-container">
+                <div class="input-group">
+                    <h3>Enter Number or Roman Numeral</h3>
+                    <input type="text" id="number-input" class="converter-input" placeholder="e.g. 2023 or MMXXIII">
+                    <div class="converter-buttons">
+                        <button id="to-roman-btn" class="converter-button primary">
+                            <i class="fas fa-arrow-right"></i> Convert to Roman
+                        </button>
+                        <button id="to-arabic-btn" class="converter-button secondary">
+                            <i class="fas fa-arrow-left"></i> Convert to Arabic
+                        </button>
+                        <button id="clear-btn" class="converter-button secondary">
+                            <i class="fas fa-redo"></i> Clear
+                        </button>
+                    </div>
+                    <div id="error-message" class="error-message" style="display: none;"></div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Conversion Result</h3>
+                    <div id="result-display" class="result-display">
+                        Result will appear here
+                    </div>
+                </div>
+                
+                <div class="examples-group">
+                    <h3>Common Roman Numerals</h3>
+                    <table class="examples-table">
+                        <thead>
+                            <tr>
+                                <th>Arabic</th>
+                                <th>Roman</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="arabic-number">1</td>
+                                <td class="roman-number">I</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">4</td>
+                                <td class="roman-number">IV</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">5</td>
+                                <td class="roman-number">V</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">9</td>
+                                <td class="roman-number">IX</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">10</td>
+                                <td class="roman-number">X</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">40</td>
+                                <td class="roman-number">XL</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">50</td>
+                                <td class="roman-number">L</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">90</td>
+                                <td class="roman-number">XC</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">100</td>
+                                <td class="roman-number">C</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">400</td>
+                                <td class="roman-number">CD</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">500</td>
+                                <td class="roman-number">D</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">900</td>
+                                <td class="roman-number">CM</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">1000</td>
+                                <td class="roman-number">M</td>
+                            </tr>
+                            <tr>
+                                <td class="arabic-number">2023</td>
+                                <td class="roman-number">MMXXIII</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this converter:</h3>
+                <ul>
+                    <li>Enter either an Arabic number (e.g., 2023) or a Roman numeral (e.g., MMXXIII)</li>
+                    <li>Click <strong>Convert to Roman</strong> to convert Arabic numbers to Roman numerals</li>
+                    <li>Click <strong>Convert to Arabic</strong> to convert Roman numerals to Arabic numbers</li>
+                    <li>Click <strong>Clear</strong> to reset the converter</li>
+                    <li>View common examples in the table for reference</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Roman Numerals:</h3>
+                <ul>
+                    <li><strong>Basic Symbols</strong>: I (1), V (5), X (10), L (50), C (100), D (500), M (1000)</li>
+                    <li><strong>Subtractive Notation</strong>: IV (4), IX (9), XL (40), XC (90), CD (400), CM (900)</li>
+                    <li><strong>Additive Notation</strong>: III (3), XX (20), CC (200), MM (2000)</li>
+                    <li><strong>Large Numbers</strong>: This converter supports values up to 3,999,999</li>
+                    <li><strong>No Zero</strong>: The Romans had no symbol for zero</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All conversions happen in your browser - no data is sent to any server</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const numberInput = document.getElementById('number-input');
+        const toRomanBtn = document.getElementById('to-roman-btn');
+        const toArabicBtn = document.getElementById('to-arabic-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const resultDisplay = document.getElementById('result-display');
+        const errorMessage = document.getElementById('error-message');
+        
+        // Roman numeral values
+        const romanValues = [
+            { value: 1000000, numeral: 'M̅' },
+            { value: 900000, numeral: 'C̅M̅' },
+            { value: 500000, numeral: 'D̅' },
+            { value: 400000, numeral: 'C̅D̅' },
+            { value: 100000, numeral: 'C̅' },
+            { value: 90000, numeral: 'X̅C̅' },
+            { value: 50000, numeral: 'L̅' },
+            { value: 40000, numeral: 'X̅L̅' },
+            { value: 10000, numeral: 'X̅' },
+            { value: 9000, numeral: 'I̅X̅' },
+            { value: 5000, numeral: 'V̅' },
+            { value: 4000, numeral: 'I̅V̅' },
+            { value: 1000, numeral: 'M' },
+            { value: 900, numeral: 'CM' },
+            { value: 500, numeral: 'D' },
+            { value: 400, numeral: 'CD' },
+            { value: 100, numeral: 'C' },
+            { value: 90, numeral: 'XC' },
+            { value: 50, numeral: 'L' },
+            { value: 40, numeral: 'XL' },
+            { value: 10, numeral: 'X' },
+            { value: 9, numeral: 'IX' },
+            { value: 5, numeral: 'V' },
+            { value: 4, numeral: 'IV' },
+            { value: 1, numeral: 'I' }
+        ];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            toRomanBtn.addEventListener('click', convertToRoman);
+            toArabicBtn.addEventListener('click', convertToArabic);
+            clearBtn.addEventListener('click', clearConverter);
+            
+            // Allow Enter key to trigger conversion
+            numberInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    // Try to detect what conversion makes sense
+                    const input = numberInput.value.trim();
+                    if (/^[0-9]+$/.test(input)) {
+                        convertToRoman();
+                    } else if (/^[IVXLCDM̅X̅C̅D̅M̅ivxlcdm]+$/i.test(input)) {
+                        convertToArabic();
+                    }
+                }
+            });
+        });
+        
+        function convertToRoman() {
+            const input = numberInput.value.trim();
+            errorMessage.style.display = 'none';
+            
+            if (!input) {
+                showError('Please enter a number to convert');
+                return;
+            }
+            
+            const number = parseInt(input, 10);
+            
+            if (isNaN(number)) {
+                showError('Please enter a valid number');
+                return;
+            }
+            
+            if (number < 1 || number > 3999999) {
+                showError('Number must be between 1 and 3,999,999');
+                return;
+            }
+            
+            resultDisplay.textContent = arabicToRoman(number);
+            resultDisplay.style.color = '#3b82f6';
+        }
+        
+        function convertToArabic() {
+            const input = numberInput.value.trim().toUpperCase();
+            errorMessage.style.display = 'none';
+            
+            if (!input) {
+                showError('Please enter a Roman numeral to convert');
+                return;
+            }
+            
+            // Validate Roman numeral format
+            if (!/^[IVXLCDM̅X̅C̅D̅M̅]+$/.test(input)) {
+                showError('Please enter a valid Roman numeral');
+                return;
+            }
+            
+            const number = romanToArabic(input);
+            
+            if (isNaN(number)) {
+                showError('Invalid Roman numeral format');
+                return;
+            }
+            
+            resultDisplay.textContent = number.toLocaleString();
+            resultDisplay.style.color = '#111827';
+        }
+        
+        function arabicToRoman(num) {
+            let result = '';
+            
+            for (let i = 0; i < romanValues.length; i++) {
+                while (num >= romanValues[i].value) {
+                    result += romanValues[i].numeral;
+                    num -= romanValues[i].value;
+                }
+            }
+            
+            return result;
+        }
+        
+        function romanToArabic(roman) {
+            // Create a map of Roman numeral values
+            const romanMap = {
+                'M̅': 1000000,
+                'C̅M̅': 900000,
+                'D̅': 500000,
+                'C̅D̅': 400000,
+                'C̅': 100000,
+                'X̅C̅': 90000,
+                'L̅': 50000,
+                'X̅L̅': 40000,
+                'X̅': 10000,
+                'I̅X̅': 9000,
+                'V̅': 5000,
+                'I̅V̅': 4000,
+                'M': 1000,
+                'CM': 900,
+                'D': 500,
+                'CD': 400,
+                'C': 100,
+                'XC': 90,
+                'L': 50,
+                'XL': 40,
+                'X': 10,
+                'IX': 9,
+                'V': 5,
+                'IV': 4,
+                'I': 1
+            };
+            
+            let result = 0;
+            let i = 0;
+            
+            while (i < roman.length) {
+                // Check for 2-character numerals first
+                if (i + 1 < roman.length) {
+                    const twoChars = roman.substring(i, i + 2);
+                    if (romanMap[twoChars]) {
+                        result += romanMap[twoChars];
+                        i += 2;
+                        continue;
+                    }
+                }
+                
+                // Check for 1-character numerals
+                const oneChar = roman.substring(i, i + 1);
+                if (romanMap[oneChar]) {
+                    result += romanMap[oneChar];
+                    i += 1;
+                } else {
+                    // Invalid character
+                    return NaN;
+                }
+            }
+            
+            return result;
+        }
+        
+        function clearConverter() {
+            numberInput.value = '';
+            resultDisplay.textContent = 'Result will appear here';
+            resultDisplay.style.color = '#111827';
+            errorMessage.style.display = 'none';
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            resultDisplay.textContent = 'Error - see message above';
+            resultDisplay.style.color = '#dc2626';
+        }
+    </script>
+</body>
+</html>
