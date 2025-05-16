@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text ↔ Unicode Converter | IT Tools</title>
+    <meta name="description" content="Convert between text and Unicode representations. Supports bidirectional conversion with UTF-8, UTF-16, UTF-32, and escape sequences.">
+    <meta name="keywords" content="unicode converter, text to unicode, unicode to text, utf-8, utf-16, utf-32, code points, escape sequences">
+    
+    <!-- CSS -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        .tool-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+        
+        .tool-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group, .output-group, .details-group {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+        
+        .input-group h3, .output-group h3, .details-group h3 {
+            margin-top: 0;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+        
+        .conversion-type {
+            display: flex;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .conversion-type button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: #f3f4f6;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .conversion-type button.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .conversion-type button:first-child {
+            border-right: 1px solid #e5e7eb;
+        }
+        
+        .converter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .converter-button {
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .converter-button.primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .converter-button.primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .converter-button.secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .converter-button.secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .output-display {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #111827;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            min-height: 60px;
+        }
+        
+        .character-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .character-table th {
+            text-align: left;
+            padding: 10px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .character-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        
+        .character-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .character-char {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .character-code {
+            font-family: 'Fira Code', monospace;
+            color: #3b82f6;
+        }
+        
+        .character-name {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            color: #2563eb;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        @media (min-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .input-group {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="tool-header">
+            <h1><i class="fas fa-language"></i> Text ↔ Unicode Converter</h1>
+            <p>Convert between text and Unicode representations in both directions</p>
+        </div>
+        
+        <div class="tool-content">
+            <div class="converter-container">
+                <div class="input-group">
+                    <h3>Conversion Type</h3>
+                    <div class="conversion-type">
+                        <button id="text-to-unicode-btn" class="active">
+                            <i class="fas fa-arrow-right"></i> Text to Unicode
+                        </button>
+                        <button id="unicode-to-text-btn">
+                            <i class="fas fa-arrow-left"></i> Unicode to Text
+                        </button>
+                    </div>
+                    
+                    <div id="text-to-unicode-section">
+                        <div class="form-group">
+                            <label for="text-input">Enter text to convert</label>
+                            <textarea id="text-input" class="form-control" placeholder="Type or paste your text here"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="format-select">Output Format</label>
+                            <select id="format-select" class="form-control form-select">
+                                <option value="code-points">Code Points (U+XXXX)</option>
+                                <option value="utf-8">UTF-8 Hex Sequence</option>
+                                <option value="utf-16">UTF-16 Hex Sequence</option>
+                                <option value="utf-32">UTF-32 Hex Sequence</option>
+                                <option value="js-escape">JavaScript Escape (\uXXXX)</option>
+                                <option value="html-entity">HTML Entity (&amp;#xXXXX;)</option>
+                                <option value="python-escape">Python Escape (\uXXXX)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="unicode-to-text-section" style="display: none;">
+                        <div class="form-group">
+                            <label for="unicode-input">Enter Unicode to convert</label>
+                            <textarea id="unicode-input" class="form-control" placeholder="Paste code points (U+XXXX), escape sequences, or hex values"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="input-format-select">Input Format</label>
+                            <select id="input-format-select" class="form-control form-select">
+                                <option value="code-points">Code Points (U+XXXX)</option>
+                                <option value="utf-8">UTF-8 Hex Sequence</option>
+                                <option value="utf-16">UTF-16 Hex Sequence</option>
+                                <option value="utf-32">UTF-32 Hex Sequence</option>
+                                <option value="js-escape">JavaScript Escape (\uXXXX)</option>
+                                <option value="html-entity">HTML Entity (&amp;#xXXXX;)</option>
+                                <option value="python-escape">Python Escape (\uXXXX)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="converter-buttons">
+                        <button id="convert-btn" class="converter-button primary">
+                            <i class="fas fa-exchange-alt"></i> Convert
+                        </button>
+                        <button id="clear-btn" class="converter-button secondary">
+                            <i class="fas fa-redo"></i> Clear
+                        </button>
+                        <button id="copy-btn" class="converter-button secondary">
+                            <i class="far fa-copy"></i> Copy Result
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Conversion Result</h3>
+                    <div id="output-display" class="output-display">
+                        Conversion results will appear here
+                    </div>
+                </div>
+                
+                <div class="details-group">
+                    <h3>Character Details</h3>
+                    <table class="character-table" id="character-table">
+                        <thead>
+                            <tr>
+                                <th>Character</th>
+                                <th>Code Point</th>
+                                <th>Name</th>
+                                <th>UTF-8</th>
+                            </tr>
+                        </thead>
+                        <tbody id="character-details">
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #6b7280;">
+                                    Enter text to view character details
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this converter:</h3>
+                <ul>
+                    <li><strong>Text to Unicode</strong>:
+                        <ul>
+                            <li>Enter text in the input field</li>
+                            <li>Select the desired output format</li>
+                            <li>Click <strong>Convert</strong> to generate Unicode representations</li>
+                        </ul>
+                    </li>
+                    <li><strong>Unicode to Text</strong>:
+                        <ul>
+                            <li>Enter Unicode code points, escape sequences, or hex values</li>
+                            <li>Select the matching input format</li>
+                            <li>Click <strong>Convert</strong> to decode to text</li>
+                        </ul>
+                    </li>
+                    <li>View detailed information about each character in the table</li>
+                    <li>Copy results to clipboard as needed</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Unicode:</h3>
+                <ul>
+                    <li><strong>Code Points</strong>: Unique numbers assigned to each character (U+0000 to U+10FFFF)</li>
+                    <li><strong>UTF-8</strong>: Variable-width encoding (1-4 bytes) compatible with ASCII</li>
+                    <li><strong>UTF-16</strong>: Uses 2 or 4 bytes per character</li>
+                    <li><strong>UTF-32</strong>: Fixed 4-byte encoding for each character</li>
+                    <li><strong>Planes</strong>: Unicode is divided into 17 planes (Basic Multilingual Plane is U+0000-U+FFFF)</li>
+                    <li><strong>Emoji</strong>: Modern emoji are typically in the Supplementary Multilingual Plane</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All conversion happens locally in your browser - no text is sent to any server</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+    
+    <script>
+        // DOM elements
+        const textToUnicodeBtn = document.getElementById('text-to-unicode-btn');
+        const unicodeToTextBtn = document.getElementById('unicode-to-text-btn');
+        const textToUnicodeSection = document.getElementById('text-to-unicode-section');
+        const unicodeToTextSection = document.getElementById('unicode-to-text-section');
+        const textInput = document.getElementById('text-input');
+        const unicodeInput = document.getElementById('unicode-input');
+        const formatSelect = document.getElementById('format-select');
+        const inputFormatSelect = document.getElementById('input-format-select');
+        const convertBtn = document.getElementById('convert-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const outputDisplay = document.getElementById('output-display');
+        const characterDetails = document.getElementById('character-details');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listeners
+            textToUnicodeBtn.addEventListener('click', () => toggleConversionType('text-to-unicode'));
+            unicodeToTextBtn.addEventListener('click', () => toggleConversionType('unicode-to-text'));
+            convertBtn.addEventListener('click', convert);
+            clearBtn.addEventListener('click', clearConverter);
+            copyBtn.addEventListener('click', copyToClipboard);
+            
+            // Convert on Enter key in textareas
+            textInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    convert();
+                }
+            });
+            
+            unicodeInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    convert();
+                }
+            });
+        });
+        
+        function toggleConversionType(type) {
+            if (type === 'text-to-unicode') {
+                textToUnicodeBtn.classList.add('active');
+                unicodeToTextBtn.classList.remove('active');
+                textToUnicodeSection.style.display = 'block';
+                unicodeToTextSection.style.display = 'none';
+            } else {
+                textToUnicodeBtn.classList.remove('active');
+                unicodeToTextBtn.classList.add('active');
+                textToUnicodeSection.style.display = 'none';
+                unicodeToTextSection.style.display = 'block';
+            }
+            clearConverter();
+        }
+        
+        function convert() {
+            if (textToUnicodeBtn.classList.contains('active')) {
+                convertTextToUnicode();
+            } else {
+                convertUnicodeToText();
+            }
+        }
+        
+        function convertTextToUnicode() {
+            const text = textInput.value;
+            if (!text) {
+                outputDisplay.textContent = 'Please enter some text to convert';
+                outputDisplay.style.color = '#6b7280';
+                characterDetails.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6b7280;">Enter text to view character details</td></tr>';
+                return;
+            }
+            
+            const format = formatSelect.value;
+            let result = '';
+            const charDetails = [];
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const codePoint = char.codePointAt(0);
+                
+                // Skip low surrogates (they're handled with the high surrogate)
+                if (codePoint >= 0xDC00 && codePoint <= 0xDFFF) continue;
+                
+                // Get conversion for current character
+                const conversion = convertCharacterToUnicode(char, codePoint, format);
+                result += conversion + ' ';
+                
+                // Store character details
+                charDetails.push({
+                    char: char,
+                    codePoint: codePoint,
+                    name: getCharacterName(codePoint),
+                    utf8: getUTF8Hex(char)
+                });
+                
+                // Handle surrogate pairs (characters outside BMP)
+                if (codePoint >= 0xD800 && codePoint <= 0xDBFF && i + 1 < text.length) {
+                    i++; // Skip the next character (low surrogate)
+                }
+            }
+            
+            // Display results
+            outputDisplay.textContent = result.trim();
+            outputDisplay.style.color = '#111827';
+            
+            // Display character details
+            displayCharacterDetails(charDetails);
+        }
+        
+        function convertUnicodeToText() {
+            const input = unicodeInput.value.trim();
+            if (!input) {
+                outputDisplay.textContent = 'Please enter Unicode to convert';
+                outputDisplay.style.color = '#6b7280';
+                characterDetails.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6b7280;">Enter Unicode to view character details</td></tr>';
+                return;
+            }
+            
+            const format = inputFormatSelect.value;
+            let result = '';
+            let charDetails = [];
+            
+            try {
+                // Process based on format
+                switch (format) {
+                    case 'code-points':
+                        result = convertCodePointsToText(input);
+                        break;
+                    case 'utf-8':
+                        result = convertHexToText(input, 'utf-8');
+                        break;
+                    case 'utf-16':
+                        result = convertHexToText(input, 'utf-16');
+                        break;
+                    case 'utf-32':
+                        result = convertHexToText(input, 'utf-32');
+                        break;
+                    case 'js-escape':
+                        case 'python-escape':
+                        result = convertEscapeToText(input);
+                        break;
+                    case 'html-entity':
+                        result = convertHtmlEntitiesToText(input);
+                        break;
+                    default:
+                        throw new Error('Unknown format');
+                }
+                
+                // Get character details
+                charDetails = [];
+                for (let i = 0; i < result.length; i++) {
+                    const char = result[i];
+                    const codePoint = char.codePointAt(0);
+                    
+                    if (codePoint >= 0xDC00 && codePoint <= 0xDFFF) continue;
+                    
+                    charDetails.push({
+                        char: char,
+                        codePoint: codePoint,
+                        name: getCharacterName(codePoint),
+                        utf8: getUTF8Hex(char)
+                    });
+                    
+                    if (codePoint >= 0xD800 && codePoint <= 0xDBFF && i + 1 < result.length) {
+                        i++;
+                    }
+                }
+                
+                // Display results
+                outputDisplay.textContent = result;
+                outputDisplay.style.color = '#111827';
+                displayCharacterDetails(charDetails);
+                
+            } catch (error) {
+                console.error('Conversion error:', error);
+                outputDisplay.textContent = 'Error: ' + error.message;
+                outputDisplay.style.color = '#ef4444';
+                characterDetails.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6b7280;">Conversion error occurred</td></tr>';
+            }
+        }
+        
+        function convertCharacterToUnicode(char, codePoint, format) {
+            switch (format) {
+                case 'code-points':
+                    return `U+${codePoint.toString(16).toUpperCase().padStart(4, '0')}`;
+                case 'utf-8':
+                    return getUTF8Hex(char);
+                case 'utf-16':
+                    return getUTF16Hex(char);
+                case 'utf-32':
+                    return getUTF32Hex(char);
+                case 'js-escape':
+                    return codePoint <= 0xFFFF 
+                        ? `\\u${codePoint.toString(16).toUpperCase().padStart(4, '0')}`
+                        : `\\u{${codePoint.toString(16).toUpperCase()}}`;
+                case 'html-entity':
+                    return `&#x${codePoint.toString(16).toUpperCase()};`;
+                case 'python-escape':
+                    return codePoint <= 0xFFFF 
+                        ? `\\u${codePoint.toString(16).toUpperCase().padStart(4, '0')}`
+                        : `\\U${codePoint.toString(16).toUpperCase().padStart(8, '0')}`;
+                default:
+                    return char;
+            }
+        }
+        
+        function convertCodePointsToText(input) {
+            // Match all U+XXXX or XXXX patterns
+            const codePoints = input.match(/(U\+|\\u|0x)?([0-9a-fA-F]{4,6})/g) || [];
+            let result = '';
+            
+            for (const cp of codePoints) {
+                // Extract hex value
+                const hex = cp.replace(/^(U\+|\\u|0x)/i, '');
+                const codePoint = parseInt(hex, 16);
+                
+                if (isNaN(codePoint)) continue;
+                
+                result += String.fromCodePoint(codePoint);
+            }
+            
+            return result;
+        }
+        
+        function convertHexToText(input, encoding) {
+            // Clean input - remove non-hex characters
+            const hexString = input.replace(/[^0-9a-fA-F]/g, '');
+            
+            // Create byte array based on encoding
+            let bytes = [];
+            if (encoding === 'utf-8') {
+                // UTF-8: variable length (1-4 bytes per char)
+                for (let i = 0; i < hexString.length; i += 2) {
+                    const byte = parseInt(hexString.substr(i, 2), 16);
+                    if (!isNaN(byte)) bytes.push(byte);
+                }
+            } else if (encoding === 'utf-16') {
+                // UTF-16: 2 or 4 bytes per char
+                for (let i = 0; i < hexString.length; i += 4) {
+                    const word = parseInt(hexString.substr(i, 4), 16);
+                    if (!isNaN(word)) {
+                        bytes.push((word >> 8) & 0xFF, word & 0xFF);
+                    }
+                }
+            } else if (encoding === 'utf-32') {
+                // UTF-32: 4 bytes per char
+                for (let i = 0; i < hexString.length; i += 8) {
+                    const codePoint = parseInt(hexString.substr(i, 8), 16);
+                    if (!isNaN(codePoint)) {
+                        result += String.fromCodePoint(codePoint);
+                    }
+                }
+                return result;
+            }
+            
+            // Decode using TextDecoder
+            const decoder = new TextDecoder(encoding);
+            return decoder.decode(new Uint8Array(bytes));
+        }
+        
+        function convertEscapeToText(input) {
+            // Handle JavaScript and Python escape sequences
+            // Match \uXXXX, \u{XXXXXX}, \UXXXXXXXX patterns
+            const escapes = input.match(/(\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]{1,6}\}|\\U[0-9a-fA-F]{8})/g) || [];
+            let result = '';
+            
+            for (const esc of escapes) {
+                if (esc.startsWith('\\u{')) {
+                    // \u{XXXXXX} format
+                    const hex = esc.slice(3, -1);
+                    const codePoint = parseInt(hex, 16);
+                    if (!isNaN(codePoint)) {
+                        result += String.fromCodePoint(codePoint);
+                    }
+                } else if (esc.startsWith('\\U')) {
+                    // \UXXXXXXXX format (Python)
+                    const hex = esc.slice(2);
+                    const codePoint = parseInt(hex, 16);
+                    if (!isNaN(codePoint)) {
+                        result += String.fromCodePoint(codePoint);
+                    }
+                } else {
+                    // \uXXXX format
+                    const hex = esc.slice(2);
+                    const codePoint = parseInt(hex, 16);
+                    if (!isNaN(codePoint)) {
+                        result += String.fromCharCode(codePoint);
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        function convertHtmlEntitiesToText(input) {
+            // Handle &#xXXXX; and &#XXXX; formats
+            const entities = input.match(/&(#x[0-9a-fA-F]+|#[0-9]+);/g) || [];
+            let result = input;
+            
+            for (const entity of entities) {
+                let codePoint;
+                if (entity.startsWith('&#x')) {
+                    // Hex entity
+                    codePoint = parseInt(entity.slice(3, -1), 16);
+                } else {
+                    // Decimal entity
+                    codePoint = parseInt(entity.slice(2, -1), 10);
+                }
+                
+                if (!isNaN(codePoint)) {
+                    result = result.replace(entity, String.fromCodePoint(codePoint));
+                }
+            }
+            
+            return result;
+        }
+        
+        function getUTF8Hex(char) {
+            const encoder = new TextEncoder();
+            const bytes = encoder.encode(char);
+            return Array.from(bytes).map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
+        }
+        
+        function getUTF16Hex(char) {
+            let hex = '';
+            for (let i = 0; i < char.length; i++) {
+                hex += char.charCodeAt(i).toString(16).toUpperCase().padStart(4, '0') + ' ';
+            }
+            return hex.trim();
+        }
+        
+        function getUTF32Hex(char) {
+            const codePoint = char.codePointAt(0);
+            return codePoint.toString(16).toUpperCase().padStart(8, '0');
+        }
+        
+        function getCharacterName(codePoint) {
+            // This is a simplified version - in a real app you might use a Unicode database
+            if (codePoint >= 0x1F600 && codePoint <= 0x1F64F) return 'Emoji';
+            if (codePoint >= 0x4E00 && codePoint <= 0x9FFF) return 'CJK Unified Ideograph';
+            if (codePoint >= 0x3400 && codePoint <= 0x4DBF) return 'CJK Extension A';
+            if (codePoint >= 0x20000 && codePoint <= 0x2A6DF) return 'CJK Extension B';
+            if (codePoint >= 0xAC00 && codePoint <= 0xD7AF) return 'Hangul Syllable';
+            if (codePoint <= 0x7F) return 'Basic Latin';
+            if (codePoint <= 0xFF) return 'Latin-1 Supplement';
+            return 'Unknown Character';
+        }
+        
+        function displayCharacterDetails(details) {
+            characterDetails.innerHTML = '';
+            
+            if (details.length === 0) {
+                characterDetails.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6b7280;">No characters to display</td></tr>';
+                return;
+            }
+            
+            details.forEach(detail => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="character-char">${detail.char}</td>
+                    <td class="character-code">U+${detail.codePoint.toString(16).toUpperCase().padStart(4, '0')}</td>
+                    <td class="character-name">${detail.name}</td>
+                    <td class="character-code">${detail.utf8}</td>
+                `;
+                characterDetails.appendChild(row);
+            });
+        }
+        
+        function clearConverter() {
+            textInput.value = '';
+            unicodeInput.value = '';
+            outputDisplay.textContent = 'Conversion results will appear here';
+            outputDisplay.style.color = '#6b7280';
+            characterDetails.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6b7280;">Enter text to view character details</td></tr>';
+        }
+        
+        function copyToClipboard() {
+            const text = outputDisplay.textContent;
+            
+            // Don't copy placeholder text
+            if (text.includes('results will appear') || text.includes('Please enter') || text.includes('Error')) {
+                return;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Show temporary feedback
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
