@@ -466,6 +466,7 @@
             // Event listeners
             uploadArea.addEventListener('click', () => imageInput.click());
             uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
             uploadArea.addEventListener('drop', handleDrop);
             imageInput.addEventListener('change', handleImageUpload);
             cropBtn.addEventListener('click', cropImage);
@@ -491,32 +492,50 @@
         function handleDragOver(e) {
             e.preventDefault();
             e.stopPropagation();
-            uploadArea.style.borderColor = var(--primary);
+            uploadArea.style.borderColor = 'var(--primary)';
             uploadArea.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+        }
+        
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.style.borderColor = 'var(--border)';
+            uploadArea.style.backgroundColor = '';
         }
         
         function handleDrop(e) {
             e.preventDefault();
             e.stopPropagation();
-            uploadArea.style.borderColor = var(--border);
-            uploadArea.style.backgroundColor = '';
+            handleDragLeave(e);
             
-            const file = e.dataTransfer.files[0];
-            if (file && file.type.match('image.*')) {
-                loadImage(file);
-            } else {
-                showStatus('Please upload a valid image file', 'error');
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                if (file.type.match('image.*')) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        showStatus('Image size should be less than 5MB', 'error');
+                        return;
+                    }
+                    loadImage(file);
+                } else {
+                    showStatus('Please upload a valid image file', 'error');
+                }
             }
         }
         
         function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (file && file.type.match('image.*')) {
-                if (file.size > 5 * 1024 * 1024) {
-                    showStatus('Image size should be less than 5MB', 'error');
-                    return;
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                if (file.type.match('image.*')) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        showStatus('Image size should be less than 5MB', 'error');
+                        return;
+                    }
+                    loadImage(file);
+                } else {
+                    showStatus('Please upload a valid image file', 'error');
                 }
-                loadImage(file);
             }
         }
         
@@ -525,11 +544,15 @@
             reader.onload = (e) => {
                 originalImageUrl = e.target.result;
                 imagePreview.src = originalImageUrl;
+                imagePreview.style.display = 'block';
                 imagePreview.onload = () => {
                     uploadArea.style.display = 'none';
                     cropperUI.style.display = 'block';
                     initCropper();
                 };
+            };
+            reader.onerror = () => {
+                showStatus('Error reading image file', 'error');
             };
             reader.readAsDataURL(file);
         }
