@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robots.txt Generator - Create robots.txt Files Online | IT Tools</title>
+    <meta name="description" content="Generate robots.txt files instantly. Configure crawler access and sitemap locations for your website.">
+    <meta name="keywords" content="robots.txt generator, create robots.txt, search engine crawlers, SEO tools, website configuration">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://it-tools.nepexo.com/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://it-tools.nepexo.com/images/apple-touch-icon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://it-tools.nepexo.com/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <script src="https://it-tools.nepexo.com/js/header.js"></script>
+    
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --secondary: #8b5cf6;
+            --secondary-hover: #7c3aed;
+            --success: #10b981;
+            --success-hover: #0d9f6e;
+            --warning: #f59e0b;
+            --warning-hover: #d97706;
+            --text: #111827;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+            --dark-bg: #1f2937;
+            --dark-card: #374151;
+            --dark-text: #f9fafb;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode header {
+            background-color: var(--dark-card);
+        }
+        
+        .tool-container {
+            padding: 40px 0;
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.2rem;
+            color: var(--text);
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .tool-header h1 {
+            color: var(--dark-text);
+        }
+        
+        .tool-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .tool-header p {
+            color: #d1d5db;
+        }
+        
+        .generator-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group, .output-group {
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .input-group,
+        body.dark-mode .output-group {
+            background: var(--dark-card);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .input-group h3, .output-group h3 {
+            margin-top: 0;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .input-group h3,
+        body.dark-mode .output-group h3 {
+            color: var(--dark-text);
+            border-bottom-color: #4b5563;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .form-group label {
+            color: var(--dark-text);
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="url"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .form-group input[type="text"],
+        body.dark-mode .form-group input[type="url"],
+        body.dark-mode .form-group textarea,
+        body.dark-mode .form-group select {
+            background-color: #4b5563;
+            border-color: #4b5563;
+            color: var(--dark-text);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .crawler-rules {
+            margin: 25px 0;
+        }
+        
+        .crawler-rule {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .crawler-rule select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-width: 120px;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .crawler-rule select {
+            background-color: #4b5563;
+            border-color: #4b5563;
+            color: var(--dark-text);
+        }
+        
+        .crawler-rule input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .crawler-rule input[type="text"] {
+            background-color: #4b5563;
+            border-color: #4b5563;
+            color: var(--dark-text);
+        }
+        
+        .crawler-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .action-button {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .action-button:hover {
+            background: var(--primary-hover);
+        }
+        
+        .action-button.outline {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        body.dark-mode .action-button.outline {
+            background: var(--dark-card);
+            border-color: #4b5563;
+            color: var(--dark-text);
+        }
+        
+        .action-button.outline:hover {
+            background: var(--bg);
+        }
+        
+        body.dark-mode .action-button.outline:hover {
+            background: #4b5563;
+        }
+        
+        .action-button.warning {
+            background: var(--warning);
+        }
+        
+        .action-button.warning:hover {
+            background: var(--warning-hover);
+        }
+        
+        .sitemap-list {
+            margin-top: 15px;
+        }
+        
+        .sitemap-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .sitemap-item input {
+            flex: 1;
+        }
+        
+        .generator-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .tool-button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex: 1;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .tool-button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .tool-button.secondary {
+            background: var(--secondary);
+        }
+        
+        .tool-button.secondary:hover {
+            background: var(--secondary-hover);
+        }
+        
+        .tool-button.outline {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        body.dark-mode .tool-button.outline {
+            background: var(--dark-card);
+            border-color: #4b5563;
+            color: var(--dark-text);
+        }
+        
+        .tool-button.outline:hover {
+            background: var(--bg);
+        }
+        
+        body.dark-mode .tool-button.outline:hover {
+            background: #4b5563;
+        }
+        
+        .tool-button.download {
+            background: var(--success);
+        }
+        
+        .tool-button.download:hover {
+            background: var(--success-hover);
+        }
+        
+        .status-message {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+        
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+        
+        .status-message.error {
+            background: #fee2e2;
+            color: #b91c1c;
+            display: block;
+        }
+        
+        .status-message.warning {
+            background: #fef3c7;
+            color: #92400e;
+            display: block;
+        }
+        
+        body.dark-mode .status-message.success {
+            background: #064e3b;
+            color: #a7f3d0;
+        }
+        
+        body.dark-mode .status-message.error {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+        
+        body.dark-mode .status-message.warning {
+            background: #78350f;
+            color: #fde68a;
+        }
+        
+        .instructions {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .instructions {
+            background-color: #1e293b;
+            border-left-color: var(--secondary);
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .instructions h3 {
+            color: var(--dark-text);
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .instructions li {
+            color: #9ca3af;
+        }
+        
+        .privacy-note {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 30px;
+            font-style: italic;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .privacy-note {
+            color: #9ca3af;
+        }
+        
+        /* Advanced features styling */
+        .preset-selector {
+            margin-bottom: 20px;
+        }
+        
+        .advanced-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        
+        body.dark-mode .advanced-section {
+            border-top-color: #4b5563;
+        }
+        
+        .advanced-section h4 {
+            margin-top: 0;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .advanced-section h4 {
+            color: var(--dark-text);
+        }
+        
+        .clean-param-rule {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .clean-param-rule input {
+            flex: 1;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .theme-toggle {
+            color: var(--dark-text);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .generator-actions {
+                flex-direction: column;
+            }
+            
+            .crawler-rule {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .crawler-rule input[type="text"] {
+                width: 100%;
+            }
+            
+            .theme-toggle {
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div id="headerContainer"></div>
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <!-- Tool Content -->
+    <main class="tool-container">
+        <div class="container">
+            <div class="tool-header">
+                <h1><i class="fas fa-robot"></i> Robots.txt Generator</h1>
+                <p>Create a robots.txt file to control search engine crawlers' access to your website</p>
+            </div>
+            
+            <div class="generator-container">
+                <div class="input-group">
+                    <h3>Configuration</h3>
+                    
+                    <div class="form-group preset-selector">
+                        <label for="preset-selector">Template Presets</label>
+                        <select id="preset-selector">
+                            <option value="custom">Custom Configuration</option>
+                            <option value="wordpress">WordPress Site</option>
+                            <option value="ecommerce">E-commerce Site</option>
+                            <option value="block-all">Block All Crawlers</option>
+                            <option value="allow-all">Allow All Crawlers</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="user-agent">Default User-agent</label>
+                        <select id="user-agent">
+                            <option value="*" selected>* (All crawlers)</option>
+                            <option value="Googlebot">Googlebot</option>
+                            <option value="Googlebot-Image">Googlebot-Image</option>
+                            <option value="Googlebot-News">Googlebot-News</option>
+                            <option value="Googlebot-Video">Googlebot-Video</option>
+                            <option value="Bingbot">Bingbot</option>
+                            <option value="Slurp">Slurp (Yahoo)</option>
+                            <option value="DuckDuckBot">DuckDuckBot</option>
+                            <option value="Baiduspider">Baiduspider</option>
+                            <option value="YandexBot">YandexBot</option>
+                        </select>
+                    </div>
+                    
+                    <div class="crawler-rules">
+                        <h4>Crawler Rules 
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Rules define which parts of your site crawlers can access</span>
+                            </span>
+                        </h4>
+                        
+                        <div id="rules-container">
+                            <!-- Rules will be added here dynamically -->
+                            <div class="crawler-rule">
+                                <select class="rule-agent">
+                                    <option value="*">* (All)</option>
+                                    <option value="Googlebot">Googlebot</option>
+                                    <option value="Bingbot">Bingbot</option>
+                                </select>
+                                <select class="rule-type">
+                                    <option value="Allow">Allow</option>
+                                    <option value="Disallow" selected>Disallow</option>
+                                </select>
+                                <input type="text" class="rule-path" placeholder="/private/">
+                                <button class="action-button outline remove-rule-btn" type="button">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="crawler-actions">
+                            <button id="add-rule-btn" class="action-button">
+                                <i class="fas fa-plus"></i> Add Rule
+                            </button>
+                            <button id="reset-rules-btn" class="action-button outline">
+                                <i class="fas fa-redo"></i> Reset Rules
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sitemap-url">Sitemap URLs 
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Point crawlers to your XML sitemap(s)</span>
+                            </span>
+                        </label>
+                        <div class="sitemap-list" id="sitemap-container">
+                            <!-- Sitemaps will be added here dynamically -->
+                            <div class="sitemap-item">
+                                <input type="url" class="sitemap-url" placeholder="https://example.com/sitemap.xml">
+                                <button class="action-button outline remove-sitemap-btn" type="button">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button id="add-sitemap-btn" class="action-button" style="margin-top: 10px;">
+                            <i class="fas fa-plus"></i> Add Sitemap
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="crawl-delay">Crawl-delay (seconds) 
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptext">Delay between crawler requests (not supported by Google)</span>
+                            </span>
+                        </label>
+                        <input type="text" id="crawl-delay" placeholder="10">
+                    </div>
+                    
+                    <div class="advanced-section">
+                        <h4>Advanced Directives</h4>
+                        
+                        <div class="form-group">
+                            <label>Clean-param 
+                                <span class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltiptext">Remove specific URL parameters from crawl (Yandex only)</span>
+                                </span>
+                            </label>
+                            <div id="clean-param-container">
+                                <div class="clean-param-rule">
+                                    <input type="text" class="clean-param" placeholder="Parameter (e.g., ref)">
+                                    <input type="text" class="clean-path" placeholder="Path (e.g., /products/)">
+                                    <button class="action-button outline remove-clean-param-btn" type="button">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button id="add-clean-param-btn" class="action-button" style="margin-top: 10px;">
+                                <i class="fas fa-plus"></i> Add Clean-param
+                            </button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="host-directive">Host Directive 
+                                <span class="tooltip">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="tooltiptext">Specify preferred domain (Yandex only)</span>
+                                </span>
+                            </label>
+                            <input type="text" id="host-directive" placeholder="example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="generator-actions">
+                        <button id="generate-btn" class="tool-button secondary">
+                            <i class="fas fa-magic"></i> Generate robots.txt
+                        </button>
+                        <button id="import-btn" class="tool-button outline">
+                            <i class="fas fa-file-import"></i> Import
+                        </button>
+                        <button id="reset-btn" class="tool-button outline">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                        <button id="download-btn" class="tool-button download" disabled>
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                    
+                    <div id="seo-checklist" style="margin-top: 30px;">
+                        <h4>SEO Best Practices Checklist</h4>
+                        <div style="margin-top: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <input type="checkbox" id="check-sensitive">
+                                <span>I've blocked sensitive areas (e.g., /admin/, /wp-admin/)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <input type="checkbox" id="check-parameters">
+                                <span>I've handled URL parameters (either allowing or blocking)</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <input type="checkbox" id="check-sitemap">
+                                <span>I've included all relevant sitemaps</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <input type="checkbox" id="check-testing">
+                                <span>I'll test the file in Google Search Console</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="output-group">
+                    <h3>Your robots.txt File 
+                        <span class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Place this file in your website's root directory</span>
+                        </span>
+                    </h3>
+                    <div class="form-group">
+                        <textarea id="robots-output" readonly placeholder="Your generated robots.txt content will appear here..."></textarea>
+                    </div>
+                    <div id="explanation-container" style="margin-top: 15px; font-size: 0.9rem; color: var(--text-light);">
+                        <!-- Explanation will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ad Banner -->
+            <section>
+                <div class="container">
+                    <div class="ad-banner horizontal">
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key' : '3b19ebe99590132546afa5dc20497a55',
+                            'format' : 'iframe',
+                            'height' : 60,
+                            'width' : 468,
+                            'params' : {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/3b19ebe99590132546afa5dc20497a55/invoke.js"></script>
+                </div>
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3>How to use this Robots.txt Generator:</h3>
+                <ul>
+                    <li>Set the default user-agent (crawler) for your rules</li>
+                    <li>Add allow/disallow rules for specific paths</li>
+                    <li>Include your sitemap URLs</li>
+                    <li>Set crawl delay if needed (seconds between requests)</li>
+                    <li>Click <strong>Generate robots.txt</strong> to create your file</li>
+                    <li>Download the file and upload it to your website's root directory</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>About Robots.txt Files:</h3>
+                <ul>
+                    <li>Robots.txt tells search engines which pages to crawl and index</li>
+                    <li>Place the file in your website's root directory (e.g., example.com/robots.txt)</li>
+                    <li>It's a text file with specific syntax rules</li>
+                    <li>Not all crawlers obey robots.txt rules (it's a request, not enforcement)</li>
+                    <li>Use with sitemaps for optimal search engine visibility</li>
+                </ul>
+            </div>
+            
+            <div class="instructions">
+                <h3>Testing Your Robots.txt:</h3>
+                <ul>
+                    <li><strong>Google Search Console</strong>: Use the Robots.txt Tester tool</li>
+                    <li><strong>Browser</strong>: Visit yourdomain.com/robots.txt to verify</li>
+                    <li><strong>SEO Tools</strong>: Many SEO platforms can validate your file</li>
+                </ul>
+            </div>
+            
+            <p class="privacy-note">All processing happens in your browser - we never store or transmit your configuration</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div id="footerContainer"></div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://it-tools.nepexo.com/js/footer.js"></script>
+    <script src="https://it-tools.nepexo.com/js/script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-61PG9HQVB4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-61PG9HQVB4');
+    </script>
+
+    <script>
+    // DOM elements
+    const userAgentSelect = document.getElementById('user-agent');
+    const rulesContainer = document.getElementById('rules-container');
+    const addRuleBtn = document.getElementById('add-rule-btn');
+    const resetRulesBtn = document.getElementById('reset-rules-btn');
+    const sitemapContainer = document.getElementById('sitemap-container');
+    const addSitemapBtn = document.getElementById('add-sitemap-btn');
+    const crawlDelayInput = document.getElementById('crawl-delay');
+    const generateBtn = document.getElementById('generate-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const importBtn = document.getElementById('import-btn');
+    const robotsOutput = document.getElementById('robots-output');
+    const statusMessage = document.getElementById('statusMessage');
+    const cleanParamContainer = document.getElementById('clean-param-container');
+    const addCleanParamBtn = document.getElementById('add-clean-param-btn');
+    const hostDirectiveInput = document.getElementById('host-directive');
+    const presetSelector = document.getElementById('preset-selector');
+    const explanationContainer = document.getElementById('explanation-container');
+    const themeToggle = document.getElementById('themeToggle');
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        // Event listeners
+        addRuleBtn.addEventListener('click', addNewRule);
+        resetRulesBtn.addEventListener('click', resetRules);
+        addSitemapBtn.addEventListener('click', addNewSitemap);
+        addCleanParamBtn.addEventListener('click', addNewCleanParam);
+        generateBtn.addEventListener('click', generateRobotsTxt);
+        resetBtn.addEventListener('click', resetGenerator);
+        downloadBtn.addEventListener('click', downloadRobotsTxt);
+        importBtn.addEventListener('click', importRobotsTxt);
+        presetSelector.addEventListener('change', applyPreset);
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        // Add initial rule and sitemap
+        addNewRule();
+        addNewSitemap();
+    });
+    
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'true');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+            localStorage.setItem('darkMode', 'false');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+    }
+    
+    function addNewRule(agent = '*', type = 'Disallow', path = '') {
+        const ruleDiv = document.createElement('div');
+        ruleDiv.className = 'crawler-rule';
+        ruleDiv.innerHTML = `
+            <select class="rule-agent">
+                <option value="*">* (All)</option>
+                <option value="Googlebot">Googlebot</option>
+                <option value="Googlebot-Image">Googlebot-Image</option>
+                <option value="Googlebot-News">Googlebot-News</option>
+                <option value="Googlebot-Video">Googlebot-Video</option>
+                <option value="Bingbot">Bingbot</option>
+                <option value="Slurp">Slurp (Yahoo)</option>
+                <option value="DuckDuckBot">DuckDuckBot</option>
+                <option value="Baiduspider">Baiduspider</option>
+                <option value="YandexBot">YandexBot</option>
+            </select>
+            <select class="rule-type">
+                <option value="Allow">Allow</option>
+                <option value="Disallow" selected>Disallow</option>
+            </select>
+            <input type="text" class="rule-path" placeholder="/private/" value="${path}">
+            <button class="action-button outline remove-rule-btn" type="button">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        
+        // Set selected agent and type
+        ruleDiv.querySelector('.rule-agent').value = agent;
+        ruleDiv.querySelector('.rule-type').value = type;
+        
+        rulesContainer.appendChild(ruleDiv);
+        
+        // Add event listener to remove button
+        const removeBtn = ruleDiv.querySelector('.remove-rule-btn');
+        removeBtn.addEventListener('click', function() {
+            if (rulesContainer.children.length > 1) {
+                ruleDiv.remove();
+            } else {
+                showStatus('You need at least one rule', 'error');
+            }
+        });
+        
+        // Auto-focus the path input
+        ruleDiv.querySelector('.rule-path').focus();
+    }
+    
+    function resetRules() {
+        rulesContainer.innerHTML = '';
+        addNewRule();
+    }
+    
+    function addNewSitemap(url = '') {
+        const sitemapDiv = document.createElement('div');
+        sitemapDiv.className = 'sitemap-item';
+        sitemapDiv.innerHTML = `
+            <input type="url" class="sitemap-url" placeholder="https://example.com/sitemap.xml" value="${url}">
+            <button class="action-button outline remove-sitemap-btn" type="button">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        
+        sitemapContainer.appendChild(sitemapDiv);
+        
+        // Add event listener to remove button
+        const removeBtn = sitemapDiv.querySelector('.remove-sitemap-btn');
+        removeBtn.addEventListener('click', function() {
+            if (sitemapContainer.children.length > 1) {
+                sitemapDiv.remove();
+            } else {
+                showStatus('You need at least one sitemap', 'error');
+            }
+        });
+        
+        // Auto-focus the URL input
+        sitemapDiv.querySelector('.sitemap-url').focus();
+    }
+    
+    function addNewCleanParam(param = '', path = '') {
+        const cleanParamDiv = document.createElement('div');
+        cleanParamDiv.className = 'clean-param-rule';
+        cleanParamDiv.innerHTML = `
+            <input type="text" class="clean-param" placeholder="Parameter (e.g., ref)" value="${param}">
+            <input type="text" class="clean-path" placeholder="Path (e.g., /products/)" value="${path}">
+            <button class="action-button outline remove-clean-param-btn" type="button">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        
+        cleanParamContainer.appendChild(cleanParamDiv);
+        
+        // Add event listener to remove button
+        const removeBtn = cleanParamDiv.querySelector('.remove-clean-param-btn');
+        removeBtn.addEventListener('click', function() {
+            if (cleanParamContainer.children.length > 1) {
+                cleanParamDiv.remove();
+            } else {
+                showStatus('You need at least one clean-param rule', 'error');
+            }
+        });
+        
+        // Auto-focus the param input
+        cleanParamDiv.querySelector('.clean-param').focus();
+    }
+    
+    function applyPreset() {
+        const preset = presetSelector.value;
+        
+        switch(preset) {
+            case 'wordpress':
+                resetRules();
+                userAgentSelect.value = '*';
+                addNewRule('*', 'Disallow', '/wp-admin/');
+                addNewRule('*', 'Disallow', '/wp-includes/');
+                addNewRule('*', 'Allow', '/wp-content/uploads/');
+                sitemapContainer.innerHTML = '';
+                addNewSitemap('https://example.com/sitemap_index.xml');
+                crawlDelayInput.value = '';
+                hostDirectiveInput.value = '';
+                cleanParamContainer.innerHTML = '';
+                addNewCleanParam();
+                showStatus('WordPress preset applied', 'success');
+                break;
+                
+            case 'ecommerce':
+                resetRules();
+                userAgentSelect.value = '*';
+                addNewRule('*', 'Disallow', '/checkout/');
+                addNewRule('*', 'Disallow', '/cart/');
+                addNewRule('*', 'Disallow', '/account/');
+                addNewRule('*', 'Disallow', '/search/');
+                addNewRule('Googlebot-Image', 'Allow', '/*.jpg$');
+                addNewRule('Googlebot-Image', 'Allow', '/*.png$');
+                sitemapContainer.innerHTML = '';
+                addNewSitemap('https://example.com/sitemap.xml');
+                addNewSitemap('https://example.com/image-sitemap.xml');
+                crawlDelayInput.value = '10';
+                hostDirectiveInput.value = '';
+                cleanParamContainer.innerHTML = '';
+                addNewCleanParam('ref', '/products/');
+                showStatus('E-commerce preset applied', 'success');
+                break;
+                
+            case 'block-all':
+                resetRules();
+                userAgentSelect.value = '*';
+                addNewRule('*', 'Disallow', '/');
+                sitemapContainer.innerHTML = '';
+                addNewSitemap();
+                crawlDelayInput.value = '';
+                hostDirectiveInput.value = '';
+                cleanParamContainer.innerHTML = '';
+                addNewCleanParam();
+                showStatus('Block all crawlers preset applied', 'warning');
+                break;
+                
+            case 'allow-all':
+                resetRules();
+                userAgentSelect.value = '*';
+                addNewRule('*', 'Allow', '/');
+                sitemapContainer.innerHTML = '';
+                addNewSitemap('https://example.com/sitemap.xml');
+                crawlDelayInput.value = '';
+                hostDirectiveInput.value = '';
+                cleanParamContainer.innerHTML = '';
+                addNewCleanParam();
+                showStatus('Allow all crawlers preset applied', 'success');
+                break;
+                
+            default:
+                // Custom - do nothing
+                break;
+        }
+    }
+    
+    function generateRobotsTxt() {
+        try {
+            let robotsContent = '';
+            let explanation = '<h4>Explanation:</h4><ul>';
+            
+            // Add default user-agent
+            const defaultAgent = userAgentSelect.value;
+            robotsContent += `User-agent: ${defaultAgent}\n`;
+            explanation += `<li>Applies these rules to <strong>${defaultAgent === '*' ? 'all crawlers' : defaultAgent}</strong></li>`;
+            
+            // Add crawl delay if specified
+            const crawlDelay = crawlDelayInput.value.trim();
+            if (crawlDelay && !isNaN(crawlDelay)) {
+                robotsContent += `Crawl-delay: ${crawlDelay}\n`;
+                explanation += `<li>Asks crawlers to wait <strong>${crawlDelay} seconds</strong> between requests</li>`;
+            }
+            
+            // Add rules
+            const rules = rulesContainer.querySelectorAll('.crawler-rule');
+            rules.forEach(rule => {
+                const agent = rule.querySelector('.rule-agent').value;
+                const type = rule.querySelector('.rule-type').value;
+                let path = rule.querySelector('.rule-path').value.trim();
+                
+                // Sanitize path
+                if (path && !path.startsWith('/') && path !== '*') {
+                    path = `/${path}`;
+                    rule.querySelector('.rule-path').value = path;
+                }
+                
+                if (path) {
+                    // Check for dangerous rules
+                    if (path === '/' && type === 'Disallow') {
+                        showStatus('Warning: Disallowing all URLs may block your entire site from search engines', 'warning');
+                    }
+                    
+                    robotsContent += `\nUser-agent: ${agent}\n`;
+                    robotsContent += `${type}: ${path}\n`;
+                    explanation += `<li><strong>${type}s</strong> ${agent === '*' ? 'all crawlers' : agent} from accessing <code>${path}</code></li>`;
+                }
+            });
+            
+            // Add clean-param directives
+            const cleanParams = cleanParamContainer.querySelectorAll('.clean-param-rule');
+            cleanParams.forEach(param => {
+                const cleanParam = param.querySelector('.clean-param').value.trim();
+                const cleanPath = param.querySelector('.clean-path').value.trim();
+                
+                if (cleanParam && cleanPath) {
+                    robotsContent += `\nClean-param: ${cleanParam} ${cleanPath}\n`;
+                    explanation += `<li>Instructs Yandex to ignore <strong>${cleanParam}</strong> parameter in <code>${cleanPath}</code> URLs</li>`;
+                }
+            });
+            
+            // Add host directive
+            const host = hostDirectiveInput.value.trim();
+            if (host) {
+                robotsContent += `\nHost: ${host}\n`;
+                explanation += `<li>Tells Yandex the preferred domain is <strong>${host}</strong></li>`;
+            }
+            
+            // Add sitemaps
+            const sitemaps = sitemapContainer.querySelectorAll('.sitemap-url');
+            sitemaps.forEach(sitemap => {
+                const url = sitemap.value.trim();
+                if (url) {
+                    // Ensure we only add sitemap line once
+                    if (!robotsContent.includes('Sitemap:')) {
+                        robotsContent += '\n';
+                    }
+                    robotsContent += `Sitemap: ${url}\n`;
+                    explanation += `<li>Points crawlers to sitemap at <code>${url}</code></li>`;
+                }
+            });
+            
+            // Update output
+            robotsOutput.value = robotsContent.trim();
+            explanation += '</ul>';
+            explanationContainer.innerHTML = explanation;
+            downloadBtn.disabled = false;
+            showStatus('robots.txt generated successfully!', 'success');
+        } catch (error) {
+            console.error('Generation error:', error);
+            showStatus('Error generating robots.txt: ' + error.message, 'error');
+        }
+    }
+    
+    function resetGenerator() {
+        userAgentSelect.value = '*';
+        resetRules();
+        sitemapContainer.innerHTML = '';
+        addNewSitemap();
+        crawlDelayInput.value = '';
+        hostDirectiveInput.value = '';
+        cleanParamContainer.innerHTML = '';
+        addNewCleanParam();
+        robotsOutput.value = '';
+        explanationContainer.innerHTML = '';
+        downloadBtn.disabled = true;
+        presetSelector.value = 'custom';
+        document.querySelectorAll('#seo-checklist input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        showStatus('Generator reset', 'success');
+    }
+    
+    function downloadRobotsTxt() {
+        const content = robotsOutput.value;
+        if (!content) {
+            showStatus('No content to download', 'error');
+            return;
+        }
+        
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'robots.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    
+    function importRobotsTxt() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.txt';
+        
+        input.onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = event => {
+                try {
+                    const content = event.target.result;
+                    parseRobotsTxt(content);
+                    showStatus('robots.txt imported successfully!', 'success');
+                } catch (error) {
+                    showStatus('Error parsing robots.txt file', 'error');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+        };
+        
+        input.click();
+    }
+    
+    function parseRobotsTxt(content) {
+        resetGenerator();
+        
+        const lines = content.split('\n');
+        let currentAgent = '*';
+        
+        lines.forEach(line => {
+            line = line.trim();
+            
+            // Skip comments and empty lines
+            if (!line || line.startsWith('#')) return;
+            
+            // Handle user-agent
+            if (line.toLowerCase().startsWith('user-agent:')) {
+                currentAgent = line.substring(11).trim();
+                if (currentAgent === '*') {
+                    userAgentSelect.value = currentAgent;
+                }
+                return;
+            }
+            
+            // Handle disallow/allow
+            if (line.toLowerCase().startsWith('disallow:')) {
+                const path = line.substring(9).trim();
+                addNewRule(currentAgent, 'Disallow', path);
+                return;
+            }
+            
+            if (line.toLowerCase().startsWith('allow:')) {
+                const path = line.substring(6).trim();
+                addNewRule(currentAgent, 'Allow', path);
+                return;
+            }
+            
+            // Handle crawl-delay
+            if (line.toLowerCase().startsWith('crawl-delay:')) {
+                const delay = line.substring(12).trim();
+                crawlDelayInput.value = delay;
+                return;
+            }
+            
+            // Handle sitemap
+            if (line.toLowerCase().startsWith('sitemap:')) {
+                const url = line.substring(8).trim();
+                sitemapContainer.innerHTML = '';
+                addNewSitemap(url);
+                return;
+            }
+            
+            // Handle host
+            if (line.toLowerCase().startsWith('host:')) {
+                const host = line.substring(5).trim();
+                hostDirectiveInput.value = host;
+                return;
+            }
+            
+            // Handle clean-param
+            if (line.toLowerCase().startsWith('clean-param:')) {
+                const parts = line.substring(12).trim().split(/\s+/);
+                if (parts.length >= 2) {
+                    cleanParamContainer.innerHTML = '';
+                    addNewCleanParam(parts[0], parts[1]);
+                }
+                return;
+            }
+        });
+        
+        // Generate the output to reflect imported settings
+        generateRobotsTxt();
+    }
+    
+    function showStatus(message, type) {
+        statusMessage.textContent = message;
+        statusMessage.className = 'status-message ' + type;
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+            statusMessage.textContent = '';
+            statusMessage.className = 'status-message';
+        }, 5000);
+    }
+</script>
+</body>
+</html>
