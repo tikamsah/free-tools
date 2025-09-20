@@ -7,7 +7,7 @@ function includeHeaderLayout(url,layout) {
         })
         .catch(error => console.error('Error fetching layout:', error));
 }
-includeHeaderLayout('https://it-tools.nepexo.com/header.html','headerContainer');
+includeHeaderLayout('https://it-tools.roptive.com/header.html','headerContainer');
 
 function includeLayout(url,layout) {
     fetch(url)
@@ -17,6 +17,6 @@ function includeLayout(url,layout) {
         })
         .catch(error => console.error('Error fetching layout:', error));
 }
-includeLayout('https://it-tools.nepexo.com/footer.html','footerContainer');
+includeLayout('https://it-tools.roptive.com/footer.html','footerContainer');
 
 

@@ -6,4 +6,4 @@ Disallow: /admin/
 Disallow: /api/  # If API should not be indexed
 Disallow: /search/  # If search pages should be excluded
 
-Sitemap: https://it-tools.nepexo.com/sitemap.xml
+Sitemap: https://it-tools.roptive.com/sitemap.xml
