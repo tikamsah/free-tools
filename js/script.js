@@ -22,4 +22,4 @@ navItems.forEach(item => {
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-61PG9HQVB4');
+gtag('config', 'G-HWVZYP07KS');
